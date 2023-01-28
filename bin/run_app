@@ -1,0 +1,1 @@
+docker-compose --file devel.docker-compose.yml --env-file ./devel.env up

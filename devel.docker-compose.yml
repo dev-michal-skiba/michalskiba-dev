@@ -1,0 +1,29 @@
+version: '3.9'
+
+services:
+  michalskiba_dev_db:
+    image: postgres:15.1
+    container_name: michalskiba_dev_db
+    volumes:
+      - ./data:/var/lib/postgresql/data
+    env_file:
+      - devel.env
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+  michalskiba_dev_django:
+    image: michalskiba_dev_django
+    container_name: michalskiba_dev_django
+    volumes:
+      - ./michalskiba_dev:/code
+    env_file:
+      - devel.env
+    ports:
+      - '8000:8000'
+    command: bash -c 'python manage.py migrate &&
+                      python manage.py runserver 0.0.0.0:8000'
+    depends_on:
+      michalskiba_dev_db:
+        condition: service_healthy
