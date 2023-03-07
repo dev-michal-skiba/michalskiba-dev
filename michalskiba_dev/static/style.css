@@ -1,0 +1,68 @@
+:root {
+  --primary-bg: #000000;
+  --secondary-bg: #333333;
+  --primary-text: #cccccc;
+  --secondary-text: #00FF00;
+  --extra-color: #ffff33;
+}
+
+body {
+    background-color: var(--primary-bg);
+    color: var(--primary-text);
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.primary-bg, .primary-bg:hover, .primary-bg:focus {
+    background-color: var(--primary-bg);
+}
+
+.secondary-bg, .secondary-bg:hover, .secondary-bg:focus {
+    background-color: var(--secondary-bg);
+}
+
+.primary-text {
+    color: var(--primary-text);
+}
+
+.secondary-text, .secondary-text:focus {
+    color: var(--secondary-text);
+    font-family: 'VT323', sans-serif;
+}
+
+.secondary-text:hover {
+    color: var(--extra-color);
+}
+
+.extra-text {
+    color: var(--extra-color);
+}
+
+.navbar-toggler-icon {
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 255, 0, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+@media (min-width: 576px) {
+  .container-sm, .container {
+    max-width: 540px;
+  }
+}
+@media (min-width: 768px) {
+  .container-md, .container-sm, .container {
+    max-width: 720px;
+  }
+}
+@media (min-width: 992px) {
+  .container-lg, .container-md, .container-sm, .container {
+    max-width: 960px;
+  }
+}
+@media (min-width: 1200px) {
+  .container-xl, .container-lg, .container-md, .container-sm, .container {
+    max-width: 960px;
+  }
+}
+@media (min-width: 1400px) {
+  .container-xxl, .container-xl, .container-lg, .container-md, .container-sm, .container {
+    max-width: 960px;
+  }
+}

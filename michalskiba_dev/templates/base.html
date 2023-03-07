@@ -1,0 +1,71 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'bootstrap-5.2.3/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Ubuntu:wght@300&family=VT323&display=swap">
+
+    <title>{% block title %}Michal Skiba{% endblock %}</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg">
+        <div class="container-lg primary-bg">
+            <a class="navbar-brand secondary-text" href="">Home</a>
+            <button
+                class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a
+                            class="nav-link dropdown-toggle secondary-text"
+                            href="#" role="button"
+                            data-bs-toggle="dropdown"
+                            aria-expanded="false"
+                        >
+                            Web Attacks
+                        </a>
+                        <ul class="dropdown-menu secondary-bg">
+                            <!--
+                            TODO: List of web attacks should be dynamic,
+                            TODO: based on existing posts
+                            -->
+                            <li>
+                                <a
+                                    class="dropdown-item secondary-text secondary-bg"
+                                    href="blog/web-parameter-tampering"
+                                >
+                                    Web Parameter Tampering
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                </ul>
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link secondary-text" href="about-me">About Me</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+    <script src="{% static 'bootstrap-5.2.3/js/bootstrap.bundle.min.js' %}"></script>
+</body>
+</html>
