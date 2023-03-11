@@ -12,3 +12,7 @@
   - Working directory: $ProjectFileDir$
   - Uncheck _Auto-save edited files to trigger the watcher_
   - Uncheck _Trigger the watcher on external changes_
+
+## Pytest setup
+In **Preferences or Settings -> Tools -> Python Integrated Tools** set _Default test runner_ to
+pytest

@@ -6,3 +6,5 @@
 venv/
 # Devel database volume
 data/
+# Coverage report
+.coverage

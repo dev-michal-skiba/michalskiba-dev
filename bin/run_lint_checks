@@ -16,3 +16,6 @@ then
   exit 1
 fi
 echo "${GREEN}Ruff check succeeded${NOCOLOR}"
+
+echo
+echo "${GREEN}== Lint checks passed ==${NOCOLOR}"
