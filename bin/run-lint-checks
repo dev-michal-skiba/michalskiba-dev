@@ -1,0 +1,18 @@
+#!/bin/sh
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+NOCOLOR='\033[0m'
+
+if ! black --check --target-version py311 ./michalskiba_dev/
+then
+  echo "${RED}Black check failed${NOCOLOR}"
+  exit 1
+fi
+echo "${GREEN}Black check succeeded${NOCOLOR}"
+
+if ! ruff check ./michalskiba_dev/
+then
+  echo "${RED}Ruff check failed${NOCOLOR}"
+  exit 1
+fi
+echo "${GREEN}Ruff check succeeded${NOCOLOR}"

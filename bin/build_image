@@ -1,1 +1,2 @@
+#!/bin/sh
 docker build --tag michalskiba_dev_django --file devel.dockerfile ./
