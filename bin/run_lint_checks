@@ -3,6 +3,13 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
 
+if ! isort --check-only --recursive michalskiba_dev/
+then
+  echo "${RED}Isort check failed${NOCOLOR}"
+  exit 1
+fi
+echo "${GREEN}Isort check succeeded${NOCOLOR}"
+
 if ! black --check --target-version py311 ./michalskiba_dev/
 then
   echo "${RED}Black check failed${NOCOLOR}"

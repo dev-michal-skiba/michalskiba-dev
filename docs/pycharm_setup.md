@@ -1,6 +1,17 @@
 # General setup
 - Install **File Watchers** plugin
 
+## Isort setup
+- Go to **Preferences or Settings -> Tools -> File Watchers** and click **+** to add new watcher
+  - Name: Isort
+  - File type: Python
+  - Scope: Project Files
+  - Program: isort
+  - Arguments: -sp $ContentRoot$/setup.cfg $FilePath$
+  - Output paths to refresh: $FilePath$
+  - Uncheck _Auto-save edited files to trigger the watcher_
+  - Uncheck _Trigger the watcher on external changes_
+
 ## Black setup
 - Go to **Preferences or Settings -> Tools -> File Watchers** and click **+** to add new watcher
   - Name: Black
