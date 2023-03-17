@@ -4,6 +4,6 @@ SECRET_KEY = "test-secret-key"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",  # noqa: F405
+        "NAME": f"{BASE_DIR}/db.sqlite3",  # noqa: F405
     }
 }

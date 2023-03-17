@@ -5,3 +5,7 @@ target-version = ['py311']
 [tool.ruff]
 line-length = 99
 target-version = 'py311'
+
+[mypy]
+plugins = 'mypy_django_plugin.main'
+python-version = '3.11'

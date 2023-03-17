@@ -2,7 +2,7 @@ from django.test import Client
 
 
 class TestHome(object):
-    def test_renders_home_template(self):
+    def test_renders_home_template(self) -> None:
         client = Client()
 
         response = client.get("/")
