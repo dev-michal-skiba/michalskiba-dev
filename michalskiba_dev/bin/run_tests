@@ -3,13 +3,13 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
 
-test_directory="michalskiba_dev/"
+test_directory="./"
 if [ $# -eq 1 ]
 then
   test_directory=$1
 fi
 
-if ! pytest $test_directory
+if ! pytest
 then
   echo "${RED}Unit tests check failed${NOCOLOR}"
   exit 1

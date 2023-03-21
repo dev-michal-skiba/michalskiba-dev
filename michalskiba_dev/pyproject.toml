@@ -1,0 +1,17 @@
+[tool.black]
+line-length = 99
+target-version = ['py311']
+extend-exclude = 'migrations'
+
+[tool.ruff]
+line-length = 99
+target-version = 'py311'
+exclude = ['migrations']
+
+[tool.mypy]
+plugins = 'mypy_django_plugin.main'
+python_version = '3.11'
+
+[tool.django-stubs]
+django_settings_module = 'michalskiba_dev.settings'
+ignore_missing_model_attributes = true

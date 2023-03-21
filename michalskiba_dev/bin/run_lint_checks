@@ -3,7 +3,7 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
 
-if ! isort --check-only michalskiba_dev/
+if ! isort --check-only ./
 then
   echo "${RED}Isort check failed${NOCOLOR}"
   exit 1
@@ -11,7 +11,7 @@ fi
 echo "${GREEN}Isort check succeeded${NOCOLOR}"
 echo
 
-if ! black --check ./michalskiba_dev/
+if ! black --check ./
 then
   echo "${RED}Black check failed${NOCOLOR}"
   exit 1
@@ -19,7 +19,7 @@ fi
 echo "${GREEN}Black check succeeded${NOCOLOR}"
 echo
 
-if ! ruff check ./michalskiba_dev/
+if ! ruff check ./
 then
   echo "${RED}Ruff check failed${NOCOLOR}"
   exit 1
@@ -27,7 +27,7 @@ fi
 echo "${GREEN}Ruff check succeeded${NOCOLOR}"
 echo
 
-if ! mypy --strict michalskiba_dev/
+if ! mypy --strict ./
 then
   echo "${RED}Mypy check failed${NOCOLOR}"
   exit 1
