@@ -121,10 +121,29 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = "static/"
+BASE_STATIC_URL = BASE_DIR / "static"
 
-STATICFILES_DIRS = [BASE_DIR / "static"]
+STATICFILES_DIRS = [BASE_STATIC_URL]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+BLOG_POSTS_RAW_URL = BASE_STATIC_URL / "blog/raw"
+BLOG_POSTS_POSTS_URL = BASE_STATIC_URL / "blog/posts"
+BLOG_POSTS_IMAGES_URL = BASE_STATIC_URL / "blog/images"
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {
+            "class": "logging.StreamHandler",
+        },
+    },
+    "root": {
+        "handlers": ["console"],
+        "level": "INFO",
+    },
+}

@@ -6,8 +6,8 @@
   - Name: Isort
   - File type: Python
   - Scope: Project Files
-  - Program: isort
-  - Arguments: -sp $ContentRoot$/setup.cfg $FilePath$
+  - Program: location of black, get it by running `which isort`
+  - Arguments: --src $ProjectFileDir$/michalskiba_dev $FilePath$
   - Output paths to refresh: $FilePath$
   - Uncheck _Auto-save edited files to trigger the watcher_
   - Uncheck _Trigger the watcher on external changes_

@@ -1,7 +1,7 @@
 from django.test import Client
 
 
-class TestHome(object):
+class TestHome:
     def test_renders_home_template(self) -> None:
         client = Client()
 
@@ -11,7 +11,7 @@ class TestHome(object):
         assert "home.html" in (t.name for t in response.templates)
 
 
-class TestAboutMe(object):
+class TestAboutMe:
     def test_renders_home_template(self) -> None:
         client = Client()
 

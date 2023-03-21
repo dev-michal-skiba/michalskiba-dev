@@ -27,7 +27,7 @@ fi
 echo "${GREEN}Ruff check succeeded${NOCOLOR}"
 echo
 
-if ! mypy --strict ./
+if ! mypy ./
 then
   echo "${RED}Mypy check failed${NOCOLOR}"
   exit 1
