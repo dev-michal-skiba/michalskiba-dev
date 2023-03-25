@@ -12,7 +12,7 @@ class TestHome:
 
 
 class TestAboutMe:
-    def test_renders_home_template(self) -> None:
+    def test_renders_about_me_template(self) -> None:
         client = Client()
 
         response = client.get("/about-me")

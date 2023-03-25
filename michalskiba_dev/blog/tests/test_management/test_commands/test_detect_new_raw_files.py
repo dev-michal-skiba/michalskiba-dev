@@ -5,7 +5,7 @@ from django.conf import settings
 from django.core.management import call_command
 
 OS_WALK: list[tuple[str, list[str], list[str]]] = [
-    (f"{settings.BLOG_POSTS_RAW_URL}/test_root", [], ["test_filename.md"])
+    (f"{settings.BLOG_POSTS_RAW_PATH}/test_root", [], ["test_filename.md"])
 ]
 
 

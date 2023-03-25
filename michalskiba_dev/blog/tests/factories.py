@@ -7,4 +7,4 @@ class BlogPostRawFactory(DjangoModelFactory):
     class Meta:
         model = BlogPostRaw
 
-    content_path = "test_raw_blog_post_filename.md"
+    content_path = "test_raw_blog_post.md"

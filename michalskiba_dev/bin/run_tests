@@ -1,15 +1,17 @@
-#!/bin/sh
+#!/bin/bash
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
 
 test_directory="./"
+pytest_options="${*}"
 if [ $# -eq 1 ]
 then
   test_directory=$1
+  pytest_options=("${*:2}")
 fi
 
-if ! pytest
+if ! pytest $pytest_options
 then
   echo "${RED}Unit tests check failed${NOCOLOR}"
   exit 1
