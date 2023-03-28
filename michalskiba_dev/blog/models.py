@@ -31,6 +31,20 @@ class Tag(models.Model):
     name = models.CharField(max_length=16, unique=True)
 
 
+class BlogPost(models.Model):
+    creation_date = models.DateTimeField(auto_now_add=True)
+    release_date = models.DateTimeField(blank=True, null=True)
+    is_released = models.BooleanField(default=False)
+    slug = models.CharField(max_length=64, unique=True)
+    title = models.CharField(max_length=64, unique=True)
+    lead = models.TextField(max_length=512)
+    content_path = models.CharField(max_length=64, unique=True)
+    tags = models.ManyToManyField(Tag, related_name="blog_posts")
+    blog_post_raw = models.OneToOneField(
+        BlogPostRaw, on_delete=models.CASCADE, related_name="blog_post"
+    )
+
+
 @receiver(pre_delete, sender=BlogPostRaw, dispatch_uid="blog_post_raw_pre_delete_signal")
 def blog_post_raw_pre_delete_signal(instance: BlogPostRaw, **kwargs: dict[str, Any]) -> None:
     images_absolute_paths = extract_images_absolute_paths_from_markdown_file(

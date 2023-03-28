@@ -33,3 +33,5 @@ ignore_missing_model_attributes = true
 
 [tool.isort]
 profile = "black"
+py_version = 311
+extend_skip_glob = ['*/migrations/*.py']
