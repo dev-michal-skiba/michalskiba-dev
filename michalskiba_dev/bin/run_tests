@@ -13,17 +13,17 @@ fi
 
 if ! pytest $pytest_options
 then
-  echo "${RED}Unit tests check failed${NOCOLOR}"
+  echo -e "${RED}Unit tests check failed${NOCOLOR}"
   exit 1
 fi
-echo "${GREEN}Unit tests check succeeded${NOCOLOR}"
+echo -e "${GREEN}Unit tests check succeeded${NOCOLOR}"
 
 if ! coverage report --show-missing --fail-under=90
 then
-  echo "${RED}Coverage check failed${NOCOLOR}"
+  echo -e "${RED}Coverage check failed${NOCOLOR}"
   exit 1
 fi
-echo "${GREEN}Coverage check succeeded${NOCOLOR}"
+echo -e "${GREEN}Coverage check succeeded${NOCOLOR}"
 
 echo
-echo "${GREEN}== Test checks passed ==${NOCOLOR}"
+echo -e "${GREEN}== Test checks passed ==${NOCOLOR}"
