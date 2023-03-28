@@ -13,6 +13,12 @@ propagate `ARGS`
 # `bin/manage/detect_new_raw_files`
 Script to run `detect_new_raw_files` Django command on app running in docker container
 
+# `bin/manage/makemigrations`
+Script to run `makemigartions` Django default command on app running in docker container
+
+# `bin/manage/migrate`
+Script to run `migrate` Django default command on app running in docker container
+
 # `michalskiba_dev/bin/run_lint_checks`
 Script to run black formatter check and ruff linter check. On any of the checks' error, script
 exits with status code 1 and shows what step failed. It is used as pre-commit hook to assure

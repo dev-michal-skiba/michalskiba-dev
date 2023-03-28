@@ -27,6 +27,10 @@ class BlogPostRaw(models.Model):
         return self.content_path
 
 
+class Tag(models.Model):
+    name = models.CharField(max_length=16, unique=True)
+
+
 @receiver(pre_delete, sender=BlogPostRaw, dispatch_uid="blog_post_raw_pre_delete_signal")
 def blog_post_raw_pre_delete_signal(instance: BlogPostRaw, **kwargs: dict[str, Any]) -> None:
     images_absolute_paths = extract_images_absolute_paths_from_markdown_file(
