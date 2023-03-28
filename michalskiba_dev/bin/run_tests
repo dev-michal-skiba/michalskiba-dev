@@ -11,7 +11,7 @@ then
   pytest_options=("${*:2}")
 fi
 
-if ! pytest $pytest_options
+if ! pytest "$test_directory" "$pytest_options"
 then
   echo -e "${RED}Unit tests check failed${NOCOLOR}"
   exit 1
