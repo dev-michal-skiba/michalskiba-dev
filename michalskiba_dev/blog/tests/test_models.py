@@ -22,8 +22,13 @@ class TestBlogPostRaw(BlogPostBaseTests):
     def instance(self, blog_post_raw: BlogPostRaw) -> BlogPostRaw:
         return blog_post_raw
 
-    def test_is_processed(self, blog_post_raw: BlogPostRaw) -> None:
-        assert blog_post_raw.is_processed is False
+    def test_is_processed_when_blog_post_doesnt_exist(self, instance: BlogPostRaw) -> None:
+        assert instance.is_processed is False
+
+    def test_is_processed_when_blog_post_exists(
+        self, instance: BlogPostRaw, blog_post: BlogPost
+    ) -> None:
+        assert instance.is_processed is True
 
 
 @pytest.mark.django_db

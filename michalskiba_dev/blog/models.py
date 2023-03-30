@@ -33,8 +33,7 @@ class BlogPostRaw(BlogPostBase):
 
     @property
     def is_processed(self) -> bool:
-        # TODO check whether file is processed based on existence of processed blog post
-        return False
+        return hasattr(self, "blog_post") and isinstance(self.blog_post, BlogPost)
 
 
 class Tag(models.Model):
