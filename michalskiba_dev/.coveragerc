@@ -8,3 +8,8 @@ omit =
     */asgi.py,
     */test*.py,
     */manage.py
+
+[report]
+skip_covered = true
+fail_under = 95
+show_missing = true

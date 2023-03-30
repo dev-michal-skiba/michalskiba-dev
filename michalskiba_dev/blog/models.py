@@ -6,7 +6,10 @@ from django.db import models
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 
-from blog.utils import extract_images_absolute_paths_from_markdown_file, remove_files
+from blog.utils import (
+    extract_images_absolute_paths_from_blog_post_raw_file,
+    remove_files,
+)
 
 
 class BlogPostBase(models.Model):
@@ -55,7 +58,7 @@ class BlogPost(BlogPostBase):
 
 @receiver(pre_delete, sender=BlogPostRaw, dispatch_uid="blog_post_raw_pre_delete_signal")
 def blog_post_raw_pre_delete_signal(instance: BlogPostRaw, **kwargs: dict[str, Any]) -> None:
-    images_absolute_paths = extract_images_absolute_paths_from_markdown_file(
+    images_absolute_paths = extract_images_absolute_paths_from_blog_post_raw_file(
         instance.absolute_path
     )
     files_to_remove = [instance.absolute_path] + images_absolute_paths

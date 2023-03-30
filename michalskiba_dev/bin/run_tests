@@ -3,22 +3,17 @@ RED='\033[0;31m'
 GREEN='\033[0;32m'
 NOCOLOR='\033[0m'
 
-test_directory="./"
-pytest_options="${*}"
-if [ $# -eq 1 ]
-then
-  test_directory=$1
-  pytest_options=("${*:2}")
-fi
+pytest_options=${*}
 
-if ! pytest "$test_directory" "$pytest_options"
+# shellcheck disable=SC2086
+if ! pytest $pytest_options
 then
   echo -e "${RED}Unit tests check failed${NOCOLOR}"
   exit 1
 fi
 echo -e "${GREEN}Unit tests check succeeded${NOCOLOR}"
 
-if ! coverage report --show-missing --fail-under=90
+if ! coverage report
 then
   echo -e "${RED}Coverage check failed${NOCOLOR}"
   exit 1
