@@ -3,28 +3,26 @@ from pathlib import Path
 import pytest
 
 from blog.models import BlogPostRaw
-from blog.raw_parser import get_section_text_by_tag
+from blog.raw_parser.utils import get_section_text_by_tag
 
 
 @pytest.mark.django_db
 class TestGetSectionTextByTag:
-    def test_correct_section_text(self, blog_post_raw: BlogPostRaw) -> None:
+    def test_correct_section(self, blog_post_raw: BlogPostRaw) -> None:
+        section_text = get_section_text_by_tag(file_path=blog_post_raw.absolute_path, tag="title")
+
+        assert section_text == (
+            "Some title title title title title title title title title title opsie"
+        )
+
+    def test_correct_section_without_default_parsers(self, blog_post_raw: BlogPostRaw) -> None:
         section_text = get_section_text_by_tag(
-            file_path=blog_post_raw.absolute_path, tag="content"
+            file_path=blog_post_raw.absolute_path, tag="title", use_default_parsers=False
         )
 
         assert section_text == (
-            "Blablablabla, I need to display some images "
-            "![empty_shelves.jpg](../images/empty_shelves.jpg) "
-            "some text "
-            "![empty_shelves_grayscale.jpg](../images/empty_shelves_grayscale.png) "
-            "some text "
-            "![empty_shelves_edges.jpg](../images/empty_shelves_edges.png) "
-            "some text "
-            "![empty_shelves_erosion.jpg](../images/empty_shelves_erosion.png) "
-            "some text "
-            "![empty_shelves_dilation.jpg](../images/empty_shelves_dilation.png) "
-            "some text"
+            "\nSome title title title    title title title title title title        "
+            "title opsie\n\n"
         )
 
     def test_empty_section_text_for_not_existing_file(self) -> None:
