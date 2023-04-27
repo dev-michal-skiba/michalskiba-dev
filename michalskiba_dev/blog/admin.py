@@ -11,6 +11,7 @@ from blog.utils import (
 
 class BlogPostRawAdmin(admin.ModelAdmin[BlogPostRaw]):
     actions = ["process_raw_file"]
+    list_display = ["content_path", "is_processed"]
 
     @admin.action(description="Process raw file(s)")
     def process_raw_file(self, request: HttpRequest, queryset: QuerySet[BlogPostRaw]) -> None:
