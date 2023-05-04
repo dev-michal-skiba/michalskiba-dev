@@ -2,8 +2,31 @@ from pathlib import Path
 from unittest.mock import Mock, call, patch
 
 import pytest
+from django.contrib.auth.models import User
 
 from blog.models import BlogPost, BlogPostBase, BlogPostRaw
+
+
+@pytest.mark.django_db
+class TestBlogPostManager:
+    class TestFilterForDisplay:
+        def test_for_superuser(
+            self, superuser: User, blog_post: BlogPost, blog_post_2: BlogPost
+        ) -> None:
+            blog_post_2.is_released = True
+            blog_post_2.save()
+
+            queryset = BlogPost.objects.filter_for_display(superuser)
+
+            assert queryset.count() == 2
+
+        def test_for_user(self, user: User, blog_post: BlogPost, blog_post_2: BlogPost) -> None:
+            blog_post_2.is_released = True
+            blog_post_2.save()
+
+            queryset = BlogPost.objects.filter_for_display(user)
+
+            assert queryset.count() == 1
 
 
 class BlogPostBaseTests:

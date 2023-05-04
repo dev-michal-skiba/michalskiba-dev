@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-lg">
+    <h1>Title: {{ blog_post.title }}</h1>
+    <p>Lead: {{ blog_post.lead }}</p>
+    <p>Tags: {% for tag in blog_post.tags.all %} {{ tag.name }} {% endfor %}</p>
+</div>
+{% endblock %}

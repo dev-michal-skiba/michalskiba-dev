@@ -1,8 +1,10 @@
 from pathlib import Path
-from typing import Any
+from typing import Any, Self
 
 from django.conf import settings
+from django.contrib.auth.models import AnonymousUser, User
 from django.db import models
+from django.db.models import QuerySet
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 
@@ -40,6 +42,13 @@ class Tag(models.Model):
     name = models.CharField(max_length=16, unique=True)
 
 
+class BlogPostManager(models.Manager[Any]):
+    def filter_for_display(self, user: User | AnonymousUser) -> QuerySet[Any] | Self:
+        if user.is_superuser:
+            return self
+        return self.filter(is_released=True)
+
+
 class BlogPost(BlogPostBase):
     creation_date = models.DateTimeField(auto_now_add=True)
     release_date = models.DateTimeField(blank=True, null=True)
@@ -53,6 +62,7 @@ class BlogPost(BlogPostBase):
     )
 
     BASE_CONTENT_PATH: Path = settings.BLOG_POSTS_PATH
+    objects = BlogPostManager()
 
 
 @receiver(pre_delete, sender=BlogPostRaw, dispatch_uid="blog_post_raw_pre_delete_signal")

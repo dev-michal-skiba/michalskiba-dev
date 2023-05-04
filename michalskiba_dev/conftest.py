@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Callable
 
 import pytest
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 from django.test import Client
 
 
@@ -38,18 +38,20 @@ def superuser_password() -> str:
 
 
 @pytest.fixture
-def create_superuser(
-    superuser_username: str, superuser_email: str, superuser_password: str
-) -> None:
-    get_user_model().objects.create_superuser(
-        superuser_username, superuser_email, superuser_password
+def superuser(superuser_username: str, superuser_email: str, superuser_password: str) -> User:
+    return User.objects.create_superuser(superuser_username, superuser_email, superuser_password)
+
+
+@pytest.fixture
+def user() -> User:
+    return User.objects.create_user(
+        username="test_username", email="test_email@example.com", password="test_password"
     )
 
 
 @pytest.fixture
-@pytest.mark.usefixtures("superuser")
 def login_superuser(
-    create_superuser: None, superuser_username: str, superuser_password: str
+    superuser: User, superuser_username: str, superuser_password: str
 ) -> Callable[[Client], None]:
     def _login_superuser(client: Client) -> None:
         client.login(username=superuser_username, password=superuser_password)
