@@ -1,4 +1,5 @@
 import os
+from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
 
@@ -54,3 +55,17 @@ def login_superuser(
         client.login(username=superuser_username, password=superuser_password)
 
     return _login_superuser
+
+
+@pytest.fixture
+def test_datetime() -> datetime:
+    return datetime(
+        year=2023,
+        month=5,
+        day=4,
+        hour=17,
+        minute=44,
+        second=17,
+        microsecond=345,
+        tzinfo=timezone.utc,
+    )

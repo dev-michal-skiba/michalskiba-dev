@@ -1,3 +1,5 @@
+from datetime import datetime, timezone
+
 from django.contrib import admin
 from django.db.models import QuerySet
 from django.http import HttpRequest
@@ -40,6 +42,19 @@ class BlogPostRawAdmin(admin.ModelAdmin[BlogPostRaw]):
             blog_post.tags.set(tags)
 
 
+class BlogPostAdmin(admin.ModelAdmin[BlogPost]):
+    actions = ["release", "revert_release"]
+    list_display = ["title", "blog_post_raw", "is_released", "release_date"]
+
+    @admin.action(description="Release blog post")
+    def release(self, request: HttpRequest, queryset: QuerySet[BlogPost]) -> None:
+        queryset.update(is_released=True, release_date=datetime.now(timezone.utc))
+
+    @admin.action(description="Revert blog post release")
+    def revert_release(self, request: HttpRequest, queryset: QuerySet[BlogPost]) -> None:
+        queryset.update(is_released=False, release_date=None)
+
+
 admin.site.register(BlogPostRaw, BlogPostRawAdmin)
 admin.site.register(Tag)
-admin.site.register(BlogPost)
+admin.site.register(BlogPost, BlogPostAdmin)
