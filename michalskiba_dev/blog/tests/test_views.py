@@ -1,10 +1,67 @@
+from datetime import datetime, timezone
+from unittest.mock import Mock
+
 import pytest
 from django.test import Client
 from django.urls import reverse
 
 from blog.models import BlogPost
+from blog.tests.factories import TagFactory
+from blog.views import _get_home_context
 
 
+@pytest.mark.django_db
+class TestGetHomeContext:
+    def test_correct_blog_posts_fields(self, blog_post: BlogPost) -> None:
+        blog_post.release_date = datetime(year=2023, month=5, day=8, tzinfo=timezone.utc)
+        blog_post.tags.add(TagFactory(name="tag 1"))
+        blog_post.tags.add(TagFactory(name="tag 2"))
+        blog_post.save()
+        request = Mock()
+
+        context = _get_home_context(request)
+
+        assert len(context["blog_posts"]) == 1
+        assert context["blog_posts"][0] == {
+            "title": blog_post.title,
+            "release_date": "2023.05.08",
+            "tags": "tag 1, tag 2",
+            "link": "/post/test-slug",
+            "lead": blog_post.lead,
+        }
+
+    def test_blog_posts_ordered_descending(
+        self, blog_post: BlogPost, blog_post_2: BlogPost
+    ) -> None:
+        blog_post.release_date = datetime(year=2023, month=5, day=8, tzinfo=timezone.utc)
+        blog_post.save()
+        blog_post_2.release_date = datetime(year=2023, month=5, day=9, tzinfo=timezone.utc)
+        blog_post_2.save()
+
+        request = Mock()
+
+        context = _get_home_context(request)
+
+        assert len(context["blog_posts"]) == 2
+        assert context["blog_posts"][0]["title"] == blog_post_2.title
+        assert context["blog_posts"][1]["title"] == blog_post.title
+
+    def test_not_released_blog_post_included_at_top_for_superuser(
+        self, blog_post: BlogPost, blog_post_2: BlogPost
+    ) -> None:
+        blog_post.release_date = datetime(year=2023, month=5, day=8, tzinfo=timezone.utc)
+        blog_post.save()
+
+        request = Mock()
+
+        context = _get_home_context(request)
+
+        assert len(context["blog_posts"]) == 2
+        assert context["blog_posts"][0]["title"] == blog_post_2.title
+        assert context["blog_posts"][1]["title"] == blog_post.title
+
+
+@pytest.mark.django_db
 class TestHome:
     def test_renders_home_template(self) -> None:
         client = Client()

@@ -41,11 +41,14 @@ class BlogPostRaw(BlogPostBase):
 class Tag(models.Model):
     name = models.CharField(max_length=16, unique=True)
 
+    def __str__(self) -> str:
+        return self.name
+
 
 class BlogPostManager(models.Manager[Any]):
     def filter_for_display(self, user: User | AnonymousUser) -> QuerySet[Any] | Self:
         if user.is_superuser:
-            return self
+            return self.all()
         return self.filter(is_released=True)
 
 
@@ -63,6 +66,12 @@ class BlogPost(BlogPostBase):
 
     BASE_CONTENT_PATH: Path = settings.BLOG_POSTS_PATH
     objects = BlogPostManager()
+
+    @property
+    def release_date_for_display(self) -> str:
+        if self.release_date:
+            return self.release_date.strftime("%Y.%m.%d")
+        return "NOT RELEASED"
 
 
 @receiver(pre_delete, sender=BlogPostRaw, dispatch_uid="blog_post_raw_pre_delete_signal")

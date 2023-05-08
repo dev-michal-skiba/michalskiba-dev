@@ -1,10 +1,11 @@
+from datetime import datetime, timezone
 from pathlib import Path
 from unittest.mock import Mock, call, patch
 
 import pytest
 from django.contrib.auth.models import User
 
-from blog.models import BlogPost, BlogPostBase, BlogPostRaw
+from blog.models import BlogPost, BlogPostBase, BlogPostRaw, Tag
 
 
 @pytest.mark.django_db
@@ -60,6 +61,15 @@ class TestBlogPost(BlogPostBaseTests):
     def instance(self, blog_post: BlogPost) -> BlogPost:
         return blog_post
 
+    def test_release_date_for_display(self, blog_post: BlogPost) -> None:
+        blog_post.release_date = datetime(year=2023, month=5, day=8, tzinfo=timezone.utc)
+        blog_post.save()
+
+        assert blog_post.release_date_for_display == "2023.05.08"
+
+    def test_release_date_for_display_for_null_value(self, blog_post: BlogPost) -> None:
+        assert blog_post.release_date_for_display == "NOT RELEASED"
+
 
 @pytest.mark.django_db
 @patch("blog.utils.os.remove")
@@ -94,3 +104,9 @@ class TestBlogPostPreDeleteSignal:
             call(test_working_directory / "blog/tests/data/posts/test_blog_post.html"),
         ]
         os_remove_mock.assert_has_calls(calls)
+
+
+@pytest.mark.django_db
+class TestTag:
+    def test_str(self, tag: Tag) -> None:
+        assert str(tag) == tag.name

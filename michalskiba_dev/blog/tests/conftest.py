@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from blog.models import BlogPostRaw
-from blog.tests.factories import BlogPostFactory, BlogPostRawFactory
+from blog.tests.factories import BlogPostFactory, BlogPostRawFactory, TagFactory
 
 
 @pytest.fixture
@@ -37,3 +37,8 @@ def blog_post_2(test_working_directory: Path, blog_post_raw_2: BlogPostRaw) -> B
     )
     blog_post.BASE_CONTENT_PATH = test_working_directory / Path("blog/tests/data/posts")
     return blog_post
+
+
+@pytest.fixture
+def tag() -> TagFactory:
+    return TagFactory(name="test tag")
