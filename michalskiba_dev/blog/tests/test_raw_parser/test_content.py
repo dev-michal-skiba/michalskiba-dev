@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import Callable
+from unittest.mock import patch
 
 import pytest
 
@@ -75,6 +76,7 @@ class TestGetContentText:
 
 
 @pytest.mark.django_db
+@patch("blog.raw_parser.base_parsers.static", lambda path: f"/static/{path}")
 class TestGetContextHtmlText:
     def test_correct_html_text(
         self,

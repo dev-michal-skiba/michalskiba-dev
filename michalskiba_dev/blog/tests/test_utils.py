@@ -9,6 +9,7 @@ from blog.tests.factories import BlogPostRawFactory
 from blog.utils import (
     create_blog_post_file,
     extract_images_absolute_paths_from_blog_post_raw_file,
+    get_blog_post_html_content,
     get_extracted_blog_post_info_from_blog_post_raw_file,
     remove_files,
 )
@@ -101,10 +102,23 @@ class TestGetExtractedBlogPostInfoFromBlogPostRawFile:
 @patch("blog.utils.settings")
 class TestCreateBlogPostFile:
     def test_blog_post_file_created(self, settings_mock: Mock, tmpdir: Any) -> None:
-        tmp_file = tmpdir.join(Path("test.html"))
-        settings_mock.BLOG_POSTS_PATH = Path(tmp_file.strpath[:-10])
+        tmp_file = tmpdir.join(Path("test_blog_post_file_created.html"))
+        settings_mock.BLOG_POSTS_PATH = Path(tmp_file.strpath[:-33])
         html_content = "<div>\nHello World!\n</div>"
 
-        create_blog_post_file(content_path="test.html", html_content=html_content)
+        create_blog_post_file(
+            content_path="test_blog_post_file_created.html", html_content=html_content
+        )
 
         assert tmp_file.read() == html_content
+
+
+class TestGetBlogPostHtmlComntent:
+    def test_file_content_returned(self, tmpdir: Any) -> None:
+        tmp_file = tmpdir.join(Path("test_file_content_returned.html"))
+        with open(tmp_file.strpath, "w") as f:
+            f.write("test content")
+
+        content = get_blog_post_html_content(Path(tmp_file.strpath))
+
+        assert content == "test content"

@@ -2,6 +2,7 @@ import os.path
 import re
 
 from django.conf import settings
+from django.templatetags.static import static
 
 from blog.constants import (
     MARKDOWN_BOLD_REGEX,
@@ -204,10 +205,10 @@ class HTMLImageParser(BaseParser):
             absolute_path = settings.BLOG_POSTS_RAW_PATH / relative_path
             absolute_path = os.path.normpath(absolute_path)
             path = os.path.relpath(absolute_path, settings.BASE_STATIC_PATH)
-            static_path_tag = f"{{% static '{path}' %}}"
+            static_path = static(path)
             text = text.replace(
                 f"![{alternative_text}]({relative_path})",
-                f'<img src="{static_path_tag}" alt="{alternative_text}">',
+                f'<img src="{static_path}" alt="{alternative_text}">',
             )
         return text
 

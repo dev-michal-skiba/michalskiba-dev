@@ -1,3 +1,5 @@
+from unittest.mock import patch
+
 import pytest
 
 from blog.raw_parser.base_parsers import (
@@ -272,6 +274,7 @@ class TestHTMLOrderedListParser:
         )
 
 
+@patch("blog.raw_parser.base_parsers.static", lambda path: f"/static/{path}")
 class TestHTMLImageParser:
     def test_parse(self) -> None:
         parser = HTMLImageParser()
@@ -281,7 +284,7 @@ class TestHTMLImageParser:
         )
 
         assert parsed_text == (
-            "dummy\n<img src=\"{% static 'blog/images/relative_path.jpg' %}\" "
+            'dummy\n<img src="/static/blog/images/relative_path.jpg" '
             'alt="alternative_text">\ndummy'
         )
 
@@ -294,9 +297,9 @@ class TestHTMLImageParser:
         )
 
         assert parsed_text == (
-            "dummy\n<img src=\"{% static 'blog/images/relative_path_1.jpg' %}\" "
+            'dummy\n<img src="/static/blog/images/relative_path_1.jpg" '
             'alt="alternative text 1">\n'
-            "dummy\n<img src=\"{% static 'blog/images/relative_path_2.jpg' %}\" "
+            'dummy\n<img src="/static/blog/images/relative_path_2.jpg" '
             'alt="alternative text 2">\ndummy'
         )
 
@@ -309,9 +312,9 @@ class TestHTMLImageParser:
         )
 
         assert parsed_text == (
-            "<img src=\"{% static 'blog/images/relative_path_1.jpg' %}\" "
+            '<img src="/static/blog/images/relative_path_1.jpg" '
             'alt="alternative text 1">'
-            "<img src=\"{% static 'blog/images/relative_path_2.jpg' %}\" "
+            '<img src="/static/blog/images/relative_path_2.jpg" '
             'alt="alternative text 2">'
         )
 

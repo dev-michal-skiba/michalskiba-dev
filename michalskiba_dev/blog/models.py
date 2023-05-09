@@ -73,6 +73,10 @@ class BlogPost(BlogPostBase):
             return self.release_date.strftime("%Y.%m.%d")
         return "NOT RELEASED"
 
+    @property
+    def tags_for_display(self) -> str:
+        return ", ".join(self.tags.values_list("name", flat=True))
+
 
 @receiver(pre_delete, sender=BlogPostRaw, dispatch_uid="blog_post_raw_pre_delete_signal")
 def blog_post_raw_pre_delete_signal(instance: BlogPostRaw, **kwargs: dict[str, Any]) -> None:

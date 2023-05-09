@@ -6,6 +6,7 @@ import pytest
 from django.contrib.auth.models import User
 
 from blog.models import BlogPost, BlogPostBase, BlogPostRaw, Tag
+from blog.tests.factories import TagFactory
 
 
 @pytest.mark.django_db
@@ -69,6 +70,15 @@ class TestBlogPost(BlogPostBaseTests):
 
     def test_release_date_for_display_for_null_value(self, blog_post: BlogPost) -> None:
         assert blog_post.release_date_for_display == "NOT RELEASED"
+
+    def test_tags_for_display(self, blog_post: BlogPost) -> None:
+        tag_1 = TagFactory(name="tag 1")
+        tag_2 = TagFactory(name="tag 2")
+        blog_post.tags.add(tag_1)
+        blog_post.tags.add(tag_2)
+        blog_post.save()
+
+        assert blog_post.tags_for_display == "tag 1, tag 2"
 
 
 @pytest.mark.django_db

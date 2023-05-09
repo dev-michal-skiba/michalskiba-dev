@@ -53,3 +53,9 @@ def create_blog_post_file(content_path: str, html_content: str) -> None:
     file_path = settings.BLOG_POSTS_PATH / content_path
     with open(file_path, "w") as blog_post_file:
         blog_post_file.write(html_content)
+
+
+def get_blog_post_html_content(absolute_path: Path) -> str:
+    with open(absolute_path, "r") as blog_post_file:
+        html_content = blog_post_file.read()
+    return html_content

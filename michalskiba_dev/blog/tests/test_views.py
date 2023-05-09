@@ -1,5 +1,5 @@
 from datetime import datetime, timezone
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 from django.test import Client
@@ -7,7 +7,7 @@ from django.urls import reverse
 
 from blog.models import BlogPost
 from blog.tests.factories import TagFactory
-from blog.views import _get_home_context
+from blog.views import _get_home_context, _get_post_context
 
 
 @pytest.mark.django_db
@@ -83,6 +83,23 @@ class TestAboutMe:
 
 
 @pytest.mark.django_db
+@patch("blog.views.get_blog_post_html_content", lambda path: "test content")
+class TestGetPostContext:
+    def test_correct_context(self, blog_post: BlogPost) -> None:
+        context = _get_post_context(blog_post)
+
+        assert context == {
+            "blog_post": {
+                "title": blog_post.title,
+                "lead": blog_post.lead,
+                "tags": blog_post.tags_for_display,
+                "html_content": "test content",
+                "release_date": blog_post.release_date_for_display,
+            }
+        }
+
+
+@pytest.mark.django_db
 class TestPost:
     def test_redirects_to_home_when_no_slug_match(self, blog_post: BlogPost) -> None:
         client = Client()
@@ -92,6 +109,7 @@ class TestPost:
         assert response.status_code == 302
         assert response["Location"] == reverse("home")
 
+    @patch("blog.views.get_blog_post_html_content", lambda path: "test content")
     def test_renders_post_template(self, blog_post_2: BlogPost) -> None:
         client = Client()
         blog_post_2.is_released = True
