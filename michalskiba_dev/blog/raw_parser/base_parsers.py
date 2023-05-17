@@ -3,6 +3,7 @@ import re
 
 from django.conf import settings
 from django.templatetags.static import static
+from slugify import slugify
 
 from blog.constants import (
     MARKDOWN_BOLD_REGEX,
@@ -244,7 +245,7 @@ class HTMLLinkParser(BaseParser):
             _, link_text, link = match
             text = text.replace(
                 f"[{link_text}]({link})",
-                f'<a href="{link}">{link_text}</a>',
+                f'<a class="link" href="{link}">{link_text}</a>',
             )
         return text
 
@@ -269,3 +270,35 @@ class HTMLItalicParser(BaseParser):
                 f"<i>{match}</i>",
             )
         return text
+
+
+class HTMLTableOfContentsParser(BaseParser):
+    def __init__(self, split_char: str = "\n"):
+        self._split_char = split_char
+
+    def parse(self, text: str) -> str:
+        lines: list[str] = text.split(self._split_char)
+        return_lines: list[str] = []
+        table_of_contents_lines: list[str] = []
+        for line in lines:
+            if not line.startswith("<h2>"):
+                return_lines.append(line)
+                continue
+            section_text = line[4:-5]
+            identifier = slugify(section_text)
+            new_line = line.replace("<h2>", f'<h2 id="{identifier}">')
+            return_lines.append(new_line)
+            table_of_contents_lines.append(
+                f'<li><a class="link" href="#{identifier}">{section_text}</a></li>'
+            )
+        table_of_contents_list_elements_text = f"{self._split_char}".join(table_of_contents_lines)
+        table_of_contents_text = (
+            f'<div class="toc_container">\n'
+            f'<p class="toc_title">Table of Contents</p>\n'
+            f'<ol class="toc_list">\n'
+            f"{table_of_contents_list_elements_text}\n"
+            f"</ol>\n"
+            f"</div>\n"
+        )
+        content_text = f"{self._split_char}".join(return_lines)
+        return table_of_contents_text + content_text

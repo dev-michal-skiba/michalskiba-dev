@@ -10,6 +10,7 @@ from blog.raw_parser.base_parsers import (
     HTMLLinkParser,
     HTMLOrderedListParser,
     HTMLParagraphParser,
+    HTMLTableOfContentsParser,
     HTMLUnorderedListParser,
     ListLowercaseParser,
     ListStripParser,
@@ -358,8 +359,8 @@ class TestHTMLLinkParser:
         )
 
         assert parsed_text == (
-            '<a href="https://www.google.com/">link 1</a> '
-            'dummy <a href="facebook.com">link 2</a> dummy'
+            '<a class="link" href="https://www.google.com/">link 1</a> '
+            'dummy <a class="link" href="facebook.com">link 2</a> dummy'
         )
 
     @pytest.mark.parametrize(
@@ -393,3 +394,31 @@ class TestHTMLItalicParser:
         parsed_text = parser.parse("dummy ***italic 1* dummy *italic 2* dummy")
 
         assert parsed_text == "dummy **<i>italic 1</i> dummy <i>italic 2</i> dummy"
+
+
+class TestHTMLTableOfContentsParser:
+    def test_parse(self) -> None:
+        parser = HTMLTableOfContentsParser()
+
+        parsed_text = parser.parse(
+            "<h2>Section 1</h2>\n"
+            "<p>section 1 text</p>\n"
+            "<h2>Section 2</h2>\n"
+            "<p>section 2 text</p>\n"
+            "<p>Some other text</p>"
+        )
+
+        assert parsed_text == (
+            '<div class="toc_container">\n'
+            '<p class="toc_title">Table of Contents</p>\n'
+            '<ol class="toc_list">\n'
+            '<li><a class="link" href="#section-1">Section 1</a></li>\n'
+            '<li><a class="link" href="#section-2">Section 2</a></li>\n'
+            "</ol>\n"
+            "</div>\n"
+            '<h2 id="section-1">Section 1</h2>\n'
+            "<p>section 1 text</p>\n"
+            '<h2 id="section-2">Section 2</h2>\n'
+            "<p>section 2 text</p>\n"
+            "<p>Some other text</p>"
+        )

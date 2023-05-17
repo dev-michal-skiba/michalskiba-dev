@@ -7,6 +7,7 @@ from .base_parsers import (
     HTMLLinkParser,
     HTMLOrderedListParser,
     HTMLParagraphParser,
+    HTMLTableOfContentsParser,
     HTMLUnorderedListParser,
     ListLowercaseParser,
     ListStripParser,
@@ -46,4 +47,5 @@ CONTENT_HTML_PARSERS: list[BaseParser] = [
     HTMLBoldParser(),
     HTMLItalicParser(),
     MultipleCharsParser(char=" "),
+    HTMLTableOfContentsParser(split_char="\n"),
 ]
