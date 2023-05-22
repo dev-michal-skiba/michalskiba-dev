@@ -41,13 +41,13 @@ class ListStripParser(StripParser):
         self._split_char = split_char
 
     def parse(self, text: str) -> str:
-        elements: list[str] = text.split(self._split_char)
-        parsed_elements = []
-        for element in elements:
-            parsed_element = super(ListStripParser, self).parse(element)
-            if parsed_element:
-                parsed_elements.append(parsed_element)
-        return f"{self._split_char}".join(parsed_elements)
+        lines: list[str] = text.split(self._split_char)
+        return_lines = []
+        for line in lines:
+            line = super(ListStripParser, self).parse(line)
+            if line:
+                return_lines.append(line)
+        return f"{self._split_char}".join(return_lines)
 
 
 class MultipleCharsParser(BaseParser):
@@ -73,10 +73,12 @@ class ListTrimParser(TrimParser):
         self._split_char = split_char
 
     def parse(self, text: str) -> str:
-        elements: list[str] = text.split(self._split_char)
-        for i in range(len(elements)):
-            elements[i] = super(ListTrimParser, self).parse(elements[i])
-        return f"{self._split_char}".join(elements)
+        lines: list[str] = text.split(self._split_char)
+        return_lines = []
+        for line in lines:
+            line = super(ListTrimParser, self).parse(line)
+            return_lines.append(line)
+        return f"{self._split_char}".join(return_lines)
 
 
 class ListLowercaseParser(BaseParser):
@@ -84,10 +86,12 @@ class ListLowercaseParser(BaseParser):
         self._split_char = split_char
 
     def parse(self, text: str) -> str:
-        elements: list[str] = text.split(self._split_char)
-        for i in range(len(elements)):
-            elements[i] = elements[i].lower()
-        return f"{self._split_char}".join(elements)
+        lines: list[str] = text.split(self._split_char)
+        return_lines = []
+        for line in lines:
+            line = line.lower()
+            return_lines.append(line)
+        return f"{self._split_char}".join(return_lines)
 
 
 class RemoveParser(BaseParser):
@@ -104,17 +108,19 @@ class HTMLHeaderParser(BaseParser):
         self._strip_char = strip_char
 
     def parse(self, text: str) -> str:
-        elements: list[str] = text.split(self._split_char)
-        for index in range(len(elements)):
+        lines: list[str] = text.split(self._split_char)
+        return_lines = []
+        for line in lines:
             for header_index in range(5, 0, -1):
-                if elements[index].startswith(header_index * "#"):
-                    elements[index] = elements[index][header_index:]
-                    elements[index] = elements[index].strip(self._strip_char)
-                    elements[
-                        index
-                    ] = f"<h{header_index + 1}>{elements[index]}</h{header_index + 1}>"
+                if line.startswith(header_index * "#"):
+                    line = line[header_index:]
+                    line = line.strip(self._strip_char)
+                    line = f"<h{header_index + 1}>{line}</h{header_index + 1}>"
+                    return_lines.append(line)
                     break
-        return f"{self._split_char}".join(elements)
+            else:
+                return_lines.append(line)
+        return f"{self._split_char}".join(return_lines)
 
 
 class HTMLUnorderedListParser(BaseParser):
@@ -124,46 +130,86 @@ class HTMLUnorderedListParser(BaseParser):
 
     def parse(self, text: str) -> str:
         current_list_level = 0
-        elements: list[str] = text.split(self._split_char)
-        return_elements: list[str] = []
-        for element in elements:
+        lines: list[str] = text.split(self._split_char)
+        return_lines: list[str] = []
+        for line in lines:
             if current_list_level:
-                should_continue = False
-                if current_list_level >= 2:
-                    for i in range(2, current_list_level + 1):
-                        if element.startswith((current_list_level - i) * "  " + "-"):
-                            for _ in range(i - 1):
-                                return_elements.append("</ul>")
-                                current_list_level -= 1
-                            return_elements.append(
-                                f"<li>{element.strip(self._strip_char)[2:]}</li>"
-                            )
-                            should_continue = True
-                            break
-                if should_continue:
-                    continue
-                if element.startswith((current_list_level - 1) * "  " + "-"):
-                    return_elements.append(f"<li>{element.strip(self._strip_char)[2:]}</li>")
-                elif element.startswith(current_list_level * "  " + "-"):
-                    return_elements.append("<ul>")
-                    return_elements.append(f"<li>{element.strip(self._strip_char)[2:]}</li>")
-                    current_list_level += 1
-                else:
-                    for _ in range(current_list_level):
-                        return_elements.append("</ul>")
-                    current_list_level = 0
-                    return_elements.append(element)
+                current_list_level, partial_return_lines = self._parse_line_when_list_started(
+                    line, current_list_level
+                )
             else:
-                if element.startswith("-"):
-                    return_elements.append("<ul>")
-                    return_elements.append(f"<li>{element.strip(self._strip_char)[2:]}</li>")
-                    current_list_level += 1
-                else:
-                    return_elements.append(element)
-        if current_list_level and return_elements[-1].startswith("<li>"):
+                current_list_level, partial_return_lines = self._parse_line_when_list_not_started(
+                    line, current_list_level
+                )
+            return_lines.extend(partial_return_lines)
+        partial_return_lines = self._close_remaining_list(
+            current_list_level, last_line=return_lines[-1]
+        )
+        return_lines.extend(partial_return_lines)
+        return f"{self._split_char}".join(return_lines)
+
+    def _parse_line_when_list_started(
+        self, line: str, current_list_level: int
+    ) -> tuple[int, list[str]]:
+        return_lines: list[str] = []
+        if current_list_level >= 2:
+            current_list_level, return_lines = self._parse_line_when_deeply_nested_line_may_end(
+                line, current_list_level
+            )
+            if return_lines:
+                return current_list_level, return_lines
+        is_list_continued_with_the_same_level = line.startswith(
+            (current_list_level - 1) * "  " + "-"
+        )
+        if is_list_continued_with_the_same_level:
+            return_lines.append(f"<li>{line.strip(self._strip_char)[2:]}</li>")
+            return current_list_level, return_lines
+        is_list_continued_with_the_deeper_level = line.startswith(current_list_level * "  " + "-")
+        if is_list_continued_with_the_deeper_level:
+            return_lines.append("<ul>")
+            return_lines.append(f"<li>{line.strip(self._strip_char)[2:]}</li>")
+            current_list_level += 1
+            return current_list_level, return_lines
+        for _ in range(current_list_level):
+            return_lines.append("</ul>")
+        current_list_level = 0
+        return_lines.append(line)
+        return current_list_level, return_lines
+
+    def _parse_line_when_deeply_nested_line_may_end(
+        self, line: str, current_list_level: int
+    ) -> tuple[int, list[str]]:
+        return_lines = []
+        for i in range(2, current_list_level + 1):
+            is_deeply_nested_list_finished = line.startswith((current_list_level - i) * "  " + "-")
+            if is_deeply_nested_list_finished:
+                for _ in range(i - 1):
+                    return_lines.append("</ul>")
+                    current_list_level -= 1
+                return_lines.append(f"<li>{line.strip(self._strip_char)[2:]}</li>")
+                break
+        return current_list_level, return_lines
+
+    def _parse_line_when_list_not_started(
+        self, line: str, current_list_level: int
+    ) -> tuple[int, list[str]]:
+        return_lines = []
+        is_list_started = line.startswith("-")
+        if is_list_started:
+            return_lines.append("<ul>")
+            return_lines.append(f"<li>{line.strip(self._strip_char)[2:]}</li>")
+            current_list_level += 1
+        else:
+            return_lines.append(line)
+        return current_list_level, return_lines
+
+    @staticmethod
+    def _close_remaining_list(current_list_level: int, last_line: str) -> list[str]:
+        return_lines = []
+        if current_list_level and last_line.startswith("<li>"):
             for _ in range(current_list_level):
-                return_elements.append("</ul>")
-        return f"{self._split_char}".join(return_elements)
+                return_lines.append("</ul>")
+        return return_lines
 
 
 class HTMLOrderedListParser(BaseParser):
@@ -172,30 +218,48 @@ class HTMLOrderedListParser(BaseParser):
         self._strip_char = strip_char
 
     def parse(self, text: str) -> str:
-        element_counter = 0
-        elements: list[str] = text.split(self._split_char)
-        return_elements: list[str] = []
-        for element in elements:
-            if element_counter:
-                expected_starting_chars = f"{element_counter + 1}. "
-                if element.startswith(expected_starting_chars):
-                    return_elements.append(
-                        f"<li>{element[len(expected_starting_chars):].strip(self._strip_char)}</li>"
-                    )
-                    element_counter += 1
-                else:
-                    return_elements.append("</ol>")
-                    element_counter = 0
-            if not element_counter:
-                if element.startswith("1. "):
-                    return_elements.append("<ol>")
-                    return_elements.append(f"<li>{element[3:].strip(self._strip_char)}</li>")
-                    element_counter += 1
-                else:
-                    return_elements.append(element)
-        if element_counter:
-            return_elements.append("</ol>")
-        return f"{self._split_char}".join(return_elements)
+        line_counter = 0
+        lines: list[str] = text.split(self._split_char)
+        return_lines: list[str] = []
+        for line in lines:
+            if line_counter:
+                line_counter, partial_return_lines = self._parse_line_when_list_started(
+                    line, line_counter
+                )
+                return_lines.extend(partial_return_lines)
+            if not line_counter:
+                line_counter, partial_return_lines = self._parse_line_when_list_not_started(
+                    line, line_counter
+                )
+                return_lines.extend(partial_return_lines)
+        if line_counter:
+            return_lines.append("</ol>")
+        return f"{self._split_char}".join(return_lines)
+
+    def _parse_line_when_list_started(self, line: str, line_counter: int) -> tuple[int, list[str]]:
+        return_lines: list[str] = []
+        expected_starting_char = f"{line_counter + 1}. "
+        if line.startswith(expected_starting_char):
+            return_lines.append(
+                f"<li>{line[len(expected_starting_char):].strip(self._strip_char)}</li>"
+            )
+            line_counter += 1
+        else:
+            return_lines.append("</ol>")
+            line_counter = 0
+        return line_counter, return_lines
+
+    def _parse_line_when_list_not_started(
+        self, line: str, line_counter: int
+    ) -> tuple[int, list[str]]:
+        return_lines: list[str] = []
+        if line.startswith("1. "):
+            return_lines.append("<ol>")
+            return_lines.append(f"<li>{line[3:].strip(self._strip_char)}</li>")
+            line_counter += 1
+        else:
+            return_lines.append(line)
+        return line_counter, return_lines
 
 
 class HTMLImageParser(BaseParser):
@@ -221,21 +285,21 @@ class HTMLParagraphParser(BaseParser):
 
     def parse(self, text: str) -> str:
         current_text = []
-        elements: list[str] = text.split(self._split_char)
-        return_elements: list[str] = []
-        for element in elements:
-            if not element.startswith("<"):
-                current_text.append(element.strip(self._strip_char))
+        lines: list[str] = text.split(self._split_char)
+        return_lines: list[str] = []
+        for line in lines:
+            if not line.startswith("<"):
+                current_text.append(line.strip(self._strip_char))
                 continue
             elif current_text:
                 paragraph_text = " ".join(current_text)
-                return_elements.append(f"<p>{paragraph_text}</p>")
+                return_lines.append(f"<p>{paragraph_text}</p>")
                 current_text = []
-            return_elements.append(element)
+            return_lines.append(line)
         if current_text:
             paragraph_text = " ".join(current_text)
-            return_elements.append(f"<p>{paragraph_text}</p>")
-        return f"{self._split_char}".join(return_elements)
+            return_lines.append(f"<p>{paragraph_text}</p>")
+        return f"{self._split_char}".join(return_lines)
 
 
 class HTMLLinkParser(BaseParser):
