@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_icons",
     "blog",
 ]
 
@@ -148,5 +149,13 @@ LOGGING = {
     "root": {
         "handlers": ["console"],
         "level": "INFO",
+    },
+}
+
+DJANGO_ICONS = {
+    "ICONS": {
+        "email": {"name": "fa fa-envelope"},
+        "linkedin": {"name": "fa fa-linkedin"},
+        "github": {"name": "fa fa-github"},
     },
 }
