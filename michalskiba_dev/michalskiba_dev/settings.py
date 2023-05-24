@@ -159,3 +159,12 @@ DJANGO_ICONS = {
         "github": {"name": "fa fa-github"},
     },
 }
+
+# fmt: off
+SECURE_HSTS_SECONDS = os.getenv("SECURE_HSTS_SECONDS", 0)
+SECURE_HSTS_INCLUDE_SUBDOMAINS = os.getenv("SECURE_HSTS_INCLUDE_SUBDOMAINS", "false").lower() in ["1", "true"]  # noqa: E501
+SECURE_HSTS_PRELOAD = os.getenv("SECURE_HSTS_PRELOAD", "false").lower() in ["1", "true"]
+SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "false").lower() in ["1", "true"]
+SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() in ["1", "true"]
+CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE", "false").lower() in ["1", "true"]
+# fmt: on
