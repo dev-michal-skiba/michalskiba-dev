@@ -1,2 +1,2 @@
 #!/bin/bash
-docker exec -it michalskiba_dev_django python manage.py "${@}"
+docker-compose --file devel.docker-compose.yml --env-file ./devel.env run --rm michalskiba_dev_web python manage.py "${@}"

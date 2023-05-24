@@ -3,6 +3,7 @@ from typing import Any, Callable
 from unittest.mock import Mock, call, patch
 
 import pytest
+from django.conf import settings
 
 from blog.models import BlogPost, BlogPostRaw
 from blog.tests.factories import BlogPostRawFactory
@@ -18,15 +19,13 @@ from blog.utils import (
 @pytest.mark.django_db
 @patch("blog.utils.os.remove")
 class TestRemoveFiles:
-    def test_files_removed(
-        self, os_remove_mock: Mock, blog_post_raw: BlogPostRawFactory, test_working_directory: Path
-    ) -> None:
+    def test_files_removed(self, os_remove_mock: Mock, blog_post_raw: BlogPostRawFactory) -> None:
         file_paths_to_remove = [
-            test_working_directory / "blog/tests/data/images/empty_shelves.jpg",
-            test_working_directory / "blog/tests/data/images/empty_shelves_grayscale.png",
-            test_working_directory / "blog/tests/data/images/empty_shelves_edges.png",
-            test_working_directory / "blog/tests/data/images/empty_shelves_erosion.png",
-            test_working_directory / "blog/tests/data/images/empty_shelves_dilation.png",
+            settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves.jpg",
+            settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_grayscale.png",
+            settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_edges.png",
+            settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_erosion.png",
+            settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_dilation.png",
         ]
 
         remove_files(file_paths_to_remove)
@@ -49,29 +48,27 @@ class TestRemoveFiles:
         assert os_remove_mock.call_count == 0
 
     def test_directories_not_removed(
-        self, os_remove_mock: Mock, blog_post_raw: BlogPostRawFactory, test_working_directory: Path
+        self, os_remove_mock: Mock, blog_post_raw: BlogPostRawFactory
     ) -> None:
-        remove_files([test_working_directory])
+        remove_files([Path("/")])
 
         assert os_remove_mock.call_count == 0
 
 
 @pytest.mark.django_db
 class TestExtractImagesFromBlogPostRawFile:
-    def test_images_extracted_correctly(
-        self, blog_post_raw: BlogPostRaw, test_working_directory: Path
-    ) -> None:
+    def test_images_extracted_correctly(self, blog_post_raw: BlogPostRaw) -> None:
         images_absolute_paths = extract_images_absolute_paths_from_blog_post_raw_file(
             blog_post_raw.absolute_path
         )
 
         assert sorted(images_absolute_paths) == sorted(
             [
-                test_working_directory / "blog/tests/data/images/empty_shelves.jpg",
-                test_working_directory / "blog/tests/data/images/empty_shelves_grayscale.png",
-                test_working_directory / "blog/tests/data/images/empty_shelves_edges.png",
-                test_working_directory / "blog/tests/data/images/empty_shelves_erosion.png",
-                test_working_directory / "blog/tests/data/images/empty_shelves_dilation.png",
+                settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves.jpg",
+                settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_grayscale.png",
+                settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_edges.png",
+                settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_erosion.png",
+                settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_dilation.png",
             ]
         )
 

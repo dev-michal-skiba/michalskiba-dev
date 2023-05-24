@@ -1,0 +1,12 @@
+version: '3.9'
+
+services:
+  michalskiba_dev_web_test:
+    image: michalskiba_dev_web
+    container_name: michalskiba_dev_web_test
+    volumes:
+      - ./michalskiba_dev:/code
+    ports:
+      - '8000:8000'
+    command: bash -c 'python manage.py migrate &&
+                      python manage.py runserver 0.0.0.0:8000'

@@ -1,2 +1,2 @@
 #!/bin/bash
-docker build --tag michalskiba_dev_django --file devel.dockerfile ./
+docker build --tag michalskiba_dev_web --file devel.dockerfile ./

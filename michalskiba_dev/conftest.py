@@ -1,4 +1,3 @@
-import os
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Callable
@@ -6,11 +5,6 @@ from typing import Callable
 import pytest
 from django.contrib.auth.models import User
 from django.test import Client
-
-
-@pytest.fixture
-def test_working_directory() -> Path:
-    return Path(os.getcwd())
 
 
 @pytest.fixture

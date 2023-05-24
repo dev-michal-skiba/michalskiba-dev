@@ -30,7 +30,7 @@ class TestGetSectionTextByTag:
 
         assert section_text == ""
 
-    def test_empty_section_text_for_directory(self, test_working_directory: Path) -> None:
-        section_text = get_section_text_by_tag(file_path=test_working_directory, tag="content")
+    def test_empty_section_text_for_directory(self) -> None:
+        section_text = get_section_text_by_tag(file_path=Path("/"), tag="content")
 
         assert section_text == ""

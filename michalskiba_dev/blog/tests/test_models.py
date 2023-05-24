@@ -1,8 +1,8 @@
 from datetime import datetime, timezone
-from pathlib import Path
 from unittest.mock import Mock, call, patch
 
 import pytest
+from django.conf import settings
 from django.contrib.auth.models import User
 
 from blog.models import BlogPost, BlogPostBase, BlogPostRaw, Tag
@@ -85,18 +85,18 @@ class TestBlogPost(BlogPostBaseTests):
 @patch("blog.utils.os.remove")
 class TestBlogPostRawPreDeleteSignal:
     def test_database_record_and_files_are_removed(
-        self, os_remove_mock: Mock, blog_post_raw: BlogPostRaw, test_working_directory: Path
+        self, os_remove_mock: Mock, blog_post_raw: BlogPostRaw
     ) -> None:
         blog_post_raw.delete()
 
         assert BlogPostRaw.objects.count() == 0
         calls = [
-            call(test_working_directory / "blog/tests/data/raw/test_raw_blog_post.md"),
-            call(test_working_directory / "blog/tests/data/images/empty_shelves.jpg"),
-            call(test_working_directory / "blog/tests/data/images/empty_shelves_grayscale.png"),
-            call(test_working_directory / "blog/tests/data/images/empty_shelves_edges.png"),
-            call(test_working_directory / "blog/tests/data/images/empty_shelves_erosion.png"),
-            call(test_working_directory / "blog/tests/data/images/empty_shelves_dilation.png"),
+            call(settings.BLOG_POSTS_RAW_PATH / "test_raw_blog_post.md"),
+            call(settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves.jpg"),
+            call(settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_grayscale.png"),
+            call(settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_edges.png"),
+            call(settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_erosion.png"),
+            call(settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_dilation.png"),
         ]
         os_remove_mock.assert_has_calls(calls)
 
@@ -105,13 +105,13 @@ class TestBlogPostRawPreDeleteSignal:
 @patch("blog.utils.os.remove")
 class TestBlogPostPreDeleteSignal:
     def test_database_record_and_files_are_removed(
-        self, os_remove_mock: Mock, blog_post: BlogPost, test_working_directory: Path
+        self, os_remove_mock: Mock, blog_post: BlogPost
     ) -> None:
         blog_post.delete()
 
         assert BlogPost.objects.count() == 0
         calls = [
-            call(test_working_directory / "blog/tests/data/posts/test_blog_post.html"),
+            call(settings.BLOG_POSTS_PATH / "test_blog_post.html"),
         ]
         os_remove_mock.assert_has_calls(calls)
 
