@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container-lg">
+    {% for blog_post in blog_posts %}
+        <a class="div-link" href="{{ blog_post.link }}">
+            <div class="container-md blog-post-tile">
+                <h2>{{ blog_post.title }}</h2>
+                <i>{{ blog_post.release_date }} | {{ blog_post.tags }}</i>
+                <br>
+                <br>
+                <p>{{ blog_post.lead }}</p>
+            </div>
+        </a>
+    {% endfor %}
+</div>
+{% endblock %}

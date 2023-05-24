@@ -13,9 +13,9 @@ services:
         interval: 10s
         timeout: 5s
         retries: 5
-  michalskiba_dev_django:
-    image: michalskiba_dev_django
-    container_name: michalskiba_dev_django
+  michalskiba_dev_web:
+    image: michalskiba_dev_web
+    container_name: michalskiba_dev_web
     volumes:
       - ./michalskiba_dev:/code
     env_file:

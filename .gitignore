@@ -5,4 +5,6 @@
 # Environments
 venv/
 # Devel database volume
-data/
+/data/
+# Coverage report
+.coverage
