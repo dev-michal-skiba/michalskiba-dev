@@ -29,7 +29,8 @@ SECRET_KEY = os.getenv("SECRET_KEY")
 DEBUG = os.getenv("DEBUG", "true").lower() in ["1", "true"]
 
 ALLOWED_HOSTS = os.environ.get("ALLOWED_HOSTS", "").split(",")
-
+ROOT_HOSTCONF = "michalskiba_dev.hosts"
+DEFAULT_HOST = "www"
 
 # Application definition
 
@@ -41,10 +42,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django_icons",
+    "django_hosts",
     "blog",
+    "web_parameter_tampering",
 ]
 
 MIDDLEWARE = [
+    "django_hosts.middleware.HostsRequestMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
@@ -53,6 +57,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django_hosts.middleware.HostsResponseMiddleware",
 ]
 
 ROOT_URLCONF = "michalskiba_dev.urls"
@@ -87,7 +92,15 @@ DATABASES = {
         "PASSWORD": os.getenv("POSTGRES_PASSWORD"),
         "HOST": os.getenv("POSTGRES_HOST"),
         "PORT": os.getenv("POSTGRES_PORT"),
-    }
+    },
+    "web_parameter_tampering": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": os.getenv("POSTGRES_WPT_DB"),
+        "USER": os.getenv("POSTGRES_WPT_USER"),
+        "PASSWORD": os.getenv("POSTGRES_WPT_PASSWORD"),
+        "HOST": os.getenv("POSTGRES_WPT_HOST"),
+        "PORT": os.getenv("POSTGRES_WPT_PORT"),
+    },
 }
 
 

@@ -9,7 +9,24 @@ services:
     env_file:
       - devel.env
     healthcheck:
-        test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+        test: ["CMD-SHELL", "pg_isready -d ${POSTGRES_DB} -U ${POSTGRES_USER}"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
+  michalskiba_dev_wpt_db:
+    image: postgres:15.1
+    container_name: michalskiba_dev_wpt_db
+    volumes:
+      - ./wpt_data:/var/lib/postgresql/data
+    env_file:
+      - devel.env
+    environment:
+      - POSTGRES_DB=${POSTGRES_WPT_DB}
+      - POSTGRES_USER=${POSTGRES_WPT_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_WPT_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_WPT_PORT}
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -d ${POSTGRES_WPT_DB} -U ${POSTGRES_WPT_USER}"]
         interval: 10s
         timeout: 5s
         retries: 5

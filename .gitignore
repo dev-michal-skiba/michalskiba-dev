@@ -6,5 +6,6 @@
 venv/
 # Devel database volume
 /data/
+/wpt_data/
 # Coverage report
 .coverage
