@@ -40,7 +40,10 @@ services:
     ports:
       - '8000:8000'
     command: bash -c 'python manage.py migrate &&
+                      python manage.py migrate --database=web_parameter_tampering &&
                       python manage.py runserver 0.0.0.0:8000'
     depends_on:
       michalskiba_dev_db:
+        condition: service_healthy
+      michalskiba_dev_wpt_db:
         condition: service_healthy

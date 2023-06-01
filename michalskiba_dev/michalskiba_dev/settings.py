@@ -102,6 +102,8 @@ DATABASES = {
         "PORT": os.getenv("POSTGRES_WPT_PORT"),
     },
 }
+DATABASE_ROUTERS = ["michalskiba_dev.database_router.DatabaseRouter"]
+APPS_WITH_DEDICATED_DATABASE = set(INSTALLED_APPS) & set(DATABASES.keys())
 
 
 # Password validation
