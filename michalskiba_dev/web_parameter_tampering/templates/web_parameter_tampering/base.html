@@ -16,12 +16,18 @@
     <span class="navbar-toggler-icon"></span>
 </button>
 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+    <ul class="navbar-nav mb-2 mb-lg-0">
         <li class="nav-item">
             <a class="nav-link secondary-text" href="/tickets">Tickets</a>
         </li>
         <li class="nav-item">
             <a class="nav-link secondary-text" href="/press">Press</a>
+        </li>
+    </ul>
+    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+            <label class="secondary-text" title="" for="wpt-switch">Secure version</label>
+            <input type="checkbox" id="wpt-switch" onclick="setWptSwitchValueCookie()">
         </li>
         {% if is_logged_in %}
         <li class="nav-item">
@@ -30,4 +36,48 @@
         {% endif %}
     </ul>
 </div>
+{% endblock %}
+
+{% block script %}
+<script>
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+        }
+        return "";
+    }
+
+    function setCookie(cname, cvalue) {
+        document.cookie = cname + "=" + cvalue + "; Path=/; SameSite=Lax; Secure";
+    }
+
+    function getWptSwitchValueFromCookie() {
+        const cookie_value = getCookie("is_secure_version_on");
+        return cookie_value.toLowerCase() === "true";
+    }
+
+    function setWptSwitchValueCookie() {
+        const isChecked = document.getElementById("wpt-switch").checked;
+        let cookieValue;
+        if ( isChecked === true )
+            cookieValue = "true";
+        else
+            cookieValue = "false";
+        setCookie("is_secure_version_on", cookieValue);
+    }
+
+    window.onload = function() {
+        let switchValueFromCookie = getWptSwitchValueFromCookie();
+        document.getElementById("wpt-switch").checked = switchValueFromCookie;
+    };
+</script>
 {% endblock %}

@@ -93,6 +93,14 @@ body {
     min-height: 70vh;
 }
 
+input[type="checkbox"] {
+    accent-color: var(--extra-color);
+    width: 0.5em;
+    height: 0.5em;
+    border: none;
+    border-radius: 0.15em;
+}
+
 @media (min-width: 576px) {
   .container-sm, .container {
     max-width: 540px;
