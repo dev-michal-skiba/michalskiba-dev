@@ -1,6 +1,6 @@
 from django.test import RequestFactory
 
-from web_parameter_tampering.views import home
+from web_parameter_tampering.views import home, tickets
 
 
 class TestHome:
@@ -8,5 +8,14 @@ class TestHome:
         request = RequestFactory().get("/")
 
         response = home(request)
+
+        assert response.status_code == 200
+
+
+class TestTickets:
+    def test_request_succeeds(self) -> None:
+        request = RequestFactory().get("/tickets")
+
+        response = tickets(request)
 
         assert response.status_code == 200
