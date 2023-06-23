@@ -1,7 +1,7 @@
 from django.urls import path
 
-from web_parameter_tampering.views import wpt
+from web_parameter_tampering.views import home
 
 urlpatterns = [
-    path("", wpt, name="test"),
+    path("", home, name="home"),
 ]

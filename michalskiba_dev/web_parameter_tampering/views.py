@@ -1,5 +1,6 @@
 from django.http import HttpRequest, HttpResponse
+from django.shortcuts import render
 
 
-def wpt(request: HttpRequest) -> HttpResponse:
-    return HttpResponse("Web Parameter Tampering Demo - WIP")
+def home(request: HttpRequest) -> HttpResponse:
+    return render(request, "web_parameter_tampering/home.html")

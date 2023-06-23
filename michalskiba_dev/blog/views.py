@@ -28,11 +28,11 @@ def _get_home_context(request: HttpRequest) -> dict[str, Any]:
 
 def home(request: HttpRequest) -> HttpResponse:
     context = _get_home_context(request)
-    return render(request, "home.html", context)
+    return render(request, "blog/home.html", context)
 
 
 def about_me(request: HttpRequest) -> HttpResponse:
-    return render(request, "about_me.html")
+    return render(request, "blog/about_me.html")
 
 
 def _get_post_context(blog_post: BlogPost) -> dict[str, Any]:
@@ -52,4 +52,4 @@ def post(request: HttpRequest, slug: str) -> HttpResponse:
     if blog_post is None:
         return redirect("home")
     context = _get_post_context(blog_post)
-    return render(request, "post.html", context)
+    return render(request, "blog/post.html", context)

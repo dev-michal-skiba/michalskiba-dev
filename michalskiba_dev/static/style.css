@@ -85,6 +85,14 @@ body {
     list-style-type: none;
 }
 
+.center-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 70vh;
+}
+
 @media (min-width: 576px) {
   .container-sm, .container {
     max-width: 540px;
