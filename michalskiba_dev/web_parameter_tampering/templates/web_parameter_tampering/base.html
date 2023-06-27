@@ -31,7 +31,10 @@
         </li>
         {% if is_logged_in %}
         <li class="nav-item">
-            <a class="nav-link secondary-text" href="/logout">Logout</a>
+            <form action="/logout" method="post">
+                {% csrf_token %}
+                <button class="nav-link link-button secondary-text">Logout</button>
+            </form>
         </li>
         {% endif %}
     </ul>
@@ -73,6 +76,7 @@
         else
             cookieValue = "false";
         setCookie("is_secure_version_on", cookieValue);
+        location.reload();
     }
 
     window.onload = function() {

@@ -101,6 +101,23 @@ input[type="checkbox"] {
     border-radius: 0.15em;
 }
 
+.primary-button, .primary-button:hover, .primary-button:active, .primary-button:focus {
+    background-color: var(--secondary-text);
+    color: black;
+}
+
+.link-button, .link-button:active, .link-button:focus {
+    background-color: black;
+    border: none;
+    cursor: default;
+    margin: 0;
+    padding: 0;
+}
+
+.link-button:hover {
+    color: var(--extra-color);
+}
+
 @media (min-width: 576px) {
   .container-sm, .container {
     max-width: 540px;

@@ -1,22 +1,24 @@
-from unittest.mock import Mock
+from unittest.mock import Mock, patch
 
 import pytest
 from django.http import HttpRequest, HttpResponse
 from django.test import RequestFactory
 
 from web_parameter_tampering.constants import IS_SECURE_VERSION_ON_COOKIE_NAME
-from web_parameter_tampering.decorators import version
+from web_parameter_tampering.decorators import authentication, version
+
+
+@pytest.fixture
+def base_request() -> HttpRequest:
+    return RequestFactory().get("/")
+
+
+@pytest.fixture
+def base_response() -> HttpResponse:
+    return HttpResponse()
 
 
 class TestVersion:
-    @pytest.fixture
-    def base_request(self) -> HttpRequest:
-        return RequestFactory().get("/")
-
-    @pytest.fixture
-    def base_response(self) -> HttpResponse:
-        return HttpResponse()
-
     def test_when_secure_version_is_defaulted(
         self, base_request: HttpRequest, base_response: HttpResponse
     ) -> None:
@@ -60,3 +62,19 @@ class TestVersion:
         assert cookie_value == (
             "Set-Cookie: is_secure_version_on=false; Path=/; SameSite=Lax; Secure"
         )
+
+
+class TestAuthentication:
+    @patch("web_parameter_tampering.decorators.get_user")
+    def test_user_is_set(
+        self, get_user_mock: Mock, base_request: HttpRequest, base_response: HttpResponse
+    ) -> None:
+        user = Mock()
+        get_user_mock.return_value = user
+        view_mock = Mock()
+        view_mock.return_value = base_response
+
+        response = authentication(view_mock)(base_request, *[], **{})
+
+        view_mock.assert_called_once_with(base_request, user=user)
+        assert response is base_response

@@ -1,0 +1,15 @@
+{% extends "web_parameter_tampering/base.html" %}
+
+{% block content %}
+<div class="container-lg">
+    <h1>Accreditation info</h1>
+    {% if press_application.accreditation_code %}
+    <p>Status: <span style="color: green;">Accepted</span></p>
+    <p>Accreditation code: <b>{{ press_application.accreditation_code }}</b></p>
+    {% else %}
+    <p>Status: <span style="color: red;">Waiting for approval</span></p>
+    {% endif %}
+    <p>Organization: {{ press_application.organization }}</p>
+    <p>Note: {{ press_application.note }}</p>
+</div>
+{% endblock %}
