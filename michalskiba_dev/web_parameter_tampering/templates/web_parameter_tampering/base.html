@@ -41,6 +41,23 @@
 </div>
 {% endblock %}
 
+{% block footer %}
+<div class="warning-footer">
+    <p primary-text>
+        This is demo site that present security threat. Do not put any personal information here as
+        it may be compromised. See
+        <a
+            class="link"
+            target=”_blank”
+            href="https://michalskiba.dev/post/web-parameter-tampering-simple-but-very-serious-security-risk"
+        >
+            blog post
+        </a>
+        for more information.
+    </p>
+</div>
+{% endblock %}
+
 {% block script %}
 <script>
     function getCookie(cname) {
