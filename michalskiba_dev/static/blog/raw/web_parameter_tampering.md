@@ -32,9 +32,9 @@ The whole code for the Web Parameter Tampering demo, which is Django app, can be
 
 Going to the demo site [https://wpt.michalskiba.dev/](https://wpt.michalskiba.dev/), by default you will start with secure version off. You can access press portal either as a victim (username: *victim*, password: *Victim1234!*) or a hacker (username: *hacker*, password: *Hacker1234!*). No matter as who you are logged in, you will see the page with press application: approved for the victim with the accreditation number and waiting application for the hacker.
 
-![wpt_1.png](..%2Fimages%2Fweb_parameter_tampering%2F1.png)
-![wpt_2.png](..%2Fimages%2Fweb_parameter_tampering%2F2.png)
-![wpt_3.png](..%2Fimages%2Fweb_parameter_tampering%2F3.png)
+![wpt_1.png](../images/web_parameter_tampering/1.png)
+![wpt_2.png](../images/web_parameter_tampering/2.png)
+![wpt_3.png](../images/web_parameter_tampering/3.png)
 
 You can also notice that urls for the victim and hacker look as follows: [http://wpt.michalskiba.dev/press/2](http://wpt.michalskiba.dev/press/2) and [http://wpt.michalskiba.dev/press/1](http://wpt.michalskiba.dev/press/1). As you can easily guess, the number in the url represents the user's primary key from the database. **That is huge security threat**. It implies that basically anyone can try different user's primary keys and try to steal accreditation of the other press organization. If you are logged in as the hacker, you can change "1" in url to "2" which will result in obtaining press application from the victim!. If you log out and try the same url [http://wpt.michalskiba.dev/press/2](http://wpt.michalskiba.dev/press/2), you will be redirected to the home page of the demo site. That is the issue for many broken access controls vulnerabilities. User can get any confidential resource based on being authenticated without authorizing user for a given resource.
 
