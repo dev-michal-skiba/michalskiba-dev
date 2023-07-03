@@ -130,6 +130,15 @@ input[type="checkbox"] {
   padding: 5px;
 }
 
+.post-img {
+    border: gray 1px solid;
+    margin: 20px 0 20px 0;
+}
+
+.justify {
+    text-align: justify;
+}
+
 @media (min-width: 576px) {
   .container-sm, .container {
     max-width: 540px;

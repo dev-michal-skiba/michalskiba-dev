@@ -24,11 +24,17 @@ COMMON_PARSERS: list[BaseParser] = [
     StripParser(strip_char=" "),
     MultipleCharsParser(char=" "),
 ]
-TITLE_PARSERS: list[BaseParser] = [TrimParser(max_length=64)]
-LEAD_PARSERS: list[BaseParser] = [TrimParser(max_length=512)]
+TITLE_PARSERS: list[BaseParser] = [TrimParser(max_length=128)]
+LEAD_PARSERS: list[BaseParser] = [
+    TrimParser(max_length=512),
+    HTMLLinkParser(),
+    HTMLBoldParser(),
+    HTMLItalicParser(),
+    MultipleCharsParser(char=" "),
+]
 TAGS_PARSERS: list[BaseParser] = [
     RemoveParser(remove_char=" "),
-    ListTrimParser(max_length=16, split_char=","),
+    ListTrimParser(max_length=32, split_char=","),
     ListLowercaseParser(split_char=","),
 ]
 CONTENT_PARSERS: list[BaseParser] = [

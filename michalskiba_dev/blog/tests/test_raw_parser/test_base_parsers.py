@@ -285,7 +285,7 @@ class TestHTMLImageParser:
         )
 
         assert parsed_text == (
-            'dummy\n<img src="/static/blog/images/relative_path.jpg" '
+            'dummy\n<img class="img-fluid post-img" src="/static/blog/images/relative_path.jpg" '
             'alt="alternative_text">\ndummy'
         )
 
@@ -298,9 +298,9 @@ class TestHTMLImageParser:
         )
 
         assert parsed_text == (
-            'dummy\n<img src="/static/blog/images/relative_path_1.jpg" '
+            'dummy\n<img class="img-fluid post-img" src="/static/blog/images/relative_path_1.jpg" '
             'alt="alternative text 1">\n'
-            'dummy\n<img src="/static/blog/images/relative_path_2.jpg" '
+            'dummy\n<img class="img-fluid post-img" src="/static/blog/images/relative_path_2.jpg" '
             'alt="alternative text 2">\ndummy'
         )
 
@@ -313,9 +313,9 @@ class TestHTMLImageParser:
         )
 
         assert parsed_text == (
-            '<img src="/static/blog/images/relative_path_1.jpg" '
+            '<img class="img-fluid post-img" src="/static/blog/images/relative_path_1.jpg" '
             'alt="alternative text 1">'
-            '<img src="/static/blog/images/relative_path_2.jpg" '
+            '<img class="img-fluid post-img" src="/static/blog/images/relative_path_2.jpg" '
             'alt="alternative text 2">'
         )
 
@@ -359,8 +359,8 @@ class TestHTMLLinkParser:
         )
 
         assert parsed_text == (
-            '<a class="link" href="https://www.google.com/">link 1</a> '
-            'dummy <a class="link" href="facebook.com">link 2</a> dummy'
+            '<a class="link" target="_blank" href="https://www.google.com/">link 1</a> '
+            'dummy <a class="link" target="_blank" href="facebook.com">link 2</a> dummy'
         )
 
     @pytest.mark.parametrize(

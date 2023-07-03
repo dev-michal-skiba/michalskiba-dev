@@ -12,7 +12,8 @@ class TestGetSectionTextByTag:
         section_text = get_section_text_by_tag(file_path=blog_post_raw.absolute_path, tag="title")
 
         assert section_text == (
-            "Some title title title title title title title title title title opsie"
+            "Some title title title title title title title title title title title title title "
+            "title title title title title title title title title opsie"
         )
 
     def test_correct_section_without_default_parsers(self, blog_post_raw: BlogPostRaw) -> None:
@@ -21,8 +22,8 @@ class TestGetSectionTextByTag:
         )
 
         assert section_text == (
-            "\nSome title title title    title title title title title title        "
-            "title opsie\n\n"
+            "\nSome title title title title title     title title title title title   title title "
+            "title title title title title title title title title        title opsie\n\n"
         )
 
     def test_empty_section_text_for_not_existing_file(self) -> None:

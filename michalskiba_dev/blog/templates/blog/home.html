@@ -4,12 +4,12 @@
 <div class="container-lg">
     {% for blog_post in blog_posts %}
         <a class="div-link" href="{{ blog_post.link }}">
-            <div class="container-md blog-post-tile">
+            <div class="container-md blog-post-tile justify">
                 <h2>{{ blog_post.title }}</h2>
                 <i>{{ blog_post.release_date }} | {{ blog_post.tags }}</i>
                 <br>
                 <br>
-                <p>{{ blog_post.lead }}</p>
+                <p>{{ blog_post.lead | safe}}</p>
             </div>
         </a>
     {% endfor %}

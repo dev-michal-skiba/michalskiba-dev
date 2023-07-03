@@ -9,3 +9,5 @@ venv/
 /wpt_data/
 # Coverage report
 .coverage
+# HTML posts
+michalskiba_dev/static/blog/posts
