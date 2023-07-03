@@ -9,4 +9,4 @@ class TestGetTags:
     def test_correct_tags(self, blog_post_raw: BlogPostRaw) -> None:
         tags = get_tags(file_path=blog_post_raw.absolute_path)
 
-        assert tags == ["tag1", "tag2", "reallylongtag123"]
+        assert tags == ["tag1", "tag2", "reallylongtagreallylongtag123456"]

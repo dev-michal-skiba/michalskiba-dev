@@ -85,6 +85,60 @@ body {
     list-style-type: none;
 }
 
+.center-div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    min-height: 70vh;
+}
+
+input[type="checkbox"] {
+    accent-color: var(--extra-color);
+    width: 0.5em;
+    height: 0.5em;
+    border: none;
+    border-radius: 0.15em;
+}
+
+.primary-button, .primary-button:hover, .primary-button:active, .primary-button:focus {
+    background-color: var(--secondary-text);
+    color: black;
+}
+
+.link-button, .link-button:active, .link-button:focus {
+    background-color: black;
+    border: none;
+    cursor: default;
+    margin: 0;
+    padding: 0;
+}
+
+.link-button:hover {
+    color: var(--extra-color);
+}
+
+.warning-footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: #660000;
+  color: white;
+  text-align: center;
+  height: auto;
+  padding: 5px;
+}
+
+.post-img {
+    border: gray 1px solid;
+    margin: 20px 0 20px 0;
+}
+
+.justify {
+    text-align: justify;
+}
+
 @media (min-width: 576px) {
   .container-sm, .container {
     max-width: 540px;

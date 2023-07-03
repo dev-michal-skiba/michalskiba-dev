@@ -69,7 +69,7 @@ class TestHome:
         response = client.get("/")
 
         assert response.status_code == 200
-        assert "home.html" in (t.name for t in response.templates)
+        assert "blog/home.html" in (t.name for t in response.templates)
 
 
 class TestAboutMe:
@@ -79,7 +79,7 @@ class TestAboutMe:
         response = client.get("/about-me")
 
         assert response.status_code == 200
-        assert "about_me.html" in (t.name for t in response.templates)
+        assert "blog/about_me.html" in (t.name for t in response.templates)
 
 
 @pytest.mark.django_db
@@ -118,4 +118,4 @@ class TestPost:
         response = client.get(f"/post/{blog_post_2.slug}")
 
         assert response.status_code == 200
-        assert "post.html" in (t.name for t in response.templates)
+        assert "blog/post.html" in (t.name for t in response.templates)

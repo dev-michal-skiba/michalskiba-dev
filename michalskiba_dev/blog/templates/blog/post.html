@@ -1,12 +1,12 @@
-{% extends "base.html" %}
+{% extends "blog/base.html" %}
 
 {% block content %}
-<div class="container-lg">
+<div class="container-lg justify">
     <h1>{{ blog_post.title }}</h1>
     <i>{{ blog_post.release_date }} | {{ blog_post.tags }}</i>
     <br>
     <br>
-    <p>{{ blog_post.lead }}</p>
+    <p>{{ blog_post.lead | safe}}</p>
     {{ blog_post.html_content | safe }}
 </div>
 {% endblock %}

@@ -15,7 +15,7 @@ from blog.utils import (
 
 
 class BlogPostBase(models.Model):
-    content_path = models.CharField(max_length=64, unique=True)
+    content_path = models.CharField(max_length=128, unique=True)
 
     BASE_CONTENT_PATH: Path = Path("")
 
@@ -39,7 +39,7 @@ class BlogPostRaw(BlogPostBase):
 
 
 class Tag(models.Model):
-    name = models.CharField(max_length=16, unique=True)
+    name = models.CharField(max_length=64, unique=True)
 
     def __str__(self) -> str:
         return self.name
@@ -56,8 +56,8 @@ class BlogPost(BlogPostBase):
     creation_date = models.DateTimeField(auto_now_add=True)
     release_date = models.DateTimeField(blank=True, null=True)
     is_released = models.BooleanField(default=False)
-    slug = models.CharField(max_length=64, unique=True)
-    title = models.CharField(max_length=64, unique=True)
+    slug = models.CharField(max_length=128, unique=True)
+    title = models.CharField(max_length=128, unique=True)
     lead = models.TextField(max_length=512)
     tags = models.ManyToManyField(Tag, related_name="blog_posts")
     blog_post_raw = models.OneToOneField(

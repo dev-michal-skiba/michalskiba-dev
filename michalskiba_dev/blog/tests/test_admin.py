@@ -42,13 +42,13 @@ class TestBlogPostRawAdmin:
             assert isinstance(blog_post, BlogPost)
             assert blog_post.blog_post_raw == blog_post_raw
             assert blog_post.content_path == "test_raw_blog_post.html"
-            assert (
-                blog_post.slug
-                == "some-title-title-title-title-title-title-title-title-title-title"
+            assert blog_post.slug == (
+                "some-title-title-title-title-title-title-title-title-title-title-title-title-"
+                "title-title-title-title-title-title-title-title-tit"
             )
-            assert (
-                blog_post.title
-                == "Some title title title title title title title title title title"
+            assert blog_post.title == (
+                "Some title title title title title title title title title title title title "
+                "title title title title title title title title tit"
             )
             assert blog_post.lead == "Some xy" + 101 * " lead"
             assert blog_post.tags.count() == 3
@@ -81,13 +81,13 @@ class TestBlogPostRawAdmin:
             assert BlogPost.objects.count() == 1
             assert blog_post.blog_post_raw == blog_post_raw
             assert blog_post.content_path == "test_raw_blog_post.html"
-            assert (
-                blog_post.slug
-                == "some-title-title-title-title-title-title-title-title-title-title"
+            assert blog_post.slug == (
+                "some-title-title-title-title-title-title-title-title-title-title-title-title-"
+                "title-title-title-title-title-title-title-title-tit"
             )
-            assert (
-                blog_post.title
-                == "Some title title title title title title title title title title"
+            assert blog_post.title == (
+                "Some title title title title title title title title title title title title "
+                "title title title title title title title title tit"
             )
             assert blog_post.lead == "Some xy" + 101 * " lead"
             assert blog_post.tags.count() == 3

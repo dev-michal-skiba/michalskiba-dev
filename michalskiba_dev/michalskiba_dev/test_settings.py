@@ -5,7 +5,11 @@ DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": f"{BASE_DIR}/db.sqlite3",  # noqa: F405
-    }
+    },
+    "web_parameter_tampering": {
+        "ENGINE": "django.db.backends.sqlite3",
+        "NAME": f"{BASE_DIR}/wpt_db.sqlite3",  # noqa: F405
+    },
 }
 
 BASE_STATIC_PATH = BASE_DIR / "test_static"  # noqa: F405

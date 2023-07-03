@@ -86,13 +86,19 @@ class TestGetExtractedBlogPostInfoFromBlogPostRawFile:
         )
 
         assert extracted_blog_post_info.title == (
-            "Some title title title title title title title title title title"
+            "Some title title title title title title title title title title title title title "
+            "title title title title title title title tit"
         )
         assert extracted_blog_post_info.slug == (
-            "some-title-title-title-title-title-title-title-title-title-title"
+            "some-title-title-title-title-title-title-title-title-title-title-title-title-title-"
+            "title-title-title-title-title-title-title-tit"
         )
         assert extracted_blog_post_info.lead == "Some xy" + 101 * " lead"
-        assert extracted_blog_post_info.tags == ["tag1", "tag2", "reallylongtag123"]
+        assert extracted_blog_post_info.tags == [
+            "tag1",
+            "tag2",
+            "reallylongtagreallylongtag123456",
+        ]
         assert_file_content(blog_post.absolute_path, extracted_blog_post_info.html_content)
 
 

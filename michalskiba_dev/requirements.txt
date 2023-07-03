@@ -24,12 +24,14 @@ pathspec==0.11.0
 platformdirs==3.1.1
 pluggy==1.0.0
 psycopg==3.1.9
+PyJWT==2.7.0
 pytest==7.3.1
 pytest-cov==4.0.0
 pytest-django==4.5.2
 pytest-freezegun==0.4.2
 python-dateutil==2.8.2
 python-slugify==8.0.1
+pytz==2023.3
 ruff==0.0.254
 six==1.16.0
 soupsieve==2.4.1

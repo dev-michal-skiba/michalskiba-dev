@@ -273,7 +273,7 @@ class HTMLImageParser(BaseParser):
             static_path = static(path)
             text = text.replace(
                 f"![{alternative_text}]({relative_path})",
-                f'<img src="{static_path}" alt="{alternative_text}">',
+                f'<img class="img-fluid post-img" src="{static_path}" alt="{alternative_text}">',
             )
         return text
 
@@ -309,7 +309,7 @@ class HTMLLinkParser(BaseParser):
             _, link_text, link = match
             text = text.replace(
                 f"[{link_text}]({link})",
-                f'<a class="link" href="{link}">{link_text}</a>',
+                f'<a class="link" target="_blank" href="{link}">{link_text}</a>',
             )
         return text
 

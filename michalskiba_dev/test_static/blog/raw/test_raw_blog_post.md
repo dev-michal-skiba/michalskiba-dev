@@ -1,12 +1,12 @@
 [start title]
 
-Some title title title    title title title title title title        title opsie
+Some title title title title title     title title title title title   title title title title title title title title title title title        title opsie
 
 [end title]
 
 [start tags]
 
-Tag1, Tag2, ReallyLongTag1234567890
+Tag1, Tag2, ReallyLongTagReallyLongTag1234567890
 
 [end tags]
 
