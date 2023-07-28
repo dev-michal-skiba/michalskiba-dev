@@ -21,7 +21,7 @@ def client(login_superuser: Callable[[Client], None]) -> Client:
 @pytest.mark.django_db
 class TestBlogPostRawAdmin:
     @patch("blog.admin.create_blog_post_file", Mock())
-    class TestProcessRawFile:
+    class TestConvertBlogPostRaw:
         @pytest.fixture
         def change_url(self) -> str:
             return reverse("admin:blog_blogpostraw_changelist")
@@ -30,7 +30,7 @@ class TestBlogPostRawAdmin:
             self, client: Client, change_url: str, blog_post_raw: BlogPostRaw
         ) -> None:
             data = {
-                "action": "process_raw_file",
+                "action": "convert_blog_post_raw",
                 "_selected_action": BlogPostRaw.objects.all().values_list("pk", flat=True),
             }
             assert BlogPost.objects.count() == 0
@@ -57,7 +57,7 @@ class TestBlogPostRawAdmin:
             self, client: Client, change_url: str, blog_post_raw: BlogPostRaw
         ) -> None:
             data = {
-                "action": "process_raw_file",
+                "action": "convert_blog_post_raw",
                 "_selected_action": BlogPostRaw.objects.all().values_list("pk", flat=True),
             }
             blog_post = BlogPostFactory(

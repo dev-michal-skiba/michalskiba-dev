@@ -3,7 +3,7 @@ from pathlib import Path
 import pytest
 
 from blog.models import BlogPostRaw
-from blog.raw_parser.utils import get_section_text_by_tag
+from blog.post_converter.utils import get_section_text_by_tag
 
 
 @pytest.mark.django_db
@@ -16,9 +16,9 @@ class TestGetSectionTextByTag:
             "title title title title title title title title title opsie"
         )
 
-    def test_correct_section_without_default_parsers(self, blog_post_raw: BlogPostRaw) -> None:
+    def test_correct_section_without_default_converters(self, blog_post_raw: BlogPostRaw) -> None:
         section_text = get_section_text_by_tag(
-            file_path=blog_post_raw.absolute_path, tag="title", use_default_parsers=False
+            file_path=blog_post_raw.absolute_path, tag="title", use_default_converters=False
         )
 
         assert section_text == (

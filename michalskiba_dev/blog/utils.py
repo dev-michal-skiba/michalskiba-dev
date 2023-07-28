@@ -6,7 +6,7 @@ from slugify import slugify
 
 from blog.constants import MARKDOWN_IMAGES_REGEX
 from blog.domain import ExtractedBlogPostInfo
-from blog.raw_parser import (
+from blog.post_converter import (
     get_content_html_text,
     get_content_text,
     get_lead_text,

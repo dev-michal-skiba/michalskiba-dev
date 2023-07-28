@@ -12,11 +12,11 @@ from blog.utils import (
 
 
 class BlogPostRawAdmin(admin.ModelAdmin[BlogPostRaw]):
-    actions = ["process_raw_file"]
-    list_display = ["content_path", "is_processed"]
+    actions = ["convert_blog_post_raw"]
+    list_display = ["content_path", "is_converted"]
 
-    @admin.action(description="Process raw file(s)")
-    def process_raw_file(self, request: HttpRequest, queryset: QuerySet[BlogPostRaw]) -> None:
+    @admin.action(description="Convert blog post raw file(s)")
+    def convert_blog_post_raw(self, request: HttpRequest, queryset: QuerySet[BlogPostRaw]) -> None:
         for blog_post_raw in queryset:
             extracted_blog_post_info = get_extracted_blog_post_info_from_blog_post_raw_file(
                 blog_post_raw.absolute_path

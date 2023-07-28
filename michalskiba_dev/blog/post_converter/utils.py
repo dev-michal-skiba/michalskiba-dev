@@ -1,11 +1,11 @@
 import os
 from pathlib import Path
 
-from .base_parsers import BaseParser
-from .conf import COMMON_PARSERS
+from .conf import COMMON_CONVERTERS
+from .converters import BaseConverter
 
 
-def get_section_text_by_tag(file_path: Path, tag: str, use_default_parsers: bool = True) -> str:
+def get_section_text_by_tag(file_path: Path, tag: str, use_default_converters: bool = True) -> str:
     section_text = ""
     if not os.path.exists(file_path) or not os.path.isfile(file_path):
         return ""
@@ -18,12 +18,12 @@ def get_section_text_by_tag(file_path: Path, tag: str, use_default_parsers: bool
                 section_text += line
             if f"[start {tag}]" in line:
                 should_read = True
-    if use_default_parsers:
-        section_text = apply_parsers(value=section_text, parsers=COMMON_PARSERS)
+    if use_default_converters:
+        section_text = apply_converters(value=section_text, converters=COMMON_CONVERTERS)
     return section_text
 
 
-def apply_parsers(value: str, parsers: list[BaseParser]) -> str:
-    for parser in parsers:
-        value = parser.parse(value)
+def apply_converters(value: str, converters: list[BaseConverter]) -> str:
+    for converter in converters:
+        value = converter.apply(value)
     return value

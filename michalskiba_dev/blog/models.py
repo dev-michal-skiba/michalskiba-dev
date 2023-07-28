@@ -34,7 +34,7 @@ class BlogPostRaw(BlogPostBase):
     BASE_CONTENT_PATH: Path = settings.BLOG_POSTS_RAW_PATH
 
     @property
-    def is_processed(self) -> bool:
+    def is_converted(self) -> bool:
         return hasattr(self, "blog_post") and isinstance(self.blog_post, BlogPost)
 
 

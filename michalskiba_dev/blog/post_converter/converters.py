@@ -13,79 +13,79 @@ from blog.constants import (
 )
 
 
-class BaseParser:
-    def parse(self, text: str) -> str:  # pragma: no cover
+class BaseConverter:
+    def apply(self, text: str) -> str:  # pragma: no cover
         return text
 
 
-class ReplaceParser(BaseParser):
+class Replace(BaseConverter):
     def __init__(self, old: str, new: str):
         self._old = old
         self._new = new
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         return text.replace(self._old, self._new)
 
 
-class StripParser(BaseParser):
+class Strip(BaseConverter):
     def __init__(self, strip_char: str = " "):
         self._strip_char = strip_char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         return text.strip(self._strip_char)
 
 
-class ListStripParser(StripParser):
+class ListStrip(Strip):
     def __init__(self, strip_char: str = " ", split_char: str = ","):
-        super(ListStripParser, self).__init__(strip_char)
+        super(ListStrip, self).__init__(strip_char)
         self._split_char = split_char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         lines: list[str] = text.split(self._split_char)
         return_lines = []
         for line in lines:
-            line = super(ListStripParser, self).parse(line)
+            line = super(ListStrip, self).apply(line)
             if line:
                 return_lines.append(line)
         return f"{self._split_char}".join(return_lines)
 
 
-class MultipleCharsParser(BaseParser):
+class MultipleChars(BaseConverter):
     def __init__(self, char: str = " "):
         self._char = char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         result = re.sub(f"{self._char}+", f"{self._char}", text)
         return str(result)
 
 
-class TrimParser(BaseParser):
+class Trim(BaseConverter):
     def __init__(self, max_length: int):
         self._max_length = max_length
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         return text[: self._max_length]
 
 
-class ListTrimParser(TrimParser):
+class ListTrim(Trim):
     def __init__(self, max_length: int, split_char: str = " "):
-        super(ListTrimParser, self).__init__(max_length)
+        super(ListTrim, self).__init__(max_length)
         self._split_char = split_char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         lines: list[str] = text.split(self._split_char)
         return_lines = []
         for line in lines:
-            line = super(ListTrimParser, self).parse(line)
+            line = super(ListTrim, self).apply(line)
             return_lines.append(line)
         return f"{self._split_char}".join(return_lines)
 
 
-class ListLowercaseParser(BaseParser):
+class ListLowercase(BaseConverter):
     def __init__(self, split_char: str = " "):
         self._split_char = split_char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         lines: list[str] = text.split(self._split_char)
         return_lines = []
         for line in lines:
@@ -94,20 +94,20 @@ class ListLowercaseParser(BaseParser):
         return f"{self._split_char}".join(return_lines)
 
 
-class RemoveParser(BaseParser):
+class Remove(BaseConverter):
     def __init__(self, remove_char: str = " "):
         self._remove_char = remove_char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         return text.replace(self._remove_char, "")
 
 
-class HTMLHeaderParser(BaseParser):
+class HTMLHeader(BaseConverter):
     def __init__(self, split_char: str = "\n", strip_char: str = " "):
         self._split_char = split_char
         self._strip_char = strip_char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         lines: list[str] = text.split(self._split_char)
         return_lines = []
         for line in lines:
@@ -123,22 +123,22 @@ class HTMLHeaderParser(BaseParser):
         return f"{self._split_char}".join(return_lines)
 
 
-class HTMLUnorderedListParser(BaseParser):
+class HTMLUnorderedList(BaseConverter):
     def __init__(self, split_char: str = "\n", strip_char: str = " "):
         self._split_char = split_char
         self._strip_char = strip_char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         current_list_level = 0
         lines: list[str] = text.split(self._split_char)
         return_lines: list[str] = []
         for line in lines:
             if current_list_level:
-                current_list_level, partial_return_lines = self._parse_line_when_list_started(
+                current_list_level, partial_return_lines = self._apply_for_list_started(
                     line, current_list_level
                 )
             else:
-                current_list_level, partial_return_lines = self._parse_line_when_list_not_started(
+                current_list_level, partial_return_lines = self._apply_for_list_not_started(
                     line, current_list_level
                 )
             return_lines.extend(partial_return_lines)
@@ -148,12 +148,10 @@ class HTMLUnorderedListParser(BaseParser):
         return_lines.extend(partial_return_lines)
         return f"{self._split_char}".join(return_lines)
 
-    def _parse_line_when_list_started(
-        self, line: str, current_list_level: int
-    ) -> tuple[int, list[str]]:
+    def _apply_for_list_started(self, line: str, current_list_level: int) -> tuple[int, list[str]]:
         return_lines: list[str] = []
         if current_list_level >= 2:
-            current_list_level, return_lines = self._parse_line_when_deeply_nested_line_may_end(
+            current_list_level, return_lines = self._apply_for_deeply_nested_line(
                 line, current_list_level
             )
             if return_lines:
@@ -176,7 +174,7 @@ class HTMLUnorderedListParser(BaseParser):
         return_lines.append(line)
         return current_list_level, return_lines
 
-    def _parse_line_when_deeply_nested_line_may_end(
+    def _apply_for_deeply_nested_line(
         self, line: str, current_list_level: int
     ) -> tuple[int, list[str]]:
         return_lines = []
@@ -190,7 +188,7 @@ class HTMLUnorderedListParser(BaseParser):
                 break
         return current_list_level, return_lines
 
-    def _parse_line_when_list_not_started(
+    def _apply_for_list_not_started(
         self, line: str, current_list_level: int
     ) -> tuple[int, list[str]]:
         return_lines = []
@@ -212,23 +210,23 @@ class HTMLUnorderedListParser(BaseParser):
         return return_lines
 
 
-class HTMLOrderedListParser(BaseParser):
+class HTMLOrderedList(BaseConverter):
     def __init__(self, split_char: str = "\n", strip_char: str = " "):
         self._split_char = split_char
         self._strip_char = strip_char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         line_counter = 0
         lines: list[str] = text.split(self._split_char)
         return_lines: list[str] = []
         for line in lines:
             if line_counter:
-                line_counter, partial_return_lines = self._parse_line_when_list_started(
+                line_counter, partial_return_lines = self._apply_for_list_started(
                     line, line_counter
                 )
                 return_lines.extend(partial_return_lines)
             if not line_counter:
-                line_counter, partial_return_lines = self._parse_line_when_list_not_started(
+                line_counter, partial_return_lines = self._apply_for_list_not_started(
                     line, line_counter
                 )
                 return_lines.extend(partial_return_lines)
@@ -236,7 +234,7 @@ class HTMLOrderedListParser(BaseParser):
             return_lines.append("</ol>")
         return f"{self._split_char}".join(return_lines)
 
-    def _parse_line_when_list_started(self, line: str, line_counter: int) -> tuple[int, list[str]]:
+    def _apply_for_list_started(self, line: str, line_counter: int) -> tuple[int, list[str]]:
         return_lines: list[str] = []
         expected_starting_char = f"{line_counter + 1}. "
         if line.startswith(expected_starting_char):
@@ -249,9 +247,7 @@ class HTMLOrderedListParser(BaseParser):
             line_counter = 0
         return line_counter, return_lines
 
-    def _parse_line_when_list_not_started(
-        self, line: str, line_counter: int
-    ) -> tuple[int, list[str]]:
+    def _apply_for_list_not_started(self, line: str, line_counter: int) -> tuple[int, list[str]]:
         return_lines: list[str] = []
         if line.startswith("1. "):
             return_lines.append("<ol>")
@@ -262,8 +258,8 @@ class HTMLOrderedListParser(BaseParser):
         return line_counter, return_lines
 
 
-class HTMLImageParser(BaseParser):
-    def parse(self, text: str) -> str:
+class HTMLImage(BaseConverter):
+    def apply(self, text: str) -> str:
         matches = MARKDOWN_IMAGES_REGEX.findall(text)
         for match in matches:
             alternative_text, relative_path = match
@@ -278,12 +274,12 @@ class HTMLImageParser(BaseParser):
         return text
 
 
-class HTMLParagraphParser(BaseParser):
+class HTMLParagraph(BaseConverter):
     def __init__(self, split_char: str = "\n", strip_char: str = " "):
         self._split_char = split_char
         self._strip_char = strip_char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         current_text = []
         lines: list[str] = text.split(self._split_char)
         return_lines: list[str] = []
@@ -302,8 +298,8 @@ class HTMLParagraphParser(BaseParser):
         return f"{self._split_char}".join(return_lines)
 
 
-class HTMLLinkParser(BaseParser):
-    def parse(self, text: str) -> str:
+class HTMLLink(BaseConverter):
+    def apply(self, text: str) -> str:
         matches = MARKDOWN_LINK_REGEX.findall(text)
         for match in matches:
             _, link_text, link = match
@@ -314,8 +310,8 @@ class HTMLLinkParser(BaseParser):
         return text
 
 
-class HTMLBoldParser(BaseParser):
-    def parse(self, text: str) -> str:
+class HTMLBold(BaseConverter):
+    def apply(self, text: str) -> str:
         matches = MARKDOWN_BOLD_REGEX.findall(text)
         for match in matches:
             text = text.replace(
@@ -325,8 +321,8 @@ class HTMLBoldParser(BaseParser):
         return text
 
 
-class HTMLItalicParser(BaseParser):
-    def parse(self, text: str) -> str:
+class HTMLItalic(BaseConverter):
+    def apply(self, text: str) -> str:
         matches = MARKDOWN_ITALIC_REGEX.findall(text)
         for match in matches:
             text = text.replace(
@@ -336,11 +332,11 @@ class HTMLItalicParser(BaseParser):
         return text
 
 
-class HTMLTableOfContentsParser(BaseParser):
+class HTMLTableOfContents(BaseConverter):
     def __init__(self, split_char: str = "\n"):
         self._split_char = split_char
 
-    def parse(self, text: str) -> str:
+    def apply(self, text: str) -> str:
         lines: list[str] = text.split(self._split_char)
         return_lines: list[str] = []
         table_of_contents_lines: list[str] = []
