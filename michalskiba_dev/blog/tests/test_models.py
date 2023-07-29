@@ -91,7 +91,7 @@ class TestBlogPostRawPreDeleteSignal:
 
         assert BlogPostRaw.objects.count() == 0
         calls = [
-            call(settings.BLOG_POSTS_RAW_PATH / "test_raw_blog_post.md"),
+            call(settings.BLOG_POSTS_RAW_PATH / "test_blog_post.md"),
             call(settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves.jpg"),
             call(settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_grayscale.png"),
             call(settings.BLOG_POSTS_IMAGES_PATH / "empty_shelves_edges.png"),

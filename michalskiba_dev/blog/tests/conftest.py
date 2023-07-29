@@ -12,7 +12,7 @@ def blog_post_raw() -> BlogPostRawFactory:
 
 @pytest.fixture
 def blog_post_raw_2() -> BlogPostRawFactory:
-    blog_post_raw = BlogPostRawFactory(content_path="test_raw_blog_post_2.md")
+    blog_post_raw = BlogPostRawFactory(content_path="test_blog_post_2.md")
     return blog_post_raw
 
 
