@@ -1,8 +1,9 @@
 from dataclasses import dataclass
 
 
-@dataclass
-class ExtractedBlogPostInfo:
+@dataclass(frozen=True)
+class ExtractedBlogPost:
+    content_path: str
     title: str
     slug: str
     lead: str

@@ -5,7 +5,7 @@ from django.conf import settings
 from django.templatetags.static import static
 from slugify import slugify
 
-from blog.post_converter.constants import (
+from .constants import (
     MARKDOWN_BOLD_REGEX,
     MARKDOWN_IMAGES_REGEX,
     MARKDOWN_ITALIC_REGEX,
