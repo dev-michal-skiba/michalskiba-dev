@@ -14,16 +14,22 @@ OS_WALK: list[tuple[str, list[str], list[str]]] = [
 
 @pytest.mark.django_db
 @patch("blog.management.commands.detect_new_post_files.os.walk", Mock(return_value=OS_WALK))
+@patch("blog.management.commands.detect_new_post_files.convert_blog_post_raw")
 class TestCommand:
     def test_nothing_happened_when_raw_and_blog_post_exist(
-        self, blog_post: BlogPost, blog_post_raw: BlogPostRaw, caplog: LogCaptureFixture
+        self,
+        convert_blog_post_raw_mock: Mock,
+        blog_post: BlogPost,
+        blog_post_raw: BlogPostRaw,
+        caplog: LogCaptureFixture,
     ) -> None:
         call_command("detect_new_post_files")
 
         assert caplog.messages == ["Detecting new blog post files"]
+        assert convert_blog_post_raw_mock.call_count == 0
 
     def test_warning_logged_when_raw_and_blog_post_does_not_exist(
-        self, caplog: LogCaptureFixture
+        self, convert_blog_post_raw_mock: Mock, caplog: LogCaptureFixture
     ) -> None:
         call_command("detect_new_post_files")
 
@@ -32,30 +38,16 @@ class TestCommand:
             'Missing blog post raw file "test_blog_post.md" for blog post file '
             '"test_blog_post.html"',
         ]
+        assert convert_blog_post_raw_mock.call_count == 0
 
     def test_post_created_when_raw_exists_and_blog_post_does_not_exist(
-        self, blog_post_raw: BlogPostRaw, caplog: LogCaptureFixture
+        self,
+        convert_blog_post_raw_mock: Mock,
+        blog_post_raw: BlogPostRaw,
+        caplog: LogCaptureFixture,
     ) -> None:
         assert BlogPost.objects.count() == 0
 
         call_command("detect_new_post_files")
 
-        assert BlogPost.objects.count() == 1
-        blog_post = BlogPost.objects.first()
-        assert isinstance(blog_post, BlogPost)
-        assert blog_post.blog_post_raw == blog_post_raw
-        assert blog_post.content_path == "test_blog_post.html"
-        assert blog_post.slug == (
-            "some-title-title-title-title-title-title-title-title-title-title-title-title-"
-            "title-title-title-title-title-title-title-title-tit"
-        )
-        assert blog_post.title == (
-            "Some title title title title title title title title title title title title "
-            "title title title title title title title title tit"
-        )
-        assert blog_post.lead == "Some xy" + 101 * " lead"
-        assert blog_post.tags.count() == 3
-        assert caplog.messages == [
-            "Detecting new blog post files",
-            'Created blog post in database for "test_blog_post.html" file',
-        ]
+        convert_blog_post_raw_mock.assert_called_once_with(blog_post_raw)

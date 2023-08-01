@@ -5,8 +5,8 @@ from typing import Any
 from django.conf import settings
 from django.core.management.base import BaseCommand
 
-from blog.models import BlogPost, BlogPostRaw, Tag
-from blog.utils import get_extracted_blog_post_info_from_blog_post_raw_file
+from blog.models import BlogPost, BlogPostRaw
+from blog.utils import convert_blog_post_raw
 
 logger = logging.getLogger(__name__)
 
@@ -32,19 +32,5 @@ class Command(BaseCommand):
                         file_name,
                     )
                     continue
-                extracted_blog_post_info = get_extracted_blog_post_info_from_blog_post_raw_file(
-                    blog_post_raw.absolute_path
-                )
-                tags: list[Tag] = []
-                for text_tag in extracted_blog_post_info.tags:
-                    tag, _ = Tag.objects.get_or_create(name=text_tag)
-                    tags.append(tag)
-                blog_post = BlogPost.objects.create(
-                    blog_post_raw=blog_post_raw,
-                    content_path=file_name,
-                    slug=extracted_blog_post_info.slug,
-                    title=extracted_blog_post_info.title,
-                    lead=extracted_blog_post_info.lead,
-                )
-                blog_post.tags.set(tags)
+                convert_blog_post_raw(blog_post_raw)
                 logger.info('Created blog post in database for "%s" file', file_name)
