@@ -1,0 +1,20 @@
+name: Tests
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+    - name: Build the Docker image
+      run: bin/build_image
+    - name: Run the lint checks
+      run: bin/run_lint_checks
+    - name: Run the unit tests
+      run: bin/run_tests
