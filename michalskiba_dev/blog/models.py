@@ -5,13 +5,6 @@ from django.conf import settings
 from django.contrib.auth.models import AnonymousUser, User
 from django.db import models
 from django.db.models import QuerySet
-from django.db.models.signals import pre_delete
-from django.dispatch import receiver
-
-from blog.utils import (
-    extract_images_absolute_paths_from_blog_post_raw_file,
-    remove_files,
-)
 
 
 class BlogPostBase(models.Model):
@@ -76,18 +69,3 @@ class BlogPost(BlogPostBase):
     @property
     def tags_for_display(self) -> str:
         return ", ".join(self.tags.values_list("name", flat=True))
-
-
-@receiver(pre_delete, sender=BlogPostRaw, dispatch_uid="blog_post_raw_pre_delete_signal")
-def blog_post_raw_pre_delete_signal(instance: BlogPostRaw, **kwargs: dict[str, Any]) -> None:
-    images_absolute_paths = extract_images_absolute_paths_from_blog_post_raw_file(
-        instance.absolute_path
-    )
-    files_to_remove = [instance.absolute_path] + images_absolute_paths
-    remove_files(files_to_remove)
-
-
-@receiver(pre_delete, sender=BlogPost, dispatch_uid="blog_post_pre_delete_signal")
-def blog_post_pre_delete_signal(instance: BlogPost, **kwargs: dict[str, Any]) -> None:
-    files_to_remove = [instance.absolute_path]
-    remove_files(files_to_remove)
