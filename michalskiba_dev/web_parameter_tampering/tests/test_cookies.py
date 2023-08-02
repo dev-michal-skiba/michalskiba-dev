@@ -200,7 +200,7 @@ class TestSetUser:
 
         cookie_value = str(response.cookies[AUTH_TOKEN_COOKIE_NAME])
         auth_token_regex = re.compile(
-            r"^Set-Cookie: auth_token=(?P<auth_token>.*?); Path=/; SameSite=Lax; Secure$"
+            r"^Set-Cookie: auth_token=(?P<auth_token>.*?); HttpOnly; Path=/; SameSite=Lax; Secure$"
         )
         match = auth_token_regex.search(cookie_value)
         assert match

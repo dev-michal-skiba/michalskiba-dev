@@ -71,6 +71,7 @@ def set_user(response: HttpResponseRedirect, user: User) -> HttpResponseRedirect
         value=encoded_user_info,
         secure=True,
         samesite="Lax",
+        httponly=True,
     )
     return response
 
