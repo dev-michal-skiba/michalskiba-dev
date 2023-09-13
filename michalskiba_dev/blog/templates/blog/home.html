@@ -1,5 +1,16 @@
 {% extends "blog/base.html" %}
 
+{% block meta_seo %}
+<meta
+    name="description"
+    content="Through this blog, I aim to provide valuable insights and practical demonstrations of
+        cybersecurity threats in web development. My goal is to empower fellow developers with the
+        knowledge and tools they need to build resilient and secure web applications. I firmly
+        believe that by sharing live demos and practical examples, we can enhance the security
+        posture of web development projects and mitigate potential risks."
+>
+{% endblock %}
+
 {% block content %}
 <div class="container-lg">
     {% for blog_post in blog_posts %}
