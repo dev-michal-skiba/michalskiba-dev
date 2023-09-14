@@ -13,6 +13,8 @@ import os
 from pathlib import Path
 
 import django_stubs_ext
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 django_stubs_ext.monkeypatch()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     "django_hosts",
     "blog",
     "web_parameter_tampering",
+    "feature",
 ]
 
 MIDDLEWARE = [
@@ -186,3 +189,11 @@ SECURE_SSL_REDIRECT = os.getenv("SECURE_SSL_REDIRECT", "false").lower() in ["1",
 SESSION_COOKIE_SECURE = os.getenv("SESSION_COOKIE_SECURE", "false").lower() in ["1", "true"]
 CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE", "false").lower() in ["1", "true"]
 # fmt: on
+
+if not DEBUG:
+    sentry_sdk.init(
+        dsn=os.getenv("SENTRY_DSN"),
+        environment="local",
+        integrations=[DjangoIntegration()],
+        send_default_pii=True,
+    )

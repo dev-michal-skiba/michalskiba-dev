@@ -6,6 +6,8 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import Client
 
+from feature.models import Flag
+
 
 @pytest.fixture
 def assert_file_content() -> Callable[[Path, str], None]:
@@ -65,3 +67,11 @@ def test_datetime() -> datetime:
         microsecond=345,
         tzinfo=timezone.utc,
     )
+
+
+@pytest.fixture
+def enable_flag() -> Callable[[str], None]:
+    def _enable_flag(flag_name: str) -> None:
+        Flag.objects.create(name=flag_name, enabled=True)
+
+    return _enable_flag
