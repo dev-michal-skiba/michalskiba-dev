@@ -193,7 +193,7 @@ CSRF_COOKIE_SECURE = os.getenv("CSRF_COOKIE_SECURE", "false").lower() in ["1", "
 if not DEBUG:
     sentry_sdk.init(
         dsn=os.getenv("SENTRY_DSN"),
-        environment="local",
+        environment="production",
         integrations=[DjangoIntegration()],
         send_default_pii=True,
     )
