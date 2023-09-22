@@ -158,7 +158,7 @@ class TestGetUser:
         assert user is None
         assert caplog.messages == [f"Failed to get expiry datetime from '{auth_token}' auth token"]
 
-    @pytest.mark.django_db(databases=["web_parameter_tampering"])
+    @pytest.mark.django_db
     def test_none_returned_when_user_does_not_exist(
         self,
         get_request_with_auth_token: Callable[[dict[str, str]], HttpRequest],
@@ -173,7 +173,7 @@ class TestGetUser:
         assert user is None
         assert caplog.messages == [f"Failed to get user from '{auth_token}' auth token"]
 
-    @pytest.mark.django_db(databases=["web_parameter_tampering"])
+    @pytest.mark.django_db
     def test_user_returned_when_auth_token_valid(
         self,
         get_request_with_auth_token: Callable[[dict[str, str]], HttpRequest],
@@ -189,7 +189,7 @@ class TestGetUser:
         assert caplog.messages == []
 
 
-@pytest.mark.django_db(databases=["web_parameter_tampering"])
+@pytest.mark.django_db
 @freeze_time("2023-06-20 12:30:00 +0000")
 class TestSetUser:
     def test_user_correctly_set_on_response(self, hacker: User) -> None:

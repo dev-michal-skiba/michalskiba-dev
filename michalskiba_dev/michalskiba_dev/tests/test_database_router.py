@@ -15,7 +15,7 @@ class TestDatabaseRouter:
     class TestDbForRead:
         @pytest.mark.parametrize(
             "model, expected_database",
-            ((BlogPost, None), (PressApplication, "web_parameter_tampering")),
+            ((BlogPost, None), (PressApplication, None)),
         )
         def test_expected_database(
             self, database_router: DatabaseRouter, model: Model, expected_database: str | None
@@ -27,7 +27,7 @@ class TestDatabaseRouter:
     class TestDbForWrite:
         @pytest.mark.parametrize(
             "model, expected_database",
-            ((BlogPost, None), (PressApplication, "web_parameter_tampering")),
+            ((BlogPost, None), (PressApplication, None)),
         )
         def test_expected_database(
             self, database_router: DatabaseRouter, model: Model, expected_database: str | None
@@ -50,29 +50,3 @@ class TestDatabaseRouter:
             allow_migrate = database_router.allow_migrate(db="default", app_label="blog")
 
             assert allow_migrate is True
-
-        @pytest.mark.parametrize("db", ("web_parameter_tampering",))
-        def test_disallow_for_table_in_default_database_when_migrating_for_non_default_database(
-            self, database_router: DatabaseRouter, db: str
-        ) -> None:
-            allow_migrate = database_router.allow_migrate(db=db, app_label="blog")
-
-            assert allow_migrate is False
-
-        @pytest.mark.parametrize(
-            "db, app_label", (("web_parameter_tampering", "web_parameter_tampering"),)
-        )
-        def test_allow_for_table_in_non_default_database_when_migrating_for_non_default_database(
-            self, database_router: DatabaseRouter, db: str, app_label: str
-        ) -> None:
-            allow_migrate = database_router.allow_migrate(db=db, app_label=app_label)
-
-            assert allow_migrate is True
-
-        @pytest.mark.parametrize("app_label", ("web_parameter_tampering",))
-        def test_disallow_for_table_in_non_default_database_when_migrating_for_default_database(
-            self, database_router: DatabaseRouter, app_label: str
-        ) -> None:
-            allow_migrate = database_router.allow_migrate(db="default", app_label=app_label)
-
-            assert allow_migrate is False
