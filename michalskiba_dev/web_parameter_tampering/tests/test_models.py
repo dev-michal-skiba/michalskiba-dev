@@ -3,7 +3,7 @@ import pytest
 from web_parameter_tampering.models import PressApplication, User
 
 
-@pytest.mark.django_db(databases=["web_parameter_tampering"])
+@pytest.mark.django_db
 class TestUser:
     class TestLogin:
         def test_returns_none_for_non_existing_user(self) -> None:
@@ -27,7 +27,7 @@ class TestUser:
             assert str(victim) == "victim"
 
 
-@pytest.mark.django_db(databases=["web_parameter_tampering"])
+@pytest.mark.django_db
 class TestPressApplication:
     class TestStr:
         def test_correct_string_returned(self, hacker_press_application: PressApplication) -> None:

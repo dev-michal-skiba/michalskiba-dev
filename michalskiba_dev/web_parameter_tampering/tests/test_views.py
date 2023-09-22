@@ -20,7 +20,7 @@ from web_parameter_tampering.views import (
 )
 
 
-@pytest.mark.django_db(databases=["web_parameter_tampering"])
+@pytest.mark.django_db
 class TestHome:
     def test_request_succeeds_for_not_authenticated_user(self) -> None:
         request = RequestFactory().get("/")
@@ -42,7 +42,7 @@ class TestHome:
         assert response.status_code == 200
 
 
-@pytest.mark.django_db(databases=["web_parameter_tampering"])
+@pytest.mark.django_db
 class TestTickets:
     def test_request_succeeds_for_not_authenticated_user(self) -> None:
         request = RequestFactory().get("/tickets")
@@ -64,7 +64,7 @@ class TestTickets:
         assert response.status_code == 200
 
 
-@pytest.mark.django_db(databases=["web_parameter_tampering"])
+@pytest.mark.django_db
 class TestLogin:
     def test_user_not_set_for_get(self) -> None:
         request = RequestFactory().get("/login")
@@ -98,7 +98,7 @@ class TestLogin:
         assert AUTH_TOKEN_COOKIE_NAME in str(response.cookies)
 
 
-@pytest.mark.django_db(databases=["web_parameter_tampering"])
+@pytest.mark.django_db
 @patch("web_parameter_tampering.views.clear_user")
 class TestLogout:
     def test_auth_token_is_not_cleaned_on_get(
@@ -138,7 +138,7 @@ class TestLogout:
         assert clear_user_mock.call_count == 1
 
 
-@pytest.mark.django_db(databases=["web_parameter_tampering"])
+@pytest.mark.django_db
 class TestPress:
     @pytest.mark.parametrize("is_secure_version_on", ("False", "True"))
     def test_renders_login_page_for_not_authenticated_user(
@@ -182,7 +182,7 @@ class TestPress:
         assert b"<h1>Accreditation info</h1>" in response.content
 
 
-@pytest.mark.django_db(databases=["web_parameter_tampering"])
+@pytest.mark.django_db
 class TestPressInsecure:
     @pytest.mark.parametrize(
         "is_user_authenticated, is_secure_version_on",
