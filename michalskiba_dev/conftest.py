@@ -6,6 +6,7 @@ import pytest
 from django.contrib.auth.models import User
 from django.test import Client
 
+from demo.models import DemoUser
 from feature.models import Flag
 
 
@@ -75,3 +76,13 @@ def enable_flag() -> Callable[[str], None]:
         Flag.objects.create(name=flag_name, enabled=True)
 
     return _enable_flag
+
+
+@pytest.fixture
+def victim() -> DemoUser:
+    return DemoUser.objects.get(username="victim")
+
+
+@pytest.fixture
+def hacker() -> DemoUser:
+    return DemoUser.objects.get(username="hacker")
