@@ -9,6 +9,7 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.test import RequestFactory
 from freezegun import freeze_time
 
+from demo.models import DemoUser
 from web_parameter_tampering.constants import (
     AUTH_TOKEN_COOKIE_NAME,
     IS_SECURE_VERSION_ON_COOKIE_NAME,
@@ -20,7 +21,6 @@ from web_parameter_tampering.cookies import (
     set_is_secure_version_on,
     set_user,
 )
-from web_parameter_tampering.models import User
 
 
 @pytest.fixture
@@ -184,7 +184,7 @@ class TestGetUser:
 
         user = get_user(request)
 
-        assert isinstance(user, User)
+        assert isinstance(user, DemoUser)
         assert user.username == "hacker"
         assert caplog.messages == []
 
@@ -192,7 +192,7 @@ class TestGetUser:
 @pytest.mark.django_db
 @freeze_time("2023-06-20 12:30:00 +0000")
 class TestSetUser:
-    def test_user_correctly_set_on_response(self, hacker: User) -> None:
+    def test_user_correctly_set_on_response(self, hacker: DemoUser) -> None:
         response = HttpResponseRedirect("/")
         assert hasattr(response.cookies, AUTH_TOKEN_COOKIE_NAME) is False
 

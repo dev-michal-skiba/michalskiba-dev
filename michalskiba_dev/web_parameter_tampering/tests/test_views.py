@@ -5,11 +5,11 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.test import RequestFactory
 
+from demo.models import DemoUser
 from web_parameter_tampering.constants import (
     AUTH_TOKEN_COOKIE_NAME,
     IS_SECURE_VERSION_ON_COOKIE_NAME,
 )
-from web_parameter_tampering.models import User
 from web_parameter_tampering.views import (
     home,
     login,
@@ -157,7 +157,7 @@ class TestPress:
         )
 
     def test_redirects_to_insecure_press_view_when_user_is_authenticated_and_secure_off(
-        self, hacker_auth_token: str, hacker: User
+        self, hacker_auth_token: str, hacker: DemoUser
     ) -> None:
         request = RequestFactory().get("/press")
         request.COOKIES[IS_SECURE_VERSION_ON_COOKIE_NAME] = "false"
@@ -169,7 +169,7 @@ class TestPress:
         assert response["Location"] == f"/press/{hacker.pk}"
 
     def test_renders_press_application_when_user_is_authenticated_and_secure_on(
-        self, hacker_auth_token: str, hacker: User
+        self, hacker_auth_token: str, hacker: DemoUser
     ) -> None:
         request = RequestFactory().get("/press")
         request.COOKIES[IS_SECURE_VERSION_ON_COOKIE_NAME] = "true"
@@ -191,7 +191,7 @@ class TestPressInsecure:
     def test_redirects_to_press_when_user_is_unauthenticated_or_secure_version_on(
         self,
         hacker_auth_token: str,
-        hacker: User,
+        hacker: DemoUser,
         is_user_authenticated: bool,
         is_secure_version_on: str,
     ) -> None:
@@ -206,7 +206,7 @@ class TestPressInsecure:
         assert response["Location"] == "/press"
 
     def test_returns_404_on_non_existing_user_pk(
-        self, hacker_auth_token: str, hacker: User, victim: User
+        self, hacker_auth_token: str, hacker: DemoUser, victim: DemoUser
     ) -> None:
         user_pk = max(hacker.pk, victim.pk) + 1
         request = RequestFactory().get(f"/press/{user_pk}")
@@ -216,10 +216,10 @@ class TestPressInsecure:
         with pytest.raises(Http404) as exc:
             press_insecure(request, *[], **{"user_pk": user_pk})
 
-        assert exc.value.args[0] == "No User matches the given query."
+        assert exc.value.args[0] == "No DemoUser matches the given query."
 
     def test_returns_press_application_for_query_user_not_for_authenticated_user(
-        self, hacker_auth_token: str, hacker: User, victim: User
+        self, hacker_auth_token: str, hacker: DemoUser, victim: DemoUser
     ) -> None:
         request = RequestFactory().get(f"/press/{victim.pk}")
         request.COOKIES[IS_SECURE_VERSION_ON_COOKIE_NAME] = "false"
