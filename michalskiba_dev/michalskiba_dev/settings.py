@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "blog",
     "web_parameter_tampering",
     "feature",
+    "demo",
 ]
 
 MIDDLEWARE = [
