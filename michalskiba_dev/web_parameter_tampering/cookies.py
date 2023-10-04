@@ -7,12 +7,12 @@ from django.conf import settings
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from jwt import PyJWTError
 
+from demo.models import DemoUser
 from web_parameter_tampering.constants import (
     AUTH_TOKEN_COOKIE_NAME,
     IS_SECURE_VERSION_ON_COOKIE_NAME,
     TIME_FORMAT,
 )
-from web_parameter_tampering.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ def set_is_secure_version_on(response: HttpResponse, value: bool) -> HttpRespons
     return response
 
 
-def get_user(request: HttpRequest) -> User | None:
+def get_user(request: HttpRequest) -> DemoUser | None:
     auth_token = request.COOKIES.get(AUTH_TOKEN_COOKIE_NAME)
     if not auth_token:
         return None
@@ -44,7 +44,7 @@ def get_user(request: HttpRequest) -> User | None:
         now = datetime.now(tz=pytz.utc)
         if now >= expiry:
             return None
-        user = User.objects.get(username=username)
+        user = DemoUser.objects.get(username=username)
     except PyJWTError:
         return None
     except KeyError:
@@ -53,13 +53,13 @@ def get_user(request: HttpRequest) -> User | None:
     except ValueError:
         logger.warning("Failed to get expiry datetime from '%s' auth token", auth_token)
         return None
-    except User.DoesNotExist:
+    except DemoUser.DoesNotExist:
         logger.warning("Failed to get user from '%s' auth token", auth_token)
         return None
     return user
 
 
-def set_user(response: HttpResponseRedirect, user: User) -> HttpResponseRedirect:
+def set_user(response: HttpResponseRedirect, user: DemoUser) -> HttpResponseRedirect:
     expiry = datetime.now(tz=pytz.utc) + timedelta(days=7)
     auth_token_payload = {
         "username": user.username,

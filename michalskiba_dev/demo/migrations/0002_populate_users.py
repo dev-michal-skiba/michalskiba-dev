@@ -26,7 +26,7 @@ def apply(apps: Any, schema_editor: Any) -> None:
 
 
 def revert(apps: Any, schema_editor: Any) -> None:
-    DemoUser = apps.get_model("demo", "User")
+    DemoUser = apps.get_model("demo", "DemoUser")
     DemoUser.objects.filter(username__in=["hacker", "victim"]).delete()
 
 
