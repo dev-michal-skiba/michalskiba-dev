@@ -1,4 +1,4 @@
-FROM python:3.11.3
+FROM python:3.12.0
 ENV PYTHONUNBUFFERED 1
 COPY michalskiba_dev /code
 WORKDIR /code
