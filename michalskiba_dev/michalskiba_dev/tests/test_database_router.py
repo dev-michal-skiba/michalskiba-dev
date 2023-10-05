@@ -3,6 +3,7 @@ from django.db.models import Model
 
 from blog.models import BlogPost
 from michalskiba_dev.database_router import DatabaseRouter
+from sql_injection.models import ParcelStore
 from web_parameter_tampering.models import PressApplication
 
 
@@ -15,7 +16,7 @@ class TestDatabaseRouter:
     class TestDbForRead:
         @pytest.mark.parametrize(
             "model, expected_database",
-            ((BlogPost, None), (PressApplication, None)),
+            ((BlogPost, None), (PressApplication, None), (ParcelStore, "sql_injection")),
         )
         def test_expected_database(
             self, database_router: DatabaseRouter, model: Model, expected_database: str | None
@@ -27,7 +28,7 @@ class TestDatabaseRouter:
     class TestDbForWrite:
         @pytest.mark.parametrize(
             "model, expected_database",
-            ((BlogPost, None), (PressApplication, None)),
+            ((BlogPost, None), (PressApplication, None), (ParcelStore, "sql_injection")),
         )
         def test_expected_database(
             self, database_router: DatabaseRouter, model: Model, expected_database: str | None
@@ -50,3 +51,27 @@ class TestDatabaseRouter:
             allow_migrate = database_router.allow_migrate(db="default", app_label="blog")
 
             assert allow_migrate is True
+
+        @pytest.mark.parametrize("db", ("sql_injection",))
+        def test_disallow_for_table_in_default_database_when_migrating_for_non_default_database(
+            self, database_router: DatabaseRouter, db: str
+        ) -> None:
+            allow_migrate = database_router.allow_migrate(db=db, app_label="blog")
+
+            assert allow_migrate is False
+
+        @pytest.mark.parametrize("db, app_label", (("sql_injection", "sql_injection"),))
+        def test_allow_for_table_in_non_default_database_when_migrating_for_non_default_database(
+            self, database_router: DatabaseRouter, db: str, app_label: str
+        ) -> None:
+            allow_migrate = database_router.allow_migrate(db=db, app_label=app_label)
+
+            assert allow_migrate is True
+
+        @pytest.mark.parametrize("app_label", ("sql_injection",))
+        def test_disallow_for_table_in_non_default_database_when_migrating_for_default_database(
+            self, database_router: DatabaseRouter, app_label: str
+        ) -> None:
+            allow_migrate = database_router.allow_migrate(db="default", app_label=app_label)
+
+            assert allow_migrate is False
