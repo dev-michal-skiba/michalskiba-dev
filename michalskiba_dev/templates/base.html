@@ -29,6 +29,43 @@
     {% endblock %}
 
     <script src="{% static 'bootstrap-5.2.3/js/bootstrap.bundle.min.js' %}"></script>
+    <script>
+        function getCookie(cname) {
+            let name = cname + "=";
+            let decodedCookie = decodeURIComponent(document.cookie);
+            let ca = decodedCookie.split(';');
+            for(let i = 0; i <ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) == ' ') {
+                    c = c.substring(1);
+                }
+                if (c.indexOf(name) == 0) {
+                    return c.substring(name.length, c.length);
+                }
+            }
+            return "";
+        }
+
+        function setCookie(cname, cvalue) {
+            document.cookie = cname + "=" + cvalue + "; Path=/; SameSite=Lax; Secure";
+        }
+
+        function getVersionSwitchValueFromCookie() {
+            const cookie_value = getCookie("is_secure_version_on");
+            return cookie_value.toLowerCase() !== "false";
+        }
+
+        function setVersionSwitchValueCookie() {
+            const isChecked = document.getElementById("version-switch").checked;
+            let cookieValue;
+            if ( isChecked === true )
+                cookieValue = "true";
+            else
+                cookieValue = "false";
+            setCookie("is_secure_version_on", cookieValue);
+            location.reload();
+        }
+    </script>
     {% block script %}
     {% endblock %}
 </body>

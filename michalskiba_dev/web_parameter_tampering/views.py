@@ -3,9 +3,9 @@ from typing import Any
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
+from demo.cookies import clear_user, set_user
+from demo.decorators import authentication, version
 from demo.models import DemoUser
-from web_parameter_tampering.cookies import clear_user, set_user
-from web_parameter_tampering.decorators import authentication, version
 from web_parameter_tampering.models import PressApplication
 
 

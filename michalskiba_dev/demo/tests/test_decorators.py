@@ -4,8 +4,8 @@ import pytest
 from django.http import HttpRequest, HttpResponse
 from django.test import RequestFactory
 
-from web_parameter_tampering.constants import IS_SECURE_VERSION_ON_COOKIE_NAME
-from web_parameter_tampering.decorators import authentication, version
+from demo.constants import IS_SECURE_VERSION_ON_COOKIE_NAME
+from demo.decorators import authentication, version
 
 
 @pytest.fixture
@@ -65,7 +65,7 @@ class TestVersion:
 
 
 class TestAuthentication:
-    @patch("web_parameter_tampering.decorators.get_user")
+    @patch("demo.decorators.get_user")
     def test_user_is_set(
         self, get_user_mock: Mock, base_request: HttpRequest, base_response: HttpResponse
     ) -> None:

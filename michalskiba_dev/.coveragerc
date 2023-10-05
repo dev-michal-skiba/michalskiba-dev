@@ -12,5 +12,5 @@ omit =
 
 [report]
 skip_covered = true
-fail_under = 95
+fail_under = 99
 show_missing = true

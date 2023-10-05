@@ -7,12 +7,12 @@ from django.conf import settings
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from jwt import PyJWTError
 
-from demo.models import DemoUser
-from web_parameter_tampering.constants import (
+from demo.constants import (
     AUTH_TOKEN_COOKIE_NAME,
     IS_SECURE_VERSION_ON_COOKIE_NAME,
     TIME_FORMAT,
 )
+from demo.models import DemoUser
 
 logger = logging.getLogger(__name__)
 

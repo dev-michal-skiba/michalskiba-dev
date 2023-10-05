@@ -5,4 +5,5 @@ host_patterns = patterns(
     "",
     host(r"www", settings.ROOT_URLCONF, name="www"),
     host(r"wpt", "web_parameter_tampering.urls", name="wpt"),
+    host(r"sql-injection", "sql_injection.urls", name="sql_injection"),
 )
