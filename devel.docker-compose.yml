@@ -13,6 +13,23 @@ services:
         interval: 10s
         timeout: 5s
         retries: 5
+  michalskiba_dev_sql_injection_db:
+    image: postgres:15.1
+    container_name: michalskiba_dev_sql_injection_db
+    volumes:
+      - ./sql_injection_data:/var/lib/postgresql/data
+    env_file:
+      - devel.env
+    environment:
+      - POSTGRES_DB=${POSTGRES_SQL_INJECTION_DB}
+      - POSTGRES_USER=${POSTGRES_SQL_INJECTION_DB}
+      - POSTGRES_PASSWORD=${POSTGRES_SQL_INJECTION_PASSWORD}
+      - POSTGRES_PORT=${POSTGRES_SQL_INJECTION_PORT}
+    healthcheck:
+        test: ["CMD-SHELL", "pg_isready -d ${POSTGRES_SQL_INJECTION_DB} -U ${POSTGRES_SQL_INJECTION_DB}"]
+        interval: 10s
+        timeout: 5s
+        retries: 5
   michalskiba_dev_web:
     image: michalskiba_dev_web
     container_name: michalskiba_dev_web
@@ -23,7 +40,10 @@ services:
     ports:
       - '8000:8000'
     command: bash -c 'python manage.py migrate &&
+                      python manage.py migrate --database=sql_injection &&
                       python manage.py runserver 0.0.0.0:8000'
     depends_on:
       michalskiba_dev_db:
+        condition: service_healthy
+      michalskiba_dev_sql_injection_db:
         condition: service_healthy

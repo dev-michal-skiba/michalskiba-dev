@@ -6,9 +6,9 @@ DATABASES = {
         "ENGINE": "django.db.backends.sqlite3",
         "NAME": f"{BASE_DIR}/db.sqlite3",  # noqa: F405
     },
-    "web_parameter_tampering": {
+    "sql_injection": {
         "ENGINE": "django.db.backends.sqlite3",
-        "NAME": f"{BASE_DIR}/wpt_db.sqlite3",  # noqa: F405
+        "NAME": f"{BASE_DIR}/sql_injection_db.sqlite3",  # noqa: F405
     },
 }
 
