@@ -9,18 +9,15 @@ from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 from django.test import RequestFactory
 from freezegun import freeze_time
 
-from demo.models import DemoUser
-from web_parameter_tampering.constants import (
-    AUTH_TOKEN_COOKIE_NAME,
-    IS_SECURE_VERSION_ON_COOKIE_NAME,
-)
-from web_parameter_tampering.cookies import (
+from demo.constants import AUTH_TOKEN_COOKIE_NAME, IS_SECURE_VERSION_ON_COOKIE_NAME
+from demo.cookies import (
     clear_user,
     get_is_secure_version_on,
     get_user,
     set_is_secure_version_on,
     set_user,
 )
+from demo.models import DemoUser
 
 
 @pytest.fixture

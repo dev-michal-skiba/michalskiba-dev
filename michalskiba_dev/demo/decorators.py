@@ -2,11 +2,7 @@ from typing import Any, Callable
 
 from django.http import HttpRequest, HttpResponse
 
-from web_parameter_tampering.cookies import (
-    get_is_secure_version_on,
-    get_user,
-    set_is_secure_version_on,
-)
+from demo.cookies import get_is_secure_version_on, get_user, set_is_secure_version_on
 
 
 def version(

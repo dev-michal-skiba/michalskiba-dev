@@ -5,11 +5,8 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.test import RequestFactory
 
+from demo.constants import AUTH_TOKEN_COOKIE_NAME, IS_SECURE_VERSION_ON_COOKIE_NAME
 from demo.models import DemoUser
-from web_parameter_tampering.constants import (
-    AUTH_TOKEN_COOKIE_NAME,
-    IS_SECURE_VERSION_ON_COOKIE_NAME,
-)
 from web_parameter_tampering.views import (
     home,
     login,

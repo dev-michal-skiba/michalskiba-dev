@@ -10,6 +10,7 @@ body {
     background-color: var(--primary-bg);
     color: var(--primary-text);
     font-family: 'Ubuntu', sans-serif;
+    margin-bottom: 70px;
 }
 
 .navbar-font-size {
@@ -106,6 +107,11 @@ input[type="checkbox"] {
     color: black;
 }
 
+.secondary-button, .secondary-button:hover, .secondary-button:active, .secondary-button:focus {
+    background-color: var(--extra-color);
+    color: black;
+}
+
 .link-button, .link-button:active, .link-button:focus {
     background-color: black;
     border: none;
@@ -137,6 +143,14 @@ input[type="checkbox"] {
 
 .justify {
     text-align: justify;
+}
+
+.sql-injection-parcel-store-tile {
+    border-style: none none dashed none;
+    border-color: var(--extra-color);
+    margin: 10px;
+    padding: 10px;
+     width: 100%;
 }
 
 @media (min-width: 576px) {

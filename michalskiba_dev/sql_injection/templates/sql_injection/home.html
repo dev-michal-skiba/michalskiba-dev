@@ -1,0 +1,61 @@
+{% extends "sql_injection/base.html" %}
+
+{% block content %}
+<div class="container-lg">
+    <form action="" method="GET">
+        <div class="row mt-5 mb-5">
+            <div class="col-10">
+                <input
+                    class="form-control"
+                    id="address-search-phrase"
+                    type="text"
+                    name="address-search-phrase"
+                    placeholder="Search for parcel store by address..."
+                >
+            </div>
+            <div class="col-1">
+                <button id="submit-button" type="submit" class="btn primary-button m-0">Search</button>
+            </div>
+            <div class="col-1">
+                <button id="clear-button" class="btn secondary-button m-0">Clear</button>
+            </div>
+        </div>
+    </form>
+    <div>
+    {% for parcel_store in parcel_stores %}
+        <div class="sql-injection-parcel-store-tile">
+            <p><b>Name:</b> {{ parcel_store.1 }}</p>
+            <p><b>Address:</b> {{ parcel_store.2 }}</p>
+            <p><b>Opening hours:</b> {{ parcel_store.3 }}</p>
+        </div>
+    {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    window.onload = function() {
+        let switchValueFromCookie = getVersionSwitchValueFromCookie();
+        document.getElementById("version-switch").checked = switchValueFromCookie;
+
+        let addressSearchPhrase = localStorage.getItem("address_search_phrase");
+        if (addressSearchPhrase == null) {
+            addressSearchPhrase = ""
+        }
+        document.getElementById("address-search-phrase").value = addressSearchPhrase
+    };
+
+    // Add listener to store info in local storage about search text
+    document.getElementById("address-search-phrase").addEventListener('change', (event) => {
+        localStorage.setItem("address_search_phrase", event.target.value);
+    });
+
+    // Add listener to clear info in local storage about search text
+    document.getElementById("clear-button").addEventListener('click', (event) => {
+        localStorage.setItem("address_search_phrase", "");
+        document.getElementById("address-search-phrase").value = "";
+        document.getElementById("submit-button").submit();
+    });
+</script>
+{% endblock %}
