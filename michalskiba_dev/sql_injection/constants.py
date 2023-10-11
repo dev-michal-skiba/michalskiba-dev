@@ -1,0 +1,17 @@
+NON_DATA_QUERY_SQL_COMMANDS = [
+    "create",
+    "drop",
+    "alter",
+    "truncate",
+    "insert",
+    "update",
+    "delete",
+    "call",
+    "lock",
+    "commit",
+    "savepoint",
+    "rollback",
+    "set",
+    "grant",
+    "revoke",
+]
