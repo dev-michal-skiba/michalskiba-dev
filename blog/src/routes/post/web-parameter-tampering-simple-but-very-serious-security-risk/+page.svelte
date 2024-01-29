@@ -4,7 +4,7 @@
 <br>
 <p>
     In 2021 OWASP placed "Broken Access Control" at first place amongst Top 10 Web Application Security Risks
-    (<a class="link" target="_blank" href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">link</a>).
+    (<a class="link" href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">link</a>).
     Web Parameter Tampering is just one type of web attack that falls into this group. Even if it seems simple,
     and you think that "only junior can introduce such threat to web application", you should still be aware of
     this attack. As the OWASP ranking shows, a lot of developers think like that and hackers will be happy to exploit it.
@@ -36,13 +36,13 @@
     In correctly implemented site, press organization member, after logging in to the press portal, should see
     theirs application. It should not change after modifying url path or query parameters. The whole code for
     the Web Parameter Tampering demo, which is Django app, can be found in public
-    <a class="link" target="_blank" href="https://github.com/dev-michal-skiba/michalskiba-dev/tree/master/michalskiba_dev/web_parameter_tampering">repository</a>
+    <a class="link" href="https://github.com/dev-michal-skiba/michalskiba-dev/tree/master/michalskiba_dev/web_parameter_tampering">repository</a>
     on GitHub.
 </p>
 
 <h2 id="exploiting-web-parameter-tampering-vulnerability">Exploiting Web Parameter Tampering vulnerability</h2>
 <p>
-    Going to the demo site <a class="link" target="_blank" href="https://wpt.michalskiba.dev/">https://wpt.michalskiba.dev/</a>,
+    Going to the demo site <a class="link" href="https://wpt.michalskiba.dev/">https://wpt.michalskiba.dev/</a>,
     by default you will start with secure version off. You can access press portal either as a victim
     (username: <i>victim</i>, password: <i>Victim1234!</i>) or a hacker (username: <i>hacker</i>, password: <i>Hacker1234!</i>).
     No matter as who you are logged in, you will see the page with press application: approved for
@@ -53,14 +53,14 @@
 <img class="img-fluid post-img" src="3.png" alt="wpt_3.png">
 <p>
     You can also notice that urls for the victim and hacker look as follows:
-    <a class="link" target="_blank" href="http://wpt.michalskiba.dev/press/2">http://wpt.michalskiba.dev/press/2</a>
-    and <a class="link" target="_blank" href="http://wpt.michalskiba.dev/press/1">http://wpt.michalskiba.dev/press/1</a>.
+    <a class="link" href="http://wpt.michalskiba.dev/press/2">http://wpt.michalskiba.dev/press/2</a>
+    and <a class="link" href="http://wpt.michalskiba.dev/press/1">http://wpt.michalskiba.dev/press/1</a>.
     As you can easily guess, the number in the url represents the user's primary key from the database.
     <b>That is huge security threat</b>. It implies that basically anyone can try different user's primary keys
     and try to steal accreditation of the other press organization. If you are logged in as the hacker, you can
     change "1" in url to "2" which will result in obtaining press application from the victim!.
     If you log out and try the same url
-    <a class="link" target="_blank" href="http://wpt.michalskiba.dev/press/2">http://wpt.michalskiba.dev/press/2</a>,
+    <a class="link" href="http://wpt.michalskiba.dev/press/2">http://wpt.michalskiba.dev/press/2</a>,
     you will be redirected to the home page of the demo site. That is the issue for many broken access controls vulnerabilities.
     User can get any confidential resource based on being authenticated without authorizing user for a given resource.
 </p>
