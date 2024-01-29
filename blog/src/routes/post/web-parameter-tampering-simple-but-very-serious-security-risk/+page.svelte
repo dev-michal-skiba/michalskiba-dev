@@ -1,6 +1,4 @@
 <h1>Web Parameter Tampering: Simple, but very serious security risk</h1>
-<br>
-<br>
 <p>
     In 2021 OWASP placed "Broken Access Control" at first place amongst Top 10 Web Application Security Risks
     (<a class="link" href="https://owasp.org/Top10/A01_2021-Broken_Access_Control/">link</a>).

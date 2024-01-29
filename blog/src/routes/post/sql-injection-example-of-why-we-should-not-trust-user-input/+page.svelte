@@ -1,6 +1,4 @@
 <h1>SQL Injection: Example of why we should not trust user input</h1>
-<br>
-<br>
 <p>
     In the digital age, where data fuels our everyday transactions and interactions, the security
     of our databases stands as one of the main concerns. SQL Injection, common and vicious attack
@@ -17,7 +15,6 @@
     <li><a class="link" href="#introduction-to-demo-scenario">Introduction to demo scenario</a></li>
     <li><a class="link" href="#exploiting-sql-injection-vulnerability">Exploiting SQL Injection vulnerability</a></li>
     <li><a class="link" href="#example-of-correctly-implemented-search-mechanism">Example of correctly implemented search mechanism</a></li>
-    <li><a class="link" href="#conclusion">Conclusion</a></li>
     </ol>
 </div>
 
