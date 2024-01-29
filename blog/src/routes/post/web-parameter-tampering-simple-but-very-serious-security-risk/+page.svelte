@@ -1,5 +1,4 @@
 <h1>Web Parameter Tampering: Simple, but very serious security risk</h1>
-<i>Published on 2023.08.03</i>
 <br>
 <br>
 <p>
