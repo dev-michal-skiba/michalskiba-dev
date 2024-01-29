@@ -1,5 +1,4 @@
 <h1>SQL Injection: Example of why we should not trust user input</h1>
-<i>Published on 2024.01.28</i>
 <br>
 <br>
 <p>
