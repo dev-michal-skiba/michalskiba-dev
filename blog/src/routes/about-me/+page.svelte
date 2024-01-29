@@ -1,5 +1,19 @@
-    <div>
-        <h2>Contact Info</h2>
+<div class="row">
+    <div class="col">
+        <h2>About Me</h2>
+        <p>
+            Welcome to my portfolio page! I'm Michał Skiba, a professional Python web developer and
+            computer science enthusiast. I created this page to showcase my skills. I decided to
+            make it a blog about web security. Throughout this blog you can explore posts about
+            potential vulnerabilities that a web page can have. What's more, I always provide live
+            demonstration that you can access online and where you check the vulnerability yourself.
+            This blog is not targeted for people who want to see beautiful cutting-edge UI, because
+            I specialize at backend part of web applications, so don't expect this blog to become
+            piece of art :)
+        </p>
+    </div>
+    <div class="col float-right" style="text-align: right;">
+        <h2 style="text-align: right;">Contact Info</h2>
         <ul id="contact-info">
             <li>
                 <a class="link" href="mailto:dev.michal.skiba@gmail.com">
@@ -18,30 +32,4 @@
             </li>
         </ul>
     </div>
-    <div>
-        <h2>About Me</h2>
-        <p>
-            Welcome to my blog! I'm Michał Skiba, a professional Python web developer and computer
-            science enthusiast. Recently I have dedicated myself to the exciting field of
-            exploring security of web applications and analysing protections that developers should be
-            aware of.
-        </p>
-        <p>
-            Through this blog, I aim to provide valuable insights and practical demonstrations of
-            cybersecurity threats in web development. My goal is to empower fellow developers with the
-            knowledge and tools they need to build resilient and secure web applications. I firmly
-            believe that by sharing live demos and practical examples, we can enhance the security
-            posture of web development projects and mitigate potential risks.
-        </p>
-        <p>
-            This blog is mainly targeted at developers looking to enhance their security skills.
-            You'll find detailed explanations of various attack vectors, best practices to prevent
-            common vulnerabilities, and step-by-step demonstrations of secure coding techniques.
-        </p>
-        <p>
-            This blog is not targeted for people who want to see beautiful cutting-edge UI, because
-            I specialize at backend part of web applications, so don't expect this blog to become
-            piece of art :)
-        </p>
-        <img id="about-me-meme-img" src="backend_developer_meme.jpeg" alt="backend developer meme">
-    </div>
+</div>
