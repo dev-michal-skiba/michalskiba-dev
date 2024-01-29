@@ -3,6 +3,12 @@ export function load({ params }) {
     return {
         posts: [
             {
+                "title": "SQL Injection: Example of why we should not trust user input",
+                "slug": "sql-injection-example-of-why-we-should-not-trust-user-input",
+                "release_date": "2024.01.30",
+                "lead": "In the digital age, where data fuels our everyday transactions and interactions, the security of our databases stands as one of the main concerns.SQL Injection, common and vicious attack vector, exemplifies the critical importance of guarding databases against potential bad actors. The attack may result in a breach or loss of data, so that is why we should take a close look at this attack.",
+            },
+            {
                 "title": "Web Parameter Tampering: Simple, but very serious security risk",
                 "slug": "web-parameter-tampering-simple-but-very-serious-security-risk",
                 "release_date": "2023.08.03",
