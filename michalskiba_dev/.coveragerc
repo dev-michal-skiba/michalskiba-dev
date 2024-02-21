@@ -8,7 +8,8 @@ omit =
     */asgi.py,
     */test*.py,
     */manage.py,
-    */urls.py
+    */urls.py,
+    michalskiba_dev/hosts.py
 
 [report]
 skip_covered = true
