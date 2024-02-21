@@ -2,7 +2,6 @@ from typing import Callable
 
 import pytest
 from django.test import Client
-from django.urls import reverse
 
 from feature.flags import ENABLE_SENTRY_TESTING_ENDPOINT
 
@@ -14,8 +13,8 @@ class TestSentry:
 
         response = client.get("/feature/test-sentry")
 
-        assert response.status_code == 302
-        assert response["Location"] == reverse("home")
+        assert response.status_code == 200
+        assert response.content == b"sentry test disabled"
 
     def test_error_raised_when_flag_is_enabled(self, enable_flag: Callable[[str], None]) -> None:
         enable_flag(ENABLE_SENTRY_TESTING_ENDPOINT)
