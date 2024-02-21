@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django_icons",
     "django_hosts",
-    "blog",
     "web_parameter_tampering",
     "feature",
     "demo",
@@ -156,10 +155,6 @@ STATICFILES_DIRS = [BASE_STATIC_PATH]
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-BLOG_POSTS_RAW_PATH = BASE_STATIC_PATH / "blog/raw"
-BLOG_POSTS_PATH = BASE_STATIC_PATH / "blog/posts"
-BLOG_POSTS_IMAGES_PATH = BASE_STATIC_PATH / "blog/images"
 
 LOGGING = {
     "version": 1,
