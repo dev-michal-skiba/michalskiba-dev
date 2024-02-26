@@ -1,1 +1,2 @@
-baseURL = 'https://michalskiba.dev/'
+baseURL = "https://michalskiba.dev/"
+theme = "michalskiba_dev"
