@@ -66,14 +66,19 @@ body {
 }
 
 .link,
+li a,
 .link:focus,
+li a:focus,
 .link:visited,
-.link:active {
+li a:visited,
+.link:active,
+li a:active {
     color: var(--secondary-text);
     text-decoration: none;
 }
 
-.link:hover {
+.link:hover,
+li a:hover {
     color: var(--extra-color);
 }
 
