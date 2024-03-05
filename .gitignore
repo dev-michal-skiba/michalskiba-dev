@@ -6,6 +6,6 @@
 venv/
 # Devel database volume
 /data/
-/wpt_data/
+/sql_injection_data/
 # Coverage report
 .coverage
