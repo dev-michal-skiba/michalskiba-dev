@@ -5,7 +5,7 @@ Application Security Risks. Web Parameter Tampering is just one type of web atta
 this group. Even if it seems simple, and you think that "only junior can introduce such threat to
 web application", you should still be aware of this attack. As the OWASP ranking shows, a lot of
 developers think like that and hackers will be happy to exploit it.'
-draft: true
+draft: false
 type: "blog"
 layout: "post"
 ---

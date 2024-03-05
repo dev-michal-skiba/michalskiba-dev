@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Michal Skiba | Blog on </title>
+    <link>https://michalskiba.dev/blog/</link>
+    <description>Recent content in Michal Skiba | Blog on </description>
+    <generator>Hugo -- gohugo.io</generator><atom:link href="https://michalskiba.dev/blog/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>SQL Injection: Example of why we should not trust user input</title>
+      <link>https://michalskiba.dev/blog/post/sql-injection-example-of-why-we-should-not-trust-user-input/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://michalskiba.dev/blog/post/sql-injection-example-of-why-we-should-not-trust-user-input/</guid>
+      <description>What is SQL Injection If you want the detailed definition please see OWASP definition. It is a well known attack and I couldn&amp;rsquo;t add more. I focus more on the practical examples and that is why I will give you a short example to understand how it works. Imagine this SQL query SELECT * FROM table WHERE name=&#39;%{name}%&#39;. Imagine also that we store it as a normal text, and we replace the {name} with whatever is inputted by the user.</description>
+    </item>
+    
+    <item>
+      <title>Web Parameter Tampering: Simple, but very serious security risk</title>
+      <link>https://michalskiba.dev/blog/post/web-parameter-tampering-simple-but-very-serious-security-risk/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://michalskiba.dev/blog/post/web-parameter-tampering-simple-but-very-serious-security-risk/</guid>
+      <description>What is Web Parameter Tampering Web Parameter Tampering is a type of web-based cyberattack in which certain parameters in a request sent to server are changed in a way that is not expected by the server. Vulnerable site may expose confidential information to user that normally should not have the access to the given resources. Such user can obtain it by simply changing url path or query/body parameters.
+Introduction to demo scenario Let&amp;rsquo;s leave theory behind and get our hands on real live example.</description>
+    </item>
+    
+  </channel>
+</rss>

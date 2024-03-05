@@ -5,7 +5,7 @@ security of our databases stands as one of the main concerns. SQL Injection, com
 attack vector, exemplifies the critical importance of guarding databases against potential bad
 actors. The attack may result in a breach or loss of data, so that is why we should take a
 close look at this attack."
-draft: true
+draft: false
 type: "blog"
 layout: "post"
 ---

@@ -1,6 +1,6 @@
 ---
 title: "Michal Skiba | Blog"
-draft: true
+draft: false
 type: "root"
 ---
 
