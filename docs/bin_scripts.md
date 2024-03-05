@@ -23,9 +23,6 @@ tests and that test cover most of the codebase.
 Script to run `python manage.py [ARGS]` on Django app running in Docker container. It will
 propagate `ARGS`
 
-# `bin/manage/detect_new_raw_files`
-Script to run `detect_new_raw_files` Django command on app running in docker container
-
 # `bin/manage/makemigrations`
 Script to run `makemigartions` Django default command on app running in docker container
 
