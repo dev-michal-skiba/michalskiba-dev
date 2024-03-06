@@ -2,16 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://michalskiba.dev/categories/</loc>
+    <loc>https://www.michalskiba.dev/categories/</loc>
   </url><url>
-    <loc>https://michalskiba.dev/</loc>
+    <loc>https://www.michalskiba.dev/</loc>
   </url><url>
-    <loc>https://michalskiba.dev/blog/</loc>
+    <loc>https://www.michalskiba.dev/blog/</loc>
   </url><url>
-    <loc>https://michalskiba.dev/blog/post/sql-injection-example-of-why-we-should-not-trust-user-input/</loc>
+    <loc>https://www.michalskiba.dev/blog/post/sql-injection-example-of-why-we-should-not-trust-user-input/</loc>
   </url><url>
-    <loc>https://michalskiba.dev/tags/</loc>
+    <loc>https://www.michalskiba.dev/tags/</loc>
   </url><url>
-    <loc>https://michalskiba.dev/blog/post/web-parameter-tampering-simple-but-very-serious-security-risk/</loc>
+    <loc>https://www.michalskiba.dev/blog/post/web-parameter-tampering-simple-but-very-serious-security-risk/</loc>
   </url>
 </urlset>
