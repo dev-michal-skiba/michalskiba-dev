@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{- partial "head.html" .}}
+</head>
+<body>
+    {{- partial "blog/header.html" .}}
+    <div class="container-lg justify">
+        {{ range .Pages }}
+            <a class="div-link" href="{{ .RelPermalink }}">
+                <div class="container-md blog-post-tile">
+                    <h2>{{ .Title }}</h2>
+                    <p>{{ .Params.Lead }}</p>
+                </div>
+            </a>
+        {{ end }}
+    </div>
+    {{- partial "scripts.html" .}}
+</body>
+</html>

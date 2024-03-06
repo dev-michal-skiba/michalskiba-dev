@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {{- partial "head.html" .}}
+</head>
+<body>
+    {{- partial "blog/header.html" .}}
+    <div class="container-lg justify">
+<!--        -->
+        <div class="row">
+            <div class="col">
+                <h2>About Me</h2>
+                <p>{{ .Content }}</p>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <h2>Contact Info</h2>
+                <ul id="contact-info">
+                    <li>
+                        <a class="link" href="mailto:dev.michal.skiba@gmail.com">
+                            <i class="fa fa-envelope" aria-hidden="true"></i> dev.michal.skiba@gmail.com
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="https://www.linkedin.com/in/michal-skiba-dev/">
+                            <i class="fa fa-linkedin" aria-hidden="true"></i> LinkedIn
+                        </a>
+                    </li>
+                    <li>
+                        <a class="link" href="https://github.com/dev-michal-skiba">
+                            <i class="fa fa-github" aria-hidden="true"></i> GitHub
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    {{- partial "scripts.html" .}}
+</body>
+</html>

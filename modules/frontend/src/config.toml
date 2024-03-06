@@ -1,0 +1,8 @@
+baseURL = "https://www.michalskiba.dev/"
+theme = "michalskiba_dev"
+
+[markup]
+  [markup.tableOfContents]
+    startLevel = 2
+    ordered = true
+    endLevel = 4
