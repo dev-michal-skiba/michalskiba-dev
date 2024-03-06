@@ -1,4 +1,4 @@
-baseURL = "https://michalskiba.dev/"
+baseURL = "https://www.michalskiba.dev/"
 theme = "michalskiba_dev"
 
 [markup]

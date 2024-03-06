@@ -1,5 +1,5 @@
 ---
-title: "Michal Skiba | Blog"
+title: "Michal Skiba"
 draft: false
 type: "root"
 ---
