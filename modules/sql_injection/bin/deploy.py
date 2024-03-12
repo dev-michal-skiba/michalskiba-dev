@@ -11,7 +11,8 @@ def build_module() -> None:
     print("Building module ...")
     os.remove(LOCAL_LAMBDA_PACKAGE_FILENAME)
     os.system(
-        f"cd {LOCAL_SOURCE_DIRECTORY} && zip -r ../{LOCAL_LAMBDA_PACKAGE_FILENAME} ."
+        f"cd {LOCAL_SOURCE_DIRECTORY} && "
+        f"zip -r ../{LOCAL_LAMBDA_PACKAGE_FILENAME} . -x template.yaml"
     )
     print("Module built")
 
