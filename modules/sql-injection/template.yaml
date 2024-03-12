@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM template for a Lambda function with API Gateway
+
+Resources:
+  MyFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: src.main.lambda_handler
+      Runtime: python3.12
+      CodeUri: .
+      Events:
+        MyApi:
+          Type: Api
+          Properties:
+            Path: /
+            Method: get
