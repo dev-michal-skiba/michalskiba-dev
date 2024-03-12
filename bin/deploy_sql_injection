@@ -1,0 +1,2 @@
+#!/bin/bash
+cd modules/sql_injection/ && AWS_PROFILE=michalskiba-dev-infra python bin/deploy.py
