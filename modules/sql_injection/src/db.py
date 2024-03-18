@@ -18,6 +18,9 @@ class ParcelStore(BaseModel):
 def get_parcel_stores(
     address_search_phrase: str, is_secure_version_on: bool
 ) -> list[dict[str, str]]:
+    queryset = ParcelStore.select().where(
+        ParcelStore.address.contains(address_search_phrase)
+    )
     return [
         {
             "name": parcel_store.name,
@@ -25,5 +28,5 @@ def get_parcel_stores(
             "opening_hours": parcel_store.opening_hours,
             "access_code": parcel_store.access_code,
         }
-        for parcel_store in ParcelStore.select()
+        for parcel_store in queryset
     ]
