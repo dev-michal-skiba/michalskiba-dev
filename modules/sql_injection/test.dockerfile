@@ -1,6 +1,7 @@
 FROM python:3.12
 ENV PYTHONUNBUFFERED 1
-COPY ./src /code
-COPY ./requirements.txt /
-COPY ./pyproject.toml /
-RUN pip install -r requirements.txt
+COPY ./ /code
+WORKDIR /code
+RUN pip install -r test.requirements.txt
+RUN pip install -e src/
+ENV PYTHONPATH=/code/src/sql_injection:$PYTHONPATH

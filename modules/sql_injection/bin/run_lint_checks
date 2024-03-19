@@ -1,12 +1,11 @@
 #!/bin/bash
 
-#docker build --tag michalskiba_dev_sql_injection_test --file test.dockerfile ./
 docker-compose --file test.docker-compose.yml run sql_injection_test bash -c \
-  'isort --check-only /code/ &&
+  'isort --check-only src/ tests/ &&
   echo -e "\033[0;32mIsort check succeeded\033[0m" &&
-  black --check /code/ &&
+  black --check src/ tests/ &&
   echo -e "\033[0;32mBlack check succeeded\033[0m" &&
-  ruff check --exclude lib /code/ &&
+  ruff check --exclude lib src/ tests/ &&
   echo -e "\033[0;32mRuff check succeeded\033[0m" &&
-  mypy /code/ &&
+  mypy src/ tests/ &&
   echo -e "\033[0;32mMypy check succeeded\033[0m"'

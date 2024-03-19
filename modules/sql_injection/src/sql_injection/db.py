@@ -1,18 +1,20 @@
-from lib.peewee import CharField, Model, SqliteDatabase
+import os
 
-db = SqliteDatabase("sql_injection.db")
+from peewee import CharField, Model, SqliteDatabase
+
+db = SqliteDatabase(os.environ.get("DB_PATH") or "sql_injection.db")
 
 
 class BaseModel(Model):
     class Meta:
-        database = db
+        database: SqliteDatabase = db
 
 
 class ParcelStore(BaseModel):
-    name = CharField(max_length=64)
-    address = CharField(max_length=64)
-    opening_hours = CharField(max_length=64)
-    access_code = CharField(max_length=16)
+    name: CharField = CharField(max_length=64)
+    address: CharField = CharField(max_length=64)
+    opening_hours: CharField = CharField(max_length=64)
+    access_code: CharField = CharField(max_length=16)
 
 
 def get_parcel_stores(

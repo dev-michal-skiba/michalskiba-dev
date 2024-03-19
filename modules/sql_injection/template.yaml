@@ -3,12 +3,12 @@ Transform: AWS::Serverless-2016-10-31
 Description: SAM template for a Lambda function with API Gateway
 
 Resources:
-  MyFunction:
+  SQLInjectionAPI:
     Type: AWS::Serverless::Function
     Properties:
       Handler: lambda_function.lambda_handler
       Runtime: python3.12
-      CodeUri: .
+      CodeUri: ./src/sql_injection
       Events:
         MyApi:
           Type: Api
