@@ -1,4 +1,4 @@
--r requirements.txt
+-r src/sql_injection/requirements.txt
 isort
 black
 ruff
