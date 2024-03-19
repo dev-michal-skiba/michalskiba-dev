@@ -5,4 +5,4 @@ services:
     container_name: sql_injection_test
     image: michalskiba_dev_sql_injection_test
     volumes:
-      - ./src:/code
+      - ./:/code/
