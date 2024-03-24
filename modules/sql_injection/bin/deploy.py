@@ -9,7 +9,8 @@ LAMBDA_FUNCTION_NAME = "michalskiba-dev-sql-injection"
 
 def build_module() -> None:
     print("Building module ...")
-    os.remove(LOCAL_LAMBDA_PACKAGE_FILENAME)
+    if os.path.exists(LOCAL_LAMBDA_PACKAGE_FILENAME):
+        os.remove(LOCAL_LAMBDA_PACKAGE_FILENAME)
     os.system(
         f"cd {LOCAL_SOURCE_DIRECTORY} && " f"zip -r ../../../{LOCAL_LAMBDA_PACKAGE_FILENAME} ."
     )
