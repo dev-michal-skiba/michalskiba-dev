@@ -6,4 +6,5 @@ mypy
 types-peewee
 pytest
 pytest-cov
+pytest-freezegun
 coverage

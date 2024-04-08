@@ -7,8 +7,9 @@ from sql_injection.lambda_function import lambda_handler
 @patch("sql_injection.lambda_function.get_parcel_stores")
 class TestLambdaHandler:
     def test_lambda_handler(
-        self, mock_get_parcel_stores: Mock, mock_get_address_search_phrase: Mock
+        self, mock_get_parcel_stores: Mock, mock_get_address_search_phrase: Mock, freeze_time: None
     ) -> None:
+
         address_search_phrase = "test address search phrase"
         mock_get_address_search_phrase.return_value = address_search_phrase
         parcel_stores = [
@@ -31,6 +32,9 @@ class TestLambdaHandler:
                 '[{"name": "parcel_store_1", "address": "Red Street 1, 00-001 Warsaw, Poland", '
                 '"opening_hours": "8:00-18:00", "access_code": "743763"}]'
             ),
+            "headers": {
+                "Set-Cookie": "is_secure_version_on=True; Expires=2025-03-30T12:00:00+00:00; Path=/; Secure"
+            },
         }
         mock_get_address_search_phrase.assert_called_once_with(event)
         mock_get_parcel_stores.assert_called_once_with(
