@@ -22,7 +22,7 @@ def get_is_secure_version_on(event: dict[str, Any]) -> bool:
 
 
 def get_headers(is_secure_version_on: bool) -> dict[str, str]:
-    expires = (datetime.now(timezone.utc) + timedelta(days=356)).isoformat()
+    expires = (datetime.now(timezone.utc) + timedelta(days=365)).isoformat()
     return {
         "Set-Cookie": f"is_secure_version_on={is_secure_version_on}; Expires={expires}; Path=/; Secure"
     }

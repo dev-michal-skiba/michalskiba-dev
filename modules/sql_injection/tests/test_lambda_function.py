@@ -33,7 +33,7 @@ class TestLambdaHandler:
                 '"opening_hours": "8:00-18:00", "access_code": "743763"}]'
             ),
             "headers": {
-                "Set-Cookie": "is_secure_version_on=True; Expires=2025-03-30T12:00:00+00:00; Path=/; Secure"
+                "Set-Cookie": "is_secure_version_on=True; Expires=2025-04-08T12:00:00+00:00; Path=/; Secure"
             },
         }
         mock_get_address_search_phrase.assert_called_once_with(event)

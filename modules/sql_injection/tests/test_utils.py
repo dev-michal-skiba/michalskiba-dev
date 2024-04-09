@@ -68,6 +68,6 @@ class TestGetHeaders:
         assert headers == {
             "Set-Cookie": (
                 f"is_secure_version_on={is_secure_version_on}; "
-                f"Expires=2025-03-30T12:00:00+00:00; Path=/; Secure"
+                f"Expires=2025-04-08T12:00:00+00:00; Path=/; Secure"
             )
         }
