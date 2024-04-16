@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        {{- partial "head.html" .}}
+    </head>
+    <body>
+        {{- partial "sql_injection/header.html" .}}
+        <div class="container-lg">
+            <form>
+                <div class="row mt-5 mb-5">
+                    <div class="col-10">
+                        <input
+                            class="form-control"
+                            id="address-search-phrase"
+                            type="text"
+                            name="address-search-phrase"
+                            placeholder="Search for parcel store by address..."
+                        >
+                    </div>
+                    <div class="col-1">
+                        <button id="submit-button" type="submit" class="btn primary-button m-0">Search</button>
+                    </div>
+                    <div class="col-1">
+                        <button id="clear-button" class="btn secondary-button m-0">Clear</button>
+                    </div>
+                </div>
+            </form>
+            <div>
+                <!--  TODO add loop  -->
+                <div class="sql-injection-parcel-store-tile">
+                    <p><b>Name:</b> parcel_store_1</p>
+                    <p><b>Address:</b> Blue Street 2, 47-404 Wroclaw, Poland</p>
+                    <p><b>Opening hours:</b> 7:00-15:00</p>
+                </div>
+                <div class="sql-injection-parcel-store-tile">
+                    <p><b>Name:</b> parcel_store_2</p>
+                    <p><b>Address:</b> Blue Street 2, 47-404 Wroclaw, Poland</p>
+                    <p><b>Opening hours:</b> 7:00-15:00</p>
+                </div>
+                <div class="sql-injection-parcel-store-tile">
+                    <p><b>Name:</b> parcel_store_3</p>
+                    <p><b>Address:</b> Blue Street 2, 47-404 Wroclaw, Poland</p>
+                    <p><b>Opening hours:</b> 7:00-15:00</p>
+                </div>
+            </div>
+        </div>
+        {{- partial "sql_injection/footer.html" .}}
+    </body>
+</html>

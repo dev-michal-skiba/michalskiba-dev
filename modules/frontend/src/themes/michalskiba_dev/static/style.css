@@ -8,7 +8,7 @@
 
 body {
     background-color: var(--primary-bg);
-    color: var(--primary-text);
+    color: var(--primary-text) !important;
     font-family: 'Ubuntu', sans-serif;
     margin-bottom: 70px;
 }
@@ -30,28 +30,28 @@ body {
 }
 
 .primary-text {
-    color: var(--primary-text);
+    color: var(--primary-text) !important;;
 }
 
 .secondary-text,
 .secondary-text:focus {
-    color: var(--secondary-text);
+    color: var(--secondary-text) !important;;
     font-family: 'VT323', sans-serif;
 }
 
 .secondary-text:hover {
-    color: var(--extra-color);
+    color: var(--extra-color) !important;;
 }
 
 .extra-text {
-    color: var(--extra-color);
+    color: var(--extra-color) !important;;
 }
 
 .div-link,
 .div-link:hover,
 .div-link:focus {
     text-decoration: none;
-    color: var(--primary-color);
+    color: var(--primary-color) !important;;
 }
 
 .blog-post-tile {
@@ -73,13 +73,13 @@ li a:focus,
 li a:visited,
 .link:active,
 li a:active {
-    color: var(--secondary-text);
+    color: var(--secondary-text) !important;;
     text-decoration: none;
 }
 
 .link:hover,
 li a:hover {
-    color: var(--extra-color);
+    color: var(--extra-color) !important;;
 }
 
 .toc_container {
@@ -122,7 +122,7 @@ input[type="checkbox"] {
 .primary-button:active,
 .primary-button:focus {
     background-color: var(--secondary-text);
-    color: black;
+    color: black !important;;
 }
 
 .secondary-button,
@@ -130,7 +130,7 @@ input[type="checkbox"] {
 .secondary-button:active,
 .secondary-button:focus {
     background-color: var(--extra-color);
-    color: black;
+    color: black !important;;
 }
 
 .link-button,
@@ -144,7 +144,7 @@ input[type="checkbox"] {
 }
 
 .link-button:hover {
-    color: var(--extra-color);
+    color: var(--extra-color) !important;;
 }
 
 .warning-footer {
@@ -153,7 +153,7 @@ input[type="checkbox"] {
     bottom: 0;
     width: 100%;
     background-color: #660000;
-    color: white;
+    color: white !important;;
     text-align: center;
     height: auto;
     padding: 5px;
@@ -174,6 +174,10 @@ input[type="checkbox"] {
     margin: 10px;
     padding: 10px;
     width: 100%;
+}
+
+.nav-item .dropdown-toggle::after {
+    display: none; /* Hide the arrow */
 }
 
 @media (min-width: 576px) {
