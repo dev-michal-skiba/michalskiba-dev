@@ -15,13 +15,11 @@ class TestGetParcelStores:
                         "name": "3.40.1",
                         "address": None,
                         "opening_hours": None,
-                        "access_code": None,
                     },
                     {
                         "name": "parcel_store_2",
                         "address": "Blue Street 2, 47-404 Wroclaw, Poland",
                         "opening_hours": "7:00-15:00",
-                        "access_code": "951620",
                     },
                 ],
             ),
@@ -49,6 +47,5 @@ class TestGetParcelStores:
                 "name": "parcel_store_2",
                 "address": "Blue Street 2, 47-404 Wroclaw, Poland",
                 "opening_hours": "7:00-15:00",
-                "access_code": "951620",
             }
         ]

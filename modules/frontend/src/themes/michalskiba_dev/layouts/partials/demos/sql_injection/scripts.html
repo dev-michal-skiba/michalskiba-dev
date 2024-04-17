@@ -1,14 +1,81 @@
 {{- partial "demos/scripts.html" .}}
 <script>
+    function setAddressSearchPhrase(value) {
+        localStorage.setItem("sql_injection_address_search_phrase", value);
+    }
+
+    function getAddressSearchPhrase() {
+        const addressSearchPhrase = localStorage.getItem("sql_injection_address_search_phrase");
+        if (addressSearchPhrase == null) {
+            setAddressSearchPhrase("");
+            return "";
+        }
+        return addressSearchPhrase
+    }
+
+    function renderParcelStores(parcelStores) {
+        const container = document.createElement('div');
+        parcelStores.forEach(store => {
+            const tile = document.createElement('div');
+            tile.classList.add('sql-injection-parcel-store-tile');
+            const nameParagraph = document.createElement('p');
+            nameParagraph.innerHTML = `<b>Name:</b> ${store.name}`;
+            const addressParagraph = document.createElement('p');
+            addressParagraph.innerHTML = `<b>Address:</b> ${store.address}`;
+            const openingHoursParagraph = document.createElement('p');
+            openingHoursParagraph.innerHTML = `<b>Opening hours:</b> ${store.opening_hours}`;
+            tile.appendChild(nameParagraph);
+            tile.appendChild(addressParagraph);
+            tile.appendChild(openingHoursParagraph);
+            container.appendChild(tile);
+        });
+        const parentContainer = document.getElementById("parent-container");
+        parentContainer.innerHTML = '';
+        parentContainer.appendChild(container);
+    }
+
+    async function setLoading() {
+        const parentContainer = document.getElementById("parent-container");
+        parentContainer.innerHTML = 'Loading ...';
+    }
+
     // Add listener to store info in local storage about search text
     document.getElementById("address-search-phrase").addEventListener('change', (event) => {
-        localStorage.setItem("address_search_phrase", event.target.value);
+        setAddressSearchPhrase(event.target.value);
     });
 
     // Add listener to clear info in local storage about search text
     document.getElementById("clear-button").addEventListener('click', (event) => {
-        localStorage.setItem("address_search_phrase", "");
+        setAddressSearchPhrase("");
         document.getElementById("address-search-phrase").value = "";
-        document.getElementById("submit-button").submit();
+        document.getElementById("submit-button").click();
     });
+
+    // Add listener to call API for parcel stores
+    document.getElementById("submit-button").addEventListener("click", function() {
+        setLoading();
+        // TODO url based on environment
+        const url = "http://localhost:3000/?address_search_phrase=" + getAddressSearchPhrase() + "&is_secure_version_on=" + getIsSecureVersionOn()
+        fetch(
+            url, {method: "GET"}
+        ).then(
+            response => {
+                return response.json();
+            }
+        ).then(
+            parcelStores => {
+                renderParcelStores(parcelStores);
+            }
+        ).catch(
+            error => {
+                console.debug(error);
+            }
+        )
+    });
+
+    window.onload = function() {
+        document.getElementById("version-switch").checked = getIsSecureVersionOn();
+        document.getElementById("address-search-phrase").value = getAddressSearchPhrase();
+        document.getElementById("submit-button").click();
+    };
 </script>

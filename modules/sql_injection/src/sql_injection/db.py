@@ -32,7 +32,6 @@ def get_parcel_stores_secure(address_search_phrase: str) -> list[dict[str, str]]
             "name": parcel_store.name,
             "address": parcel_store.address,
             "opening_hours": parcel_store.opening_hours,
-            "access_code": parcel_store.access_code,
         }
         for parcel_store in queryset
     ]
@@ -46,7 +45,6 @@ def get_parcel_stores_insecure(address_search_phrase: str) -> list[dict[str, str
             "name": parcel_store.name,
             "address": parcel_store.address,
             "opening_hours": parcel_store.opening_hours,
-            "access_code": parcel_store.access_code,
         }
         for parcel_store in queryset
     ]

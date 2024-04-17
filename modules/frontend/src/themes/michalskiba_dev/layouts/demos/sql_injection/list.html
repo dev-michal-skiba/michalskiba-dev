@@ -18,31 +18,14 @@
                         >
                     </div>
                     <div class="col-1">
-                        <button id="submit-button" type="submit" class="btn primary-button m-0">Search</button>
+                        <button id="submit-button" type="button" class="btn primary-button m-0">Search</button>
                     </div>
                     <div class="col-1">
-                        <button id="clear-button" class="btn secondary-button m-0">Clear</button>
+                        <button id="clear-button" type="button" class="btn secondary-button m-0">Clear</button>
                     </div>
                 </div>
             </form>
-            <div>
-                <!--  TODO add loop  -->
-                <div class="sql-injection-parcel-store-tile">
-                    <p><b>Name:</b> parcel_store_1</p>
-                    <p><b>Address:</b> Blue Street 2, 47-404 Wroclaw, Poland</p>
-                    <p><b>Opening hours:</b> 7:00-15:00</p>
-                </div>
-                <div class="sql-injection-parcel-store-tile">
-                    <p><b>Name:</b> parcel_store_2</p>
-                    <p><b>Address:</b> Blue Street 2, 47-404 Wroclaw, Poland</p>
-                    <p><b>Opening hours:</b> 7:00-15:00</p>
-                </div>
-                <div class="sql-injection-parcel-store-tile">
-                    <p><b>Name:</b> parcel_store_3</p>
-                    <p><b>Address:</b> Blue Street 2, 47-404 Wroclaw, Poland</p>
-                    <p><b>Opening hours:</b> 7:00-15:00</p>
-                </div>
-            </div>
+            <div id="parent-container"></div>
         </div>
         {{- partial "demos/sql_injection/footer.html" .}}
         {{- partial "demos/sql_injection/scripts.html" .}}
