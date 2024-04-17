@@ -1,0 +1,14 @@
+{{- partial "demos/scripts.html" .}}
+<script>
+    // Add listener to store info in local storage about search text
+    document.getElementById("address-search-phrase").addEventListener('change', (event) => {
+        localStorage.setItem("address_search_phrase", event.target.value);
+    });
+
+    // Add listener to clear info in local storage about search text
+    document.getElementById("clear-button").addEventListener('click', (event) => {
+        localStorage.setItem("address_search_phrase", "");
+        document.getElementById("address-search-phrase").value = "";
+        document.getElementById("submit-button").submit();
+    });
+</script>
