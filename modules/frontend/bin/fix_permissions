@@ -1,3 +1,0 @@
-#!/bin/bash
-sudo chown --recursive michal:michal src/
-sudo chmod --recursive 774 src/

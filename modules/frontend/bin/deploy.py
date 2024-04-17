@@ -10,16 +10,14 @@ REMOTE_DESTINATION_DIRECTORY = "frontend/"
 
 def build_module():
     print("Building module ...")
-    os.system(f"cd {MODULE_DIRECTORY} && sudo bin/hugo")
+    os.system(f"cd {MODULE_DIRECTORY} && bin/build_deploy")
     print("Module built")
 
 
 def clean_remote_destination_directory(s3_client):
     print("Cleaning remote destination directory ...")
     paginator = s3_client.get_paginator("list_objects")
-    page_iterator = paginator.paginate(
-        Bucket=BUCKET_NAME, Prefix=REMOTE_DESTINATION_DIRECTORY
-    )
+    page_iterator = paginator.paginate(Bucket=BUCKET_NAME, Prefix=REMOTE_DESTINATION_DIRECTORY)
     for page in page_iterator:
         for obj in page.get("Contents") or []:
             s3_client.delete_object(Bucket=BUCKET_NAME, Key=obj["Key"])
@@ -61,11 +59,8 @@ def upload(s3_client):
         for file_name in filenames:
             local_source_file_path = os.path.join(root, file_name)
             content_type = _get_content_type(local_source_file_path)
-            remote_destination_file_path = (
-                REMOTE_DESTINATION_DIRECTORY
-                + os.path.relpath(
-                    path=local_source_file_path, start=LOCAL_SOURCE_DIRECTORY
-                )
+            remote_destination_file_path = REMOTE_DESTINATION_DIRECTORY + os.path.relpath(
+                path=local_source_file_path, start=LOCAL_SOURCE_DIRECTORY
             )
             s3_client.upload_file(
                 local_source_file_path,

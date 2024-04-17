@@ -54,10 +54,10 @@
     // Add listener to call API for parcel stores
     document.getElementById("submit-button").addEventListener("click", function() {
         setLoading();
-        // TODO url based on environment
-        const url = "http://localhost:3000/?address_search_phrase=" + getAddressSearchPhrase() + "&is_secure_version_on=" + getIsSecureVersionOn()
+        const apiUrl = '{{ getenv "HUGO_API_URL" }}';
         fetch(
-            url, {method: "GET"}
+            apiUrl + "/?address_search_phrase=" + getAddressSearchPhrase() + "&is_secure_version_on=" + getIsSecureVersionOn(),
+            {method: "GET"}
         ).then(
             response => {
                 return response.json();

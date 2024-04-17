@@ -1,5 +1,6 @@
 ---
 title: "Michal Skiba | SQL Injection Demo"
-draft: true
+draft: false
 type: "demos/sql_injection"
+layout: "post"
 ---
