@@ -38,5 +38,5 @@ class TestGetHeaders:
             "Access-Control-Allow-Origin": "http://localhost:1313",
             "Access-Control-Allow-Headers": "*",
             "Access-Control-Allow-Methods": "GET,OPTIONS",
-            "Access-Control-Allow-Credentials": "true",
+            "Access-Control-Allow-Credentials": "false",
         }

@@ -16,5 +16,5 @@ def get_headers() -> dict[str, str]:
         "Access-Control-Allow-Origin": allow_origin,
         "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Methods": "GET,OPTIONS",
-        "Access-Control-Allow-Credentials": "true",
+        "Access-Control-Allow-Credentials": "false",
     }
