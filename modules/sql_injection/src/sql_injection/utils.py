@@ -1,28 +1,20 @@
-from datetime import datetime, timedelta, timezone
+import os
 from typing import Any
 
 
-def get_address_search_phrase(event: dict[str, Any]) -> str:
+def extract_query_parameters(event: dict[str, Any]) -> tuple[str, bool]:
     query_string_parameters = event.get("queryStringParameters") or {}
     address_search_phrase = query_string_parameters.get("address_search_phrase") or ""
-    return address_search_phrase
+    is_secure_version_on = query_string_parameters.get("is_secure_version_on") or ""
+    is_secure_version_on = is_secure_version_on.lower() != "false"
+    return address_search_phrase, is_secure_version_on
 
 
-def get_is_secure_version_on(event: dict[str, Any]) -> bool:
-    headers = event.get("headers") or {}
-    cookie_header = headers.get("Cookie") or ""
-    if cookie_header:
-        cookies = cookie_header.split(";")
-        for cookie in cookies:
-            cookie = cookie.strip().split("=")
-            if len(cookie) == 2 and cookie[0].strip() == "is_secure_version_on":
-                cookie_value = cookie[1]
-                return cookie_value.lower() == "true"
-    return True
-
-
-def get_headers(is_secure_version_on: bool) -> dict[str, str]:
-    expires = (datetime.now(timezone.utc) + timedelta(days=365)).isoformat()
+def get_headers() -> dict[str, str]:
+    allow_origin = os.environ.get("CORS_ALLOW_ORIGIN") or "http://localhost:1313"
     return {
-        "Set-Cookie": f"is_secure_version_on={is_secure_version_on}; Expires={expires}; Path=/; Secure"
+        "Access-Control-Allow-Origin": allow_origin,
+        "Access-Control-Allow-Headers": "*",
+        "Access-Control-Allow-Methods": "GET,OPTIONS",
+        "Access-Control-Allow-Credentials": "true",
     }

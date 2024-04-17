@@ -3,15 +3,16 @@ from unittest.mock import Mock, patch
 from sql_injection.lambda_function import lambda_handler
 
 
-@patch("sql_injection.lambda_function.get_address_search_phrase")
+@patch("sql_injection.lambda_function.extract_query_parameters")
 @patch("sql_injection.lambda_function.get_parcel_stores")
 class TestLambdaHandler:
     def test_lambda_handler(
-        self, mock_get_parcel_stores: Mock, mock_get_address_search_phrase: Mock, freeze_time: None
+        self, mock_get_parcel_stores: Mock, mock_extract_query_parameters: Mock
     ) -> None:
 
         address_search_phrase = "test address search phrase"
-        mock_get_address_search_phrase.return_value = address_search_phrase
+        is_secure_version_on = True
+        mock_extract_query_parameters.return_value = address_search_phrase, is_secure_version_on
         parcel_stores = [
             {
                 "name": "parcel_store_1",
@@ -33,11 +34,14 @@ class TestLambdaHandler:
                 '"opening_hours": "8:00-18:00", "access_code": "743763"}]'
             ),
             "headers": {
-                "Set-Cookie": "is_secure_version_on=True; Expires=2025-04-08T12:00:00+00:00; Path=/; Secure"
+                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Methods": "GET,OPTIONS",
+                "Access-Control-Allow-Credentials": "true",
             },
         }
-        mock_get_address_search_phrase.assert_called_once_with(event)
+        mock_extract_query_parameters.assert_called_once_with(event)
         mock_get_parcel_stores.assert_called_once_with(
             address_search_phrase=address_search_phrase,
-            is_secure_version_on=True,
+            is_secure_version_on=is_secure_version_on,
         )
