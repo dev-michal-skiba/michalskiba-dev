@@ -45,7 +45,7 @@ SQL query (even with ORM) and sometimes it may be tempting to do so.
 ## Introduction to demo scenario
 
 Let's leave theory behind and get our hands on real live example. Demonstration is available under
-this address [sql-injection.michalskiba.dev](https://sql-injection.michalskiba.dev/). It is a
+this [address](/demos/sql-injection/). It is a
 simple mockup site of fake carrier that provides user with view to search for parcel stores by 
 address. The site itself is primitive, but what is most important it provides a way for user to 
 input search query which is later used in SQL query to filter parcel stores. In the navbar you 
@@ -57,53 +57,53 @@ protection) or whether you want to use insecure version (without SQL Injection p
 Please open demo site without SQL Injection protection. Let's try to recreate the reasoning 
 and actions attacker performs when he wants to exploit potential SQL Injection vulnerability. 
 Let's check that the search mechanism works by inputting `Warsaw`. It should display two parcel 
-stores as expected. With knowledge we have from previous sections let's see whether form is 
+stores as expected. With the knowledge we have from previous sections let's see whether form is 
 vulnerable to SQL Injection by using `UNION` keyword. The idea behind it is that it should 
 "union" two query results into one under two conditions: number of returned values must match 
 and values in the same column of different tables must have the same type, unless it is `NULL` 
 value. We will use this `NULL` value exception to check how many values are returned in the 
 query. In the search output we can see three values per parcel store, so it is logical to 
 conclude that query returns three values. Let's try `abc' UNION SELECT NULL, NULL, NULL;--` 
-then. It does not work. Maybe some field is not displayed (many times also primary key is 
-returned from query), so let's try it with one more `NULL` by inputting this `abc' UNION SELECT 
-NULL, NULL, NULL, NULL;--`. Great (not great for fake carrier), that is working. We are now 
-sure that site is really vulnerable.
+then. It does not work. Maybe some fields are not displayed (many times also primary key is 
+returned from query etc.). Attacker have to try many combinations, but we can skip that and we can
+already try to input `NULL` five times: `abc' UNION SELECT NULL, NULL, NULL, NULL, NULL;--`. Great
+(not great for fake carrier), that is working. We are now  sure that site is really vulnerable.
 
 ![sql_injection_1.png](/post/sql_injection/1.png)
 
 Now it may be useful to know on what database we are operating. Most of the modern database 
 provides some kind of command to check it. Let's skip part of guessing and with the knowledge 
-that this app is using postgres let's search for `abc' UNION SELECT NULL, version(), NULL, NULL;
---`.
+that this app is using SQLite let's search for `abc' UNION SELECT NULL, NULL, sqlite_version(),
+NULL, NULL; --`.
 
 ![sql_injection_2.png](/post/sql_injection/2.png)
  
-That is very useful information. In PostgreSQL table names are stored in the table called
-`information_schema.tables`. We can search for all tables with this input
-`abc' UNION SELECT NULL, table_name, NULL, NULL FROM information_schema.tables;--`.
+That is very useful information. In SQLite table names are stored in the table called
+`<DB_NAME>.sqlite_master`. Default database name is `main`. We can search for all tables with this input
+`abc' UNION SELECT NULL, NULL, name, NULL, NULL FROM main.sqlite_master WHERE type='table'; --`.
 
 ![sql_injection_3.png](/post/sql_injection/3.png)
 
-Once we find interesting table we can also display all columns on that table by selecting
-values from `information_schema.columns` table. Let's check columns in parcel store table with
-following input `abc' UNION SELECT NULL, column_name, NULL, NULL FROM information_schema.
-columns WHERE table_name = 'sql_injection_parcelstore';--`.
+Once we find interesting table we can also get SQL which was used to create the table from
+the same `<DB_NAME>.sqlite_master` table. Let's check it with following input
+`abc' UNION SELECT NULL, NULL, sql, NULL, NULL FROM main.sqlite_master WHERE name='parcelstore'; --`.
 
 ![sql_injection_4.png](/post/sql_injection/4.png)
 
 That is interesting, we found `access_code` column that is not shown in the search result.
-Probably that is code that if provided will open locked doors of parcel store! (let's assume 
+Probably that is the code that if provided will open locked doors of parcel store! (let's assume 
 that such access code really exists and is stored on the same table for the sake of this 
-example :D). Now all we need to do to get all access codes is to input this `abc' UNION SELECT 
-NULL, name, address, access_code FROM sql_injection_parcelstore;--` and we now know all access 
+example :D). Now all we need to do to get all access codes is to input this `abc' UNION SELECT
+NULL, name, address, access_code, NULL FROM parcelstore;--` and we now know all access 
 codes with the exact locations of parcel stores.
 
 ![sql_injection_5.png](/post/sql_injection/5.png)
 
 In real life scenario using SQL Injection you could also add data to the tables (for example 
 users with admin privileges), drop tables or drop whole database, but because I expose this 
-vulnerability online I validate the input, so only read queries are allowed. There is (hopefully)
-no way of dropping the database. I also use different database for this demo than for other 
+vulnerability online I ensured that only `UNION SELECT` can be injected
+(protection in `pewwee` library to run only one raw query at once), so only read queries are allowed.
+There is (hopefully) no way of dropping the database. I also use different database for this demo than for other 
 demos, so there is also no risk of breaking my other demo sites.
 
 ## Example of correctly implemented search mechanism
@@ -111,13 +111,11 @@ demos, so there is also no risk of breaking my other demo sites.
 You can switch the site to the secure version and check all previous inputs that helped us to get
 access codes. It won't work, because now SQL queries are parametrized. You can check out the
 code that is responsible for querying in secure and insecure way in my
-[open repository](https://github.com/dev-michal-skiba/michalskiba-dev/blob/master/michalskiba_dev/sql_injection/utils.py).
-For secure querying I use Django ORM that parametrize the query under the hood. Using
-framework recommended way of communicating with database is always the safest option. If we
-are using bare language there are always ORMs available (for example SQLAlchemy 
-fo Python) which should be used. Anyway, as you can see in the code, Django ORM allows 
-executing bare SQL queries. It is not recommended, but you can do this. There is mechanism for 
-parametrizing raw SQL queries in Django (see 
-[docs](https://docs.djangoproject.com/en/5.0/topics/db/sql/#passing-parameters-into-raw)), but you
-are not forced to use it. That is why developers should be aware of SQL Injection. Not knowing this
-can result in introducing major vulnerabilities to the web applications.
+[open repository](https://github.com/dev-michal-skiba/michalskiba-dev/tree/master/modules/sql_injection).
+For database operations I use `peewee` package which provides ORM which parametrize the query under the hood. Using
+framework recommended way of communicating with database is always the safest option. For most of the moderns
+languages there is always some ORM available (for example `peewee` or `SQLAlchemy` for Python) which should be used.
+Anyway, as you can see in the code, ORM also provides a mechanism to execute bare SQL queries. It is not recommended,
+but you can do this. There is mechanism for parametrizing raw SQL queries in `peewee`, but you are not forced to use it.
+That is why developers should be aware of SQL Injection. Not knowing this can result in introducing major
+vulnerabilities to the applications.

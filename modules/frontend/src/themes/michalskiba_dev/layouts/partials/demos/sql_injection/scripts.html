@@ -39,6 +39,11 @@
         parentContainer.innerHTML = 'Loading ...';
     }
 
+    async function unsetLoading() {
+        const parentContainer = document.getElementById("parent-container");
+        parentContainer.innerHTML = '';
+    }
+
     // Add listener to store info in local storage about search text
     document.getElementById("address-search-phrase").addEventListener('change', (event) => {
         setAddressSearchPhrase(event.target.value);
@@ -69,6 +74,7 @@
         ).catch(
             error => {
                 console.debug(error);
+                unsetLoading();
             }
         )
     });
