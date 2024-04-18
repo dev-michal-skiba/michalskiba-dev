@@ -1,0 +1,10 @@
+#!/bin/bash
+
+modules_dir="modules/"
+for dir in "${modules_dir}"*/; do
+    if [ -f "${dir}bin/run" ]; then
+        (cd "${dir}" && ./bin/run) &
+    fi
+done
+
+wait

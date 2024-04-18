@@ -9,3 +9,5 @@ services:
         - ./src:/src
       ports:
         - "1313:1313"
+      env_file:
+        - .env.dev

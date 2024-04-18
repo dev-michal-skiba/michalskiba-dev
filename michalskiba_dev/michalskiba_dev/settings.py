@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     "django_hosts",
     "web_parameter_tampering",
     "demo",
-    "sql_injection",
 ]
 
 MIDDLEWARE = [
@@ -95,17 +94,7 @@ DATABASES = {
         "HOST": os.getenv("POSTGRES_HOST"),
         "PORT": os.getenv("POSTGRES_PORT"),
     },
-    "sql_injection": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.getenv("POSTGRES_SQL_INJECTION_DB"),
-        "USER": os.getenv("POSTGRES_SQL_INJECTION_USER"),
-        "PASSWORD": os.getenv("POSTGRES_SQL_INJECTION_PASSWORD"),
-        "HOST": os.getenv("POSTGRES_SQL_INJECTION_HOST"),
-        "PORT": os.getenv("POSTGRES_SQL_INJECTION_PORT"),
-    },
 }
-DATABASE_ROUTERS = ["michalskiba_dev.database_router.DatabaseRouter"]
-APPS_WITH_DEDICATED_DATABASE = set(INSTALLED_APPS) & set(DATABASES.keys())
 
 
 # Password validation

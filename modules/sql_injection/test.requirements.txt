@@ -1,0 +1,9 @@
+-r src/sql_injection/requirements.txt
+isort
+black
+ruff
+mypy
+types-peewee
+pytest
+pytest-cov
+coverage

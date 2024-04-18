@@ -1,0 +1,8 @@
+#!/bin/bash
+docker \
+compose \
+run \
+--entrypoint=hugo \
+--rm \
+-e HUGO_API_URL=https://ctcz656rremunfokutj4vvdfme0hthte.lambda-url.eu-central-1.on.aws \
+frontend

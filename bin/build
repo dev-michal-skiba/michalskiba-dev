@@ -1,0 +1,8 @@
+#!/bin/bash
+
+for dir in "modules"/*/; do
+  if [ -d "$dir" ] && [ -f "${dir}bin/build" ]; then
+    cd "$dir" && "bin/build"
+  fi
+done
+exit 0
