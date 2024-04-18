@@ -44,20 +44,7 @@
         parentContainer.innerHTML = '';
     }
 
-    // Add listener to store info in local storage about search text
-    document.getElementById("address-search-phrase").addEventListener('change', (event) => {
-        setAddressSearchPhrase(event.target.value);
-    });
-
-    // Add listener to clear info in local storage about search text
-    document.getElementById("clear-button").addEventListener('click', (event) => {
-        setAddressSearchPhrase("");
-        document.getElementById("address-search-phrase").value = "";
-        document.getElementById("submit-button").click();
-    });
-
-    // Add listener to call API for parcel stores
-    document.getElementById("submit-button").addEventListener("click", function() {
+    function submitForm() {
         setLoading();
         const apiUrl = '{{ getenv "HUGO_API_URL" }}';
         fetch(
@@ -77,11 +64,34 @@
                 unsetLoading();
             }
         )
+    }
+
+    // Add listener to store info in local storage about search text
+    document.getElementById("address-search-phrase").addEventListener('change', (event) => {
+        setAddressSearchPhrase(event.target.value);
+    });
+
+    // Add listener to clear info in local storage about search text
+    document.getElementById("clear-button").addEventListener('click', (event) => {
+        setAddressSearchPhrase("");
+        document.getElementById("address-search-phrase").value = "";
+        submitForm();
+    });
+
+    // Add listener to correctly submit form
+    document.getElementById("parcel-store-search-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitForm();
+    });
+
+    // Add listener to call API for parcel stores
+    document.getElementById("submit-button").addEventListener("click", function() {
+        submitForm();
     });
 
     window.onload = function() {
         document.getElementById("version-switch").checked = getIsSecureVersionOn();
         document.getElementById("address-search-phrase").value = getAddressSearchPhrase();
-        document.getElementById("submit-button").click();
+        submitForm();
     };
 </script>
