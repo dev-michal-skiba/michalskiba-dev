@@ -5,12 +5,14 @@ import boto3
 LOCAL_SOURCE_DIRECTORY = ".aws-sam/build/SQLInjectionAPI"
 LOCAL_LAMBDA_PACKAGE_FILENAME = "lambda_package.zip"
 LAMBDA_FUNCTION_NAME = "michalskiba-dev-sql-injection"
+BUILD_SCRIPT_PATH = "bin/build"
 
 
 def build_module() -> None:
     print("Building module ...")
     if os.path.exists(LOCAL_LAMBDA_PACKAGE_FILENAME):
         os.remove(LOCAL_LAMBDA_PACKAGE_FILENAME)
+    os.system(BUILD_SCRIPT_PATH)
     os.system(
         f"cd {LOCAL_SOURCE_DIRECTORY} && " f"zip -r ../../../{LOCAL_LAMBDA_PACKAGE_FILENAME} ."
     )
