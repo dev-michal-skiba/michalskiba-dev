@@ -11,10 +11,12 @@ def extract_query_parameters(event: dict[str, Any]) -> tuple[str, bool]:
 
 
 def get_headers() -> dict[str, str]:
-    allow_origin = os.environ.get("CORS_ALLOW_ORIGIN") or "http://localhost:1313"
-    return {
-        "Access-Control-Allow-Origin": allow_origin,
+    headers = {
         "Access-Control-Allow-Headers": "*",
         "Access-Control-Allow-Methods": "GET,OPTIONS",
         "Access-Control-Allow-Credentials": "false",
     }
+    is_production = os.environ.get("PRODUCTION", "").lower() == "true"
+    if not is_production:
+        headers["Access-Control-Allow-Origin"] = "http://localhost:1313"
+    return headers
