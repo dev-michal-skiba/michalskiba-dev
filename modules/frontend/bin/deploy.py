@@ -2,15 +2,15 @@ import os
 
 import boto3
 
-MODULE_DIRECTORY = "modules/frontend/"
 BUCKET_NAME = "michalskiba-dev"
-LOCAL_SOURCE_DIRECTORY = f"{MODULE_DIRECTORY}src/public/"
+LOCAL_SOURCE_DIRECTORY = "src/public/"
 REMOTE_DESTINATION_DIRECTORY = "frontend/"
+BUILD_DEPLOY_SCRIPT_PATH = "bin/build_deploy"
 
 
 def build_module():
     print("Building module ...")
-    os.system(f"cd {MODULE_DIRECTORY} && bin/build_deploy")
+    os.system(BUILD_DEPLOY_SCRIPT_PATH)
     print("Module built")
 
 
