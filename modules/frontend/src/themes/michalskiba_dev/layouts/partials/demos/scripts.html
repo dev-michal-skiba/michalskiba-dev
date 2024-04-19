@@ -18,4 +18,8 @@
         setIsSecureVersionOn(!is_secure_version_on);
         window.location.reload();
     }
+
+    function encodeURI(value) {
+        return encodeURIComponent(value).replace(/-/g, "%2D");
+    }
 </script>
