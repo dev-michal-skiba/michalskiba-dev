@@ -1,0 +1,16 @@
+{{- partial "demos/scripts.html" .}}
+<script>
+    function login() {
+        console.log("login");
+    }
+
+    // Add listener to correctly submit form
+    document.getElementById("wpt-login-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        login();
+    });
+
+    window.onload = function() {
+        document.getElementById("version-switch").checked = getIsSecureVersionOn();
+    };
+</script>
