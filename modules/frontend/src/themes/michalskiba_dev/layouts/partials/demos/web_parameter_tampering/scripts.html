@@ -1,7 +1,67 @@
 {{- partial "demos/scripts.html" .}}
 <script>
+    function clearLoggingError() {
+        document.getElementById("wpt-login-error").innerText = "";
+    }
+
+    function setLoggingError() {
+        document.getElementById("wpt-login-error").innerText = "Wrong credentials";
+    }
+
     function login() {
-        console.log("login");
+        clearLoggingError();
+        const username = document.getElementById("wpt-username").value;
+        const password = document.getElementById("wpt-password").value;
+        if (username === "test" && password === "1234") {
+            localStorage.setItem("wpt_logged_in", "true");
+            window.location.reload();
+        }
+        setLoggingError();
+    }
+
+    function logout() {
+        localStorage.setItem("wpt_logged_in", "false");
+        window.location.reload();
+    }
+
+    function displayLogoutButton() {
+        let button = document.createElement("button");
+        button.className = "nav-link link-button secondary-text"
+        button.innerText = "logout";
+        button.addEventListener("click", logout);
+        document.getElementById("wpt-logout-container").appendChild(button);
+    }
+
+    function getPressApplication() {
+        return {
+            // "accreditation_code": null,
+            "accreditation_code": "258c4453-4eff-463d-8169-1d0596fe0b7a",
+            "organization": "Legitimate organization",
+        }
+    }
+
+    function displayPressApplication() {
+        const pressApplication = getPressApplication();
+        let container = document.getElementById("wpt-press-container");
+        container.innerHTML = "";
+        let header = document.createElement("h1");
+        header.innerText = "Accreditation info";
+        container.append(header);
+        if (pressApplication.accreditation_code) {
+            let status = document.createElement("p");
+            status.innerHTML = "Status: <span class='success'>Accepted</span></p>";
+            container.append(status)
+            let accreditation_code = document.createElement("p");
+            accreditation_code.innerHTML = "Accreditation code: <b>" + pressApplication.accreditation_code + "</b>";
+            container.append(accreditation_code)
+        } else {
+            let status = document.createElement("p");
+            status.innerHTML = "Status: <span class='error'>Waiting for approval</span></p>";
+            container.append(status)
+        }
+        let organization = document.createElement("p");
+        organization.innerText = "Organization: " + pressApplication.organization;
+        container.append(organization);
     }
 
     // Add listener to correctly submit form
@@ -12,5 +72,9 @@
 
     window.onload = function() {
         document.getElementById("version-switch").checked = getIsSecureVersionOn();
+        if (localStorage.getItem("wpt_logged_in") === "true") {
+            displayLogoutButton();
+            displayPressApplication();
+        }
     };
 </script>
