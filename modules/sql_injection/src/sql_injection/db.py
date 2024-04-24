@@ -2,7 +2,7 @@ import os
 
 from peewee import CharField, Model, SqliteDatabase
 
-db = SqliteDatabase(os.environ.get("DB_PATH") or "sql_injection.db")
+db = SqliteDatabase(os.environ.get("DB_PATH"))
 
 
 class BaseModel(Model):
