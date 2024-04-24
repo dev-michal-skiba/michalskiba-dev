@@ -15,3 +15,7 @@ Resources:
           Properties:
             Path: /
             Method: get
+      Environment:
+        Variables:
+          DB_PATH: "sql_injection.db"
+          ALLOW_ORIGIN: "http://localhost:1313"
