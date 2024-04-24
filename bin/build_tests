@@ -2,7 +2,8 @@
 
 for dir in "modules"/*/; do
   if [ -d "$dir" ] && [ -f "${dir}bin/build_tests" ]; then
-    cd "$dir" && "bin/build_tests"
+    echo "== Building tests image for $(basename "$dir") =="
+    (cd "$dir" && "bin/build_tests")
   fi
 done
 exit 0

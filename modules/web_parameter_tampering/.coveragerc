@@ -1,0 +1,8 @@
+[run]
+omit =
+    */lib/*.py
+
+[report]
+skip_covered = true
+fail_under = 95
+show_missing = true

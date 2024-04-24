@@ -1,0 +1,11 @@
+#!/bin/bash
+
+docker compose --file test.docker-compose.yml run web_parameter_tampering_test bash -c \
+  'isort --check-only src/ tests/ &&
+  echo -e "\033[0;32mIsort check succeeded\033[0m" &&
+  black --check src/ tests/ &&
+  echo -e "\033[0;32mBlack check succeeded\033[0m" &&
+  ruff check --exclude lib src/ tests/ &&
+  echo -e "\033[0;32mRuff check succeeded\033[0m" &&
+  mypy src/ tests/ &&
+  echo -e "\033[0;32mMypy check succeeded\033[0m"'

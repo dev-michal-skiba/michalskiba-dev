@@ -3,7 +3,7 @@
 for dir in "modules"/*/; do
   if [ -d "$dir" ] && [ -f "${dir}bin/run_lint_checks" ]; then
     echo "== Lint checks for $(basename "$dir") =="
-    cd "$dir" && "bin/run_lint_checks"
+    (cd "$dir" && "bin/run_lint_checks")
   fi
 done
 exit 0

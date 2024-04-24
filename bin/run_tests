@@ -3,7 +3,7 @@
 for dir in "modules"/*/; do
   if [ -d "$dir" ] && [ -f "${dir}bin/run_tests" ]; then
     echo "== Tests for $(basename "$dir") =="
-    cd "$dir" && "bin/run_tests"
+    (cd "$dir" && "bin/run_tests")
   fi
 done
 exit 0

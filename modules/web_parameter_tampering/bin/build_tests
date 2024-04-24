@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker build --tag michalskiba_dev_web_parameter_tampering_test --file test.dockerfile ./
