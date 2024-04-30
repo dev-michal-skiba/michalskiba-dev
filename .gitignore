@@ -9,3 +9,4 @@ venv/
 /sql_injection_data/
 # Coverage report
 .coverage
+.aws-sam

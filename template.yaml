@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: SAM template for a Lambda function with API Gateway
+
+Parameters:
+  Environment:
+    Type: String
+    AllowedValues:
+      - Local
+      - Production
+
+Mappings:
+  EnvVariables:
+    Local:
+      AllowOrigin: http://localhost:1313
+    Production:
+      AllowOrigin: https://www.michalskiba.dev
+
+Resources:
+  SqlInjection:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.12
+      CodeUri: ./modules/sql_injection/src/sql_injection
+      Handler: lambda_function.lambda_handler
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Method: GET
+            Path: /demo/sql-injection
+      Environment:
+        Variables:
+          DB_PATH: sql_injection.db
+          ALLOW_ORIGIN: !FindInMap
+            - EnvVariables
+            - !Ref Environment
+            - AllowOrigin
+  Api:
+    Type: AWS::Serverless::HttpApi
+    Properties:
+      Domain:
+        CertificateArn: arn:aws:acm:eu-central-1:628924145931:certificate/c8335665-cc74-46ee-b24f-b615ac09a6c3
+        DomainName: api.michalskiba.dev
+

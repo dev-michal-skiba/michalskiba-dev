@@ -1,0 +1,25 @@
+version=0.1
+
+[default.local_start_api.parameters]
+warm_containers="EAGER"
+parameter_overrides=[
+  "Environment=Local",
+]
+
+[default.validate.parameters]
+profile="michalskiba-dev-infra"
+lint=true
+
+[default.build.parameters]
+use_container="true"
+
+[default.deploy.parameters]
+profile="michalskiba-dev-infra"
+stack_name="michalskiba-dev"
+resolve_s3=true
+capabilities=[
+  "CAPABILITY_IAM",
+]
+parameter_overrides=[
+  "Environment=Production",
+]
