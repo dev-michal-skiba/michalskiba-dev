@@ -1,0 +1,3 @@
+#!/bin/bash
+
+docker build --tag michalskiba_dev_auth_test --file test.dockerfile ./

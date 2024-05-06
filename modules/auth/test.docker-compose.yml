@@ -1,0 +1,8 @@
+version: '3.9'
+
+services:
+  auth_test:
+    container_name: auth_test
+    image: michalskiba_dev_auth_test
+    volumes:
+      - ./:/code/

@@ -37,6 +37,26 @@ Resources:
             - EnvVariables
             - !Ref Environment
             - AllowOrigin
+  Auth:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.12
+      CodeUri: ./modules/auth/src/auth
+      Handler: lambda_function.lambda_handler
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Method: POST
+            Path: /demo/auth
+      Environment:
+        Variables:
+          DB_PATH: auth.db
+          ALLOW_ORIGIN: !FindInMap
+            - EnvVariables
+            - !Ref Environment
+            - AllowOrigin
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:
