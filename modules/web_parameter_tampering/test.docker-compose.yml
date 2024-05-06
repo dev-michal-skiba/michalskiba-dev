@@ -1,8 +1,0 @@
-version: '3.9'
-
-services:
-  web_parameter_tampering_test:
-    container_name: web_parameter_tampering_test
-    image: michalskiba_dev_web_parameter_tampering_test
-    volumes:
-      - ./:/code/

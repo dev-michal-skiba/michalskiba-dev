@@ -1,5 +1,0 @@
-bin
-*.zip
-.gitignore
-test.docker-compose.yml
-test.dockerfile

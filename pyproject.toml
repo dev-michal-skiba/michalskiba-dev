@@ -1,21 +1,17 @@
 [tool.isort]
 profile = "black"
 py_version = 312
-extend_skip_glob = ['src/web_parameter_tampering/lib/*']
 
 [tool.black]
 line-length = 99
 target-version = ['py312']
-extend-exclude = 'src/web_parameter_tampering/lib'
 
 [tool.ruff]
 line-length = 99
 target-version = 'py312'
-exclude = ['src/web_parameter_tampering/lib']
 
 [tool.mypy]
 python_version = '3.12'
-exclude =  ['(^|/)web_parameter_tampering/lib/']
 follow_imports = 'normal'
 warn_unused_configs = true
 disallow_any_generics = true

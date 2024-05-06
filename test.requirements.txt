@@ -1,4 +1,4 @@
--r src/auth/requirements.txt
+-r ./requirements.txt
 isort
 black
 ruff

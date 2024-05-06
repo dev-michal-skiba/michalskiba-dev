@@ -57,6 +57,26 @@ Resources:
             - EnvVariables
             - !Ref Environment
             - AllowOrigin
+  WebParameterTampering:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.12
+      CodeUri: ./modules/web_parameter_tampering/src/web_parameter_tampering
+      Handler: lambda_function.lambda_handler
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Method: GET
+            Path: /demo/web-parameter-tampering
+      Environment:
+        Variables:
+          DB_PATH: web_parameter_tampering.db
+          ALLOW_ORIGIN: !FindInMap
+            - EnvVariables
+            - !Ref Environment
+            - AllowOrigin
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:

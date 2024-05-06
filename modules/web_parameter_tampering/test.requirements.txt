@@ -1,9 +1,0 @@
--r src/web_parameter_tampering/requirements.txt
-isort
-black
-ruff
-mypy
-types-peewee
-pytest
-pytest-cov
-coverage

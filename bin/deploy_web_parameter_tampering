@@ -1,2 +1,0 @@
-#!/bin/bash
-cd modules/web_parameter_tampering/ && AWS_PROFILE=michalskiba-dev-infra python bin/deploy.py
