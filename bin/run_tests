@@ -1,4 +1,15 @@
 #!/bin/bash
+echo -e "\033[0;94m==== Auth Tests ====\033[0m"
 docker compose --file test.docker-compose.yml run api_test bash -c \
-  'DB_PATH=sql_injection/src/sql_injection/sql_injection.db ALLOW_ORIGIN=http://localhost:1313 python -m pytest &&
+  'ALLOW_ORIGIN=http://localhost:1313 python -m pytest --cov=auth/tests auth/tests &&
+  python -m coverage report'
+
+echo -e "\033[0;94m==== SQL Injection Tests ====\033[0m"
+docker compose --file test.docker-compose.yml run api_test bash -c \
+  'DB_PATH=sql_injection/src/sql_injection/sql_injection.db ALLOW_ORIGIN=http://localhost:1313 python -m pytest --cov=sql_injection/tests sql_injection/tests &&
+  python -m coverage report'
+
+echo -e "\033[0;94m==== Web Parameter Tampering Tests ====\033[0m"
+docker compose --file test.docker-compose.yml run api_test bash -c \
+  'python -m pytest --cov=web_parameter_tampering/tests web_parameter_tampering/tests &&
   python -m coverage report'

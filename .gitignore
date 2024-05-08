@@ -4,3 +4,4 @@ venv/
 .coverage
 .aws-sam
 modules/**/requirements.txt
+**/.pytest_cache

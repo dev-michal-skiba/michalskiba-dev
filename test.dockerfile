@@ -1,6 +1,8 @@
 FROM python:3.12
 ENV PYTHONUNBUFFERED 1
 
+RUN mkdir code
+RUN touch code/__init__.py
 COPY ./pyproject.toml code/
 COPY ./.coveragerc code/
 

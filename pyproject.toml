@@ -30,5 +30,5 @@ extra_checks = true
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-addopts = '--cov-config=.coveragerc --cov-report= --cov=./'
+addopts = '--cov-config=.coveragerc --cov-report='
 filterwarnings = 'ignore::DeprecationWarning'
