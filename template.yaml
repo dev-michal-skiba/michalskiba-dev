@@ -21,8 +21,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: python3.12
-      CodeUri: ./modules/sql_injection/src/sql_injection
-      Handler: lambda_function.lambda_handler
+      CodeUri: ./modules/sql_injection/src
+      Handler: sql_injection.lambda_function.lambda_handler
       Events:
         Api:
           Type: HttpApi
@@ -32,7 +32,7 @@ Resources:
             Path: /demo/sql-injection
       Environment:
         Variables:
-          DB_PATH: sql_injection.db
+          DB_PATH: sql_injection/data.db
           ALLOW_ORIGIN: !FindInMap
             - EnvVariables
             - !Ref Environment
@@ -41,8 +41,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: python3.12
-      CodeUri: ./modules/auth/src/auth
-      Handler: lambda_function.lambda_handler
+      CodeUri: ./modules/auth/src
+      Handler: auth.lambda_function.lambda_handler
       Events:
         Api:
           Type: HttpApi
@@ -52,7 +52,7 @@ Resources:
             Path: /demo/auth
       Environment:
         Variables:
-          DB_PATH: auth.db
+          DB_PATH: auth/data.db
           ALLOW_ORIGIN: !FindInMap
             - EnvVariables
             - !Ref Environment
@@ -61,8 +61,8 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: python3.12
-      CodeUri: ./modules/web_parameter_tampering/src/web_parameter_tampering
-      Handler: lambda_function.lambda_handler
+      CodeUri: ./modules/web_parameter_tampering/src
+      Handler: web_parameter_tampering.lambda_function.lambda_handler
       Events:
         Api:
           Type: HttpApi
@@ -72,7 +72,7 @@ Resources:
             Path: /demo/web-parameter-tampering
       Environment:
         Variables:
-          DB_PATH: web_parameter_tampering.db
+          DB_PATH: web_parameter_tampering/data.db
           ALLOW_ORIGIN: !FindInMap
             - EnvVariables
             - !Ref Environment

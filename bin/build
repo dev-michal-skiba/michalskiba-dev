@@ -1,5 +1,2 @@
 #!/bin/bash
-for api_module in "auth" "sql_injection" "web_parameter_tampering"; do
-  cp "./requirements.txt" "modules/${api_module}/src/${api_module}/"
-done
 sam build

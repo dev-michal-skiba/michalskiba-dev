@@ -1,8 +1,8 @@
 import json
 from typing import Any
 
-from db import get_parcel_stores
-from utils import extract_query_parameters, get_headers
+from .db import get_parcel_stores
+from .utils import extract_query_parameters, get_headers
 
 
 def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:

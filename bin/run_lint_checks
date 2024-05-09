@@ -7,4 +7,4 @@ docker compose --file test.docker-compose.yml run api_test bash -c \
   ruff check --exclude lib ./ &&
   echo -e "\033[0;32mRuff check succeeded\033[0m" &&
   mypy ./ &&
-  echo -e "\033[0;32mMypy check succeeded\033[0m"'
+  echo -e "\033[0;32mMypy check succeeded\033[0m"' || exit $?
