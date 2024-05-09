@@ -13,8 +13,10 @@ Mappings:
   EnvVariables:
     Local:
       AllowOrigin: http://localhost:1313
+      CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax"
     Production:
       AllowOrigin: https://www.michalskiba.dev
+      CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax"
 
 Resources:
   SqlInjection:
@@ -57,6 +59,10 @@ Resources:
             - EnvVariables
             - !Ref Environment
             - AllowOrigin
+          COOKIE_TEMPLATE: !FindInMap
+            - EnvVariables
+            - !Ref Environment
+            - CookieTemplate
   WebParameterTampering:
     Type: AWS::Serverless::Function
     Properties:

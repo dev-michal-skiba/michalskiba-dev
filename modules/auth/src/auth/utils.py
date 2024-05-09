@@ -13,7 +13,9 @@ def get_headers(access_token: str | None = None) -> dict[str, str]:
         "Access-Control-Allow-Origin": os.environ.get("ALLOW_ORIGIN") or "",
     }
     if access_token is not None:
-        headers["Set-Cookie"] = f"access_token={access_token}; Secure; HttpOnly; SameSite=Lax"
+        cookie_template = os.environ.get("COOKIE_TEMPLATE")
+        if cookie_template is not None:
+            headers["Set-Cookie"] = cookie_template.format(access_token)
     return headers
 
 
