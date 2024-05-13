@@ -76,6 +76,8 @@ Resources:
             ApiId: !Ref Api
             Method: GET
             Path: /demo/web-parameter-tampering
+            Auth:
+              Authorizer: CustomAuthorizer
       Environment:
         Variables:
           DB_PATH: web_parameter_tampering/data.db
@@ -89,4 +91,13 @@ Resources:
       Domain:
         CertificateArn: arn:aws:acm:eu-central-1:628924145931:certificate/c8335665-cc74-46ee-b24f-b615ac09a6c3
         DomainName: api.michalskiba.dev
-
+      Auth:
+        Authorizers:
+          CustomAuthorizer:
+            AuthorizerPayloadFormatVersion: "2.0"
+            EnableFunctionDefaultPermissions: true
+            EnableSimpleResponses: true
+            FunctionArn:
+              Fn::GetAtt:
+                - Auth
+                - Arn

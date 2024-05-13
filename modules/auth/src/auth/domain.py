@@ -25,5 +25,7 @@ class User:
     @property
     def access_token(self) -> str:
         if self.__access_token is None:
-            self.__access_token = ""
+            self.__access_token = (
+                "TEST-ACCESS-TOKEN"  # TODO Implement proper access token generation
+            )
         return self.__access_token

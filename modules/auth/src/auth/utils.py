@@ -24,3 +24,15 @@ def get_user(event: dict[str, Any]) -> User | None:
     username = body.get("username") or ""
     password = body.get("password") or ""
     return User.get(username, password)
+
+
+def get_access_token(event: dict[str, Any]) -> str:
+    cookies = event.get("cookies") or []
+    access_token_cookie = next(
+        filter(
+            lambda cookie: cookie.startswith("access_token="),
+            cookies,
+        ),
+        "access_token=",
+    )
+    return access_token_cookie.split("=", 1)[1]

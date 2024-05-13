@@ -23,4 +23,4 @@ class TestUser:
         def test(self) -> None:
             user = User(username="test")
 
-            assert user.access_token == ""
+            assert user.access_token == "TEST-ACCESS-TOKEN"
