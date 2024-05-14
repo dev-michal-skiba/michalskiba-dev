@@ -46,11 +46,10 @@
 
     function submitForm() {
         setLoading();
-        const apiUrl = '{{ getenv "HUGO_API_URL" }}';
         const addressSearchPhrase = encodeURI(getAddressSearchPhrase());
         const isSecureVersionOn = encodeURI(getIsSecureVersionOn());
         fetch(
-            apiUrl + "/demo/sql-injection?address_search_phrase=" + addressSearchPhrase + "&is_secure_version_on=" + isSecureVersionOn,
+            getApiUrl() + "/demo/sql-injection?address_search_phrase=" + addressSearchPhrase + "&is_secure_version_on=" + isSecureVersionOn,
             {method: "GET"}
         ).then(
             response => {

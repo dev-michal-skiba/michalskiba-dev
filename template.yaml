@@ -46,12 +46,18 @@ Resources:
       CodeUri: ./modules/auth/src
       Handler: auth.lambda_function.lambda_handler
       Events:
-        Api:
+        LoginApi:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
             Method: POST
-            Path: /demo/auth
+            Path: /demo/auth/login
+        LogoutApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Method: POST
+            Path: /demo/auth/logout
       Environment:
         Variables:
           DB_PATH: auth/data.db

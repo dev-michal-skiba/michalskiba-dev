@@ -18,11 +18,22 @@ def login(event: dict[str, Any]) -> dict[str, Any]:
         }
     return {
         "statusCode": 200,
-        "headers": get_headers(user.access_token),
+        "headers": get_headers(access_token=user.access_token),
+    }
+
+
+def logout(event: dict[str, Any]) -> dict[str, Any]:
+    return {
+        "statusCode": 200,
+        "headers": get_headers(access_token=""),
     }
 
 
 def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     if "type" in event and event["type"] == "REQUEST":
         return authorize(event)
-    return login(event)
+    if event["rawPath"].endswith("/login"):
+        return login(event)
+    if event["rawPath"].endswith("/logout"):
+        return logout(event)
+    raise NotImplementedError
