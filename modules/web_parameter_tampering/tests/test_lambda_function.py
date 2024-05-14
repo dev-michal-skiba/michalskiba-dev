@@ -7,5 +7,14 @@ class TestLambdaHandler:
 
         assert response == {
             "statusCode": 200,
-            "body": "ok",
+            "body": (
+                '{"accreditation_code": "258c4453-4eff-463d-8169-1d0596fe0b7a", '
+                '"organization": "Legitimate organization"}'
+            ),
+            "headers": {
+                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Methods": "GET,OPTIONS",
+                "Access-Control-Allow-Credentials": "true",
+            },
         }

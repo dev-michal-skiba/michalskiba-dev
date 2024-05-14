@@ -12,5 +12,5 @@ docker compose --file test.docker-compose.yml run api_test bash -c \
 
 echo -e "\033[0;94m==== Web Parameter Tampering Tests ====\033[0m"
 docker compose --file test.docker-compose.yml run api_test bash -c \
-  'python -m pytest --cov=web_parameter_tampering/tests web_parameter_tampering/tests &&
+  'ALLOW_ORIGIN=http://localhost:1313 python -m pytest --cov=web_parameter_tampering/tests web_parameter_tampering/tests &&
   python -m coverage report' || exit $?
