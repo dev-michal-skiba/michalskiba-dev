@@ -25,7 +25,7 @@ class TestGetHeaders:
             "Access-Control-Allow-Headers": "*",
             "Access-Control-Allow-Methods": "GET,OPTIONS",
             "Access-Control-Allow-Credentials": "true",
-            "Set-Cookie": "access_token=token; Secure; HttpOnly; SameSite=Lax",
+            "Set-Cookie": "access_token=token; Secure; HttpOnly; SameSite=Lax; Path=/demo",
         }
 
 

@@ -1,7 +1,7 @@
 #!/bin/bash
 echo -e "\033[0;94m==== Auth Tests ====\033[0m"
 docker compose --file test.docker-compose.yml run api_test bash -c \
-  'DB_PATH=auth/src/auth/data.db ALLOW_ORIGIN=http://localhost:1313 COOKIE_TEMPLATE="access_token={}; Secure; HttpOnly; SameSite=Lax" python -m pytest --cov=auth/tests auth/tests &&
+  'DB_PATH=auth/src/auth/data.db ALLOW_ORIGIN=http://localhost:1313 COOKIE_TEMPLATE="access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/demo" python -m pytest --cov=auth/tests auth/tests &&
   python -m coverage report' || exit $?
 
 

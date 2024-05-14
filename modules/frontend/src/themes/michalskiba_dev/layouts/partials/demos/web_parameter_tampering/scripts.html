@@ -8,6 +8,11 @@
         document.getElementById("wpt-login-error").innerText = "Wrong credentials";
     }
 
+    function submit (event) {
+        event.preventDefault();
+        login();
+    }
+
     function login() {
         clearLoggingError();
         const username = document.getElementById("wpt-username").value;
@@ -22,14 +27,12 @@
         ).then(
             response => {
                 if (response.status === 200) {
-                    localStorage.setItem("wpt_logged_in", "true");
-                    window.location.reload();
+                    loadPage();
                 } else {
                     setLoggingError();
                 }
             }
         )
-
     }
 
     function logout() {
@@ -42,11 +45,10 @@
         ).then(
             response => {
                 if (response.status === 200) {
-                    localStorage.setItem("wpt_logged_in", "false");
-                    window.location.reload();
+                    loadPage();
                 }
             }
-        ).catch(() => {});
+        );
     }
 
     function displayLogoutButton() {
@@ -57,18 +59,8 @@
         document.getElementById("wpt-logout-container").appendChild(button);
     }
 
-    function getPressApplication() {
-        return {
-            // "accreditation_code": null,
-            "accreditation_code": "258c4453-4eff-463d-8169-1d0596fe0b7a",
-            "organization": "Legitimate organization",
-        }
-    }
-
-    function displayPressApplication() {
-        const pressApplication = getPressApplication();
+    function displayPressApplication(pressApplication) {
         let container = document.getElementById("wpt-press-container");
-        container.innerHTML = "";
         let header = document.createElement("h1");
         header.innerText = "Accreditation info";
         container.append(header);
@@ -89,17 +81,118 @@
         container.append(organization);
     }
 
-    // Add listener to correctly submit form
-    document.getElementById("wpt-login-form").addEventListener("submit", (event) => {
-        event.preventDefault();
-        login();
-    });
+    function displayPressApplicationPage(pressApplication) {
+        displayLogoutButton();
+        displayPressApplication(pressApplication);
+    }
+
+    function displayLoginPage() {
+        let form = document.createElement("form");
+        form.id = "wpt-login-form";
+        form.className = "container-lg";
+
+        let row_1 = document.createElement("div");
+        row_1.className = "row mt-5";
+        let col_1_1 = document.createElement("div");
+        col_1_1.className = "col d-flex text-justify align-items-center";
+        let p_1_1 = document.createElement("p");
+        p_1_1.className = "h2 text-justify";
+        p_1_1.innerText = "To see status of your press application please log in to our BEST Festival press portal";
+        col_1_1.appendChild(p_1_1);
+        let col_1_2 = document.createElement("div");
+        col_1_2.className = "col";
+        let div_1_2_1 = document.createElement("div");
+        div_1_2_1.className = "mb-3";
+        let label_1_2_1 = document.createElement("label");
+        label_1_2_1.for = "wpt-username";
+        label_1_2_1.className = "form-label primary-text";
+        label_1_2_1.innerText = "Username";
+        let input_1_2_1 = document.createElement("input");
+        input_1_2_1.type = "text";
+        input_1_2_1.className = "form-control";
+        input_1_2_1.id = "wpt-username";
+        input_1_2_1.name = "username";
+        input_1_2_1.placeholder = "Username";
+        div_1_2_1.appendChild(label_1_2_1);
+        div_1_2_1.appendChild(input_1_2_1);
+        let div_1_2_2 = document.createElement("div");
+        div_1_2_2.className = "mb-3";
+        let label_1_2_2 = document.createElement("label");
+        label_1_2_2.for = "wpt-password";
+        label_1_2_2.className = "form-label primary-text";
+        label_1_2_2.innerText = "Password";
+        let input_1_2_2 = document.createElement("input");
+        input_1_2_2.type = "password";
+        input_1_2_2.className = "form-control";
+        input_1_2_2.id = "wpt-password";
+        input_1_2_2.name = "password";
+        input_1_2_2.placeholder = "Password";
+        div_1_2_2.appendChild(label_1_2_2);
+        div_1_2_2.appendChild(input_1_2_2);
+        col_1_2.appendChild(div_1_2_1);
+        col_1_2.appendChild(div_1_2_2);
+        row_1.append(col_1_1);
+        row_1.append(col_1_2);
+
+        let row_2 = document.createElement("div");
+        row_2.className = "row";
+        let col_2_1 = document.createElement("div");
+        col_2_1.className = "col";
+        let col_2_2 = document.createElement("div");
+        col_2_2.className = "col";
+        let p_2_2 = document.createElement("p");
+        p_2_2.id = "wpt-login-error";
+        p_2_2.className = "error";
+        col_2_2.appendChild(p_2_2);
+        row_2.appendChild(col_2_1);
+        row_2.appendChild(col_2_2);
+
+        let row_3 = document.createElement("div");
+        row_3.className = "row";
+        let col_3_1 = document.createElement("div");
+        col_3_1.className = "col";
+        let col_3_2 = document.createElement("div");
+        col_3_2.className = "col";
+        let div_3_2 = document.createElement("div");
+        div_3_2.className = "text-center";
+
+        let button_3_2 = document.createElement("button");
+        button_3_2.type = "submit";
+        button_3_2.className = "btn primary-button";
+        button_3_2.innerText = "Log In";
+        div_3_2.appendChild(button_3_2);
+        col_3_2.appendChild(div_3_2);
+        row_3.appendChild(col_3_1);
+        row_3.appendChild(col_3_2);
+
+        form.appendChild(row_1);
+        form.appendChild(row_2);
+        form.appendChild(row_3);
+        form.addEventListener("submit", submit);
+
+        let container = document.getElementById("wpt-press-container");
+        container.appendChild(form);
+    }
+
+    function loadPage() {
+        document.getElementById("wpt-press-container").innerHTML = "";
+        fetch(
+            getApiUrl() + "/demo/web-parameter-tampering",
+                {
+                    method: "GET",
+                    credentials: 'include',
+                },
+        ).then(
+            response => response.json()
+        ).then(
+            data => displayPressApplicationPage(data)
+        ).catch(
+            () => displayLoginPage()
+        );
+    }
 
     window.onload = function() {
         document.getElementById("version-switch").checked = getIsSecureVersionOn();
-        if (localStorage.getItem("wpt_logged_in") === "true") {
-            displayLogoutButton();
-            displayPressApplication();
-        }
+        loadPage();
     };
 </script>

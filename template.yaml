@@ -13,10 +13,10 @@ Mappings:
   EnvVariables:
     Local:
       AllowOrigin: http://localhost:1313
-      CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax"
+      CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax; Path=/demo"
     Production:
       AllowOrigin: https://www.michalskiba.dev
-      CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax"
+      CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/demo"
 
 Resources:
   SqlInjection:

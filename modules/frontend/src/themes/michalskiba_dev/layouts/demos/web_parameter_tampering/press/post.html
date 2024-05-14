@@ -5,41 +5,7 @@
     </head>
     <body>
         {{- partial "demos/web_parameter_tampering/header.html" .}}
-        <div id="wpt-press-container" class="container-lg">
-            <form id="wpt-login-form">
-                <div class="row mt-5">
-                    <div class="col d-flex text-justify align-items-center">
-                        <p class="h2 text-justify">To see status of your press application please log in to our BEST Festival press portal</p>
-                    </div>
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="wpt-username" class="form-label primary-text">Username</label>
-                            <input type="text" class="form-control" id="wpt-username" name="username" placeholder="Username">
-                        </div>
-                        <div class="mb-3">
-                            <label for="wpt-password" class="form-label primary-text">Password</label>
-                            <input type="password" class="form-control" id="wpt-password" name="password" placeholder="Password">
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                    </div>
-                    <div class="col">
-                        <p id="wpt-login-error" class="error"></p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                    </div>
-                    <div class="col">
-                        <div class="text-center">
-                            <button type="submit" class="btn primary-button">Log In</button>
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
+        <div id="wpt-press-container" class="container-lg"></div>
         {{- partial "demos/web_parameter_tampering/footer.html" .}}
         {{- partial "demos/web_parameter_tampering/scripts.html" .}}
     </body>
