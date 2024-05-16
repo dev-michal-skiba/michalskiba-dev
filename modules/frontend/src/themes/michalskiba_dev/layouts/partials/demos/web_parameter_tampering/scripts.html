@@ -27,6 +27,7 @@
         ).then(
             response => {
                 if (response.status === 200) {
+                    localStorage.setItem("wptIsLoggedIn", "true");
                     loadPage();
                 } else {
                     setLoggingError();
@@ -47,6 +48,7 @@
         ).then(
             response => {
                 if (response.status === 200) {
+                    localStorage.setItem("wptIsLoggedIn", "false");
                     loadPage();
                 }
             }
@@ -184,22 +186,30 @@
         container.appendChild(form);
     }
 
-    function loadPage() {
+    function clearPage() {
         clearLogoutButton();
         document.getElementById("wpt-press-container").innerHTML = "";
-        fetch(
-            getApiUrl() + "/demo/web-parameter-tampering",
+    }
+
+    function loadPage() {
+        clearPage();
+        if (localStorage.getItem("wptIsLoggedIn") === "true") {
+            fetch(
+                getApiUrl() + "/demo/web-parameter-tampering",
                 {
                     method: "GET",
                     credentials: 'include',
                 },
-        ).then(
-            response => response.json()
-        ).then(
-            data => displayPressApplicationPage(data)
-        ).catch(
-            () => displayLoginPage()
-        );
+            ).then(
+                response => response.json()
+            ).then(
+                data => displayPressApplicationPage(data)
+            ).catch(
+                () => displayLoginPage()
+            );
+        } else {
+            displayLoginPage();
+        }
     }
 
     window.onload = function() {
