@@ -1,16 +1,23 @@
+import json
 from typing import Any
 
-from .utils import get_access_token, get_headers, get_user
+from .domain import User
+from .utils import get_access_token, get_headers
 
 
-def authorize(event: dict[str, Any]) -> dict[str, bool]:
+def authorize(event: dict[str, Any]) -> dict[str, Any]:
     access_token = get_access_token(event)
-    is_authorized = access_token == "TEST-ACCESS-TOKEN"  # TODO Implement proper access token check
-    return {"isAuthorized": is_authorized}
+    user = User.from_access_token(access_token)
+    if user is None:
+        return {"isAuthorized": False}
+    return {"isAuthorized": True, "context": {"username": user.username}}
 
 
 def login(event: dict[str, Any]) -> dict[str, Any]:
-    user = get_user(event)
+    body = json.loads(event["body"])
+    username = body.get("username") or ""
+    password = body.get("password") or ""
+    user = User.from_credentials(username, password)
     if user is None:
         return {
             "statusCode": 401,

@@ -1,8 +1,5 @@
-import json
 import os
 from typing import Any
-
-from .domain import User
 
 
 def get_headers(access_token: str | None = None) -> dict[str, str]:
@@ -17,13 +14,6 @@ def get_headers(access_token: str | None = None) -> dict[str, str]:
         if cookie_template is not None:
             headers["Set-Cookie"] = cookie_template.format(access_token)
     return headers
-
-
-def get_user(event: dict[str, Any]) -> User | None:
-    body = json.loads(event["body"])
-    username = body.get("username") or ""
-    password = body.get("password") or ""
-    return User.get(username, password)
 
 
 def get_access_token(event: dict[str, Any]) -> str:

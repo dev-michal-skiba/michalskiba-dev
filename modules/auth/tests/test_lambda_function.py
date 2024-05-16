@@ -48,7 +48,7 @@ class TestTestLambdaHandler:
 
 
 class TestLogin:
-    def test_for_valid_credentials(self) -> None:
+    def test_for_valid_credentials(self, victim_access_token: str) -> None:
         event = {"body": json.dumps({"username": "victim", "password": "Victim1234!"})}
 
         response = login(event)
@@ -60,7 +60,7 @@ class TestLogin:
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "GET,OPTIONS",
                 "Access-Control-Allow-Credentials": "true",
-                "Set-Cookie": "access_token=TEST-ACCESS-TOKEN; Secure; HttpOnly; SameSite=Lax; Path=/demo",
+                "Set-Cookie": f"access_token={victim_access_token}; Secure; HttpOnly; SameSite=Lax; Path=/demo",
             },
         }
 
@@ -97,12 +97,12 @@ class TestLogout:
 
 
 class TestAuthorize:
-    def test_for_valid_access_token(self) -> None:
-        event = {"type": "REQUEST", "cookies": ["access_token=TEST-ACCESS-TOKEN"]}
+    def test_for_valid_access_token(self, victim_access_token: str) -> None:
+        event = {"type": "REQUEST", "cookies": [f"access_token={victim_access_token}"]}
 
         response = authorize(event)
 
-        assert response == {"isAuthorized": True}
+        assert response == {"isAuthorized": True, "context": {"username": "victim"}}
 
     def test_for_invalid_access_token(self) -> None:
         event = {"type": "REQUEST", "cookies": ["access_token=TEST"]}

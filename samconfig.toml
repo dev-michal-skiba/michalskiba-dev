@@ -4,6 +4,7 @@ version=0.1
 warm_containers="EAGER"
 parameter_overrides=[
   "Environment=Local",
+  "AuthSecretKey=local-secret-key",
 ]
 
 [default.validate.parameters]
@@ -22,4 +23,5 @@ capabilities=[
 ]
 parameter_overrides=[
   "Environment=Production",
+  "AuthSecretKey=${AUTH_SECRET_KEY}",
 ]

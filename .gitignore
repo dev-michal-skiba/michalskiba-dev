@@ -4,3 +4,5 @@ venv/
 .coverage
 .aws-sam
 **/.pytest_cache
+.env.prod
+samconfig.prod.toml

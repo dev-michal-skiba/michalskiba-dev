@@ -8,6 +8,9 @@ Parameters:
     AllowedValues:
       - Local
       - Production
+  AuthSecretKey:
+    Type: String
+    NoEcho: true
 
 Mappings:
   EnvVariables:
@@ -69,6 +72,7 @@ Resources:
             - EnvVariables
             - !Ref Environment
             - CookieTemplate
+          SECRET_KEY: !Ref AuthSecretKey
   WebParameterTampering:
     Type: AWS::Serverless::Function
     Properties:

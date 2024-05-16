@@ -32,7 +32,9 @@
                     setLoggingError();
                 }
             }
-        )
+        ).catch(
+            () => setLoggingError()
+        );
     }
 
     function logout() {
@@ -48,12 +50,20 @@
                     loadPage();
                 }
             }
-        );
+        ).catch(() => {});
+    }
+
+    function clearLogoutButton() {
+        const button = document.getElementById("wpt-logout-button");
+        if (button) {
+            button.parentNode.removeChild(button);
+        }
     }
 
     function displayLogoutButton() {
         let button = document.createElement("button");
-        button.className = "nav-link link-button secondary-text"
+        button.id = "wpt-logout-button";
+        button.className = "nav-link link-button secondary-text";
         button.innerText = "logout";
         button.addEventListener("click", logout);
         document.getElementById("wpt-logout-container").appendChild(button);
@@ -175,6 +185,7 @@
     }
 
     function loadPage() {
+        clearLogoutButton();
         document.getElementById("wpt-press-container").innerHTML = "";
         fetch(
             getApiUrl() + "/demo/web-parameter-tampering",

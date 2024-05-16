@@ -1,9 +1,7 @@
-import json
 from typing import Any
 
 import pytest
-from auth.domain import User
-from auth.utils import get_access_token, get_headers, get_user
+from auth.utils import get_access_token, get_headers
 
 
 class TestGetHeaders:
@@ -27,23 +25,6 @@ class TestGetHeaders:
             "Access-Control-Allow-Credentials": "true",
             "Set-Cookie": "access_token=token; Secure; HttpOnly; SameSite=Lax; Path=/demo",
         }
-
-
-class TestGetUser:
-    def test_correct_user(self) -> None:
-        event = {"body": json.dumps({"username": "victim", "password": "Victim1234!"})}
-
-        user = get_user(event)
-
-        assert isinstance(user, User)
-        assert user.username == "victim"
-
-    def test_incorrect_user(self) -> None:
-        event = {"body": json.dumps({})}
-
-        user = get_user(event)
-
-        assert user is None
 
 
 class TestGetAccessToken:

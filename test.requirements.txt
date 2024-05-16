@@ -7,3 +7,4 @@ types-peewee
 pytest
 pytest-cov
 coverage
+freezegun
