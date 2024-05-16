@@ -1,9 +1,11 @@
+from typing import Generator
+
 import pytest
 from freezegun import freeze_time
 
 
 @pytest.fixture(autouse=True)
-def freeze_time_fixture():
+def freeze_time_fixture() -> Generator[None, None, None]:
     with freeze_time("2024-05-16 12:00:00"):
         yield
 
