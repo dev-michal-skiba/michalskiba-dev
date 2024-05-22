@@ -196,9 +196,9 @@
     function loadPage() {
         clearPage();
         if (localStorage.getItem("wptIsLoggedIn") === "true") {
-            const is_secure_version = getIsSecureVersionOn();
-            let url = getApiUrl() + "/demo/web-parameter-tampering?is_secure_version=" + is_secure_version;
-            if (!is_secure_version) {
+            const is_secure_version_on = getIsSecureVersionOn();
+            let url = getApiUrl() + "/demo/web-parameter-tampering?is_secure_version_on=" + is_secure_version_on;
+            if (!is_secure_version_on) {
                 const username = localStorage.getItem("wptUsername");
                 url = url + "&username=" + username;
             }
