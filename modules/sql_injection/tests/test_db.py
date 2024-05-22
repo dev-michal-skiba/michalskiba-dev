@@ -1,5 +1,4 @@
 import pytest
-
 from sql_injection.db import get_parcel_stores
 
 

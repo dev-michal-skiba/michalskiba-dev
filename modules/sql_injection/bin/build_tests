@@ -1,3 +1,0 @@
-#!/bin/bash
-
-docker build --tag michalskiba_dev_sql_injection_test --file test.dockerfile ./

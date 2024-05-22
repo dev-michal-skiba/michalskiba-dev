@@ -1,21 +1,17 @@
 [tool.isort]
 profile = "black"
 py_version = 312
-extend_skip_glob = ['src/sql_injection/lib/*']
 
 [tool.black]
 line-length = 99
 target-version = ['py312']
-extend-exclude = 'src/sql_injection/lib'
 
 [tool.ruff]
 line-length = 99
 target-version = 'py312'
-exclude = ['src/sql_injection/lib']
 
 [tool.mypy]
 python_version = '3.12'
-exclude =  ['(^|/)sql_injection/lib/']
 follow_imports = 'normal'
 warn_unused_configs = true
 disallow_any_generics = true
@@ -34,5 +30,5 @@ extra_checks = true
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]
-addopts = '--cov-config=.coveragerc --cov-report= --cov=./'
+addopts = '--cov-config=.coveragerc --cov-report='
 filterwarnings = 'ignore::DeprecationWarning'

@@ -8,21 +8,26 @@ Parameters:
     AllowedValues:
       - Local
       - Production
+  AuthSecretKey:
+    Type: String
+    NoEcho: true
 
 Mappings:
   EnvVariables:
     Local:
       AllowOrigin: http://localhost:1313
+      CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax; Path=/demo"
     Production:
       AllowOrigin: https://www.michalskiba.dev
+      CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/demo"
 
 Resources:
   SqlInjection:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: python3.12
-      CodeUri: ./modules/sql_injection/src/sql_injection
-      Handler: lambda_function.lambda_handler
+      CodeUri: ./modules/sql_injection/src
+      Handler: sql_injection.lambda_function.lambda_handler
       Events:
         Api:
           Type: HttpApi
@@ -32,7 +37,61 @@ Resources:
             Path: /demo/sql-injection
       Environment:
         Variables:
-          DB_PATH: sql_injection.db
+          DB_PATH: sql_injection/data.db
+          ALLOW_ORIGIN: !FindInMap
+            - EnvVariables
+            - !Ref Environment
+            - AllowOrigin
+  Auth:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.12
+      CodeUri: ./modules/auth/src
+      Handler: auth.lambda_function.lambda_handler
+      MemorySize: 512
+      Events:
+        LoginApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Method: POST
+            Path: /demo/auth/login
+        LogoutApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Method: POST
+            Path: /demo/auth/logout
+      Environment:
+        Variables:
+          DB_PATH: auth/data.db
+          ALLOW_ORIGIN: !FindInMap
+            - EnvVariables
+            - !Ref Environment
+            - AllowOrigin
+          COOKIE_TEMPLATE: !FindInMap
+            - EnvVariables
+            - !Ref Environment
+            - CookieTemplate
+          SECRET_KEY: !Ref AuthSecretKey
+  WebParameterTampering:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.12
+      CodeUri: ./modules/web_parameter_tampering/src
+      Handler: web_parameter_tampering.lambda_function.lambda_handler
+      Events:
+        Api:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Method: GET
+            Path: /demo/web-parameter-tampering
+            Auth:
+              Authorizer: CustomAuthorizer
+      Environment:
+        Variables:
+          DB_PATH: web_parameter_tampering/data.db
           ALLOW_ORIGIN: !FindInMap
             - EnvVariables
             - !Ref Environment
@@ -43,4 +102,13 @@ Resources:
       Domain:
         CertificateArn: arn:aws:acm:eu-central-1:628924145931:certificate/c8335665-cc74-46ee-b24f-b615ac09a6c3
         DomainName: api.michalskiba.dev
-
+      Auth:
+        Authorizers:
+          CustomAuthorizer:
+            AuthorizerPayloadFormatVersion: "2.0"
+            EnableFunctionDefaultPermissions: true
+            EnableSimpleResponses: true
+            FunctionArn:
+              Fn::GetAtt:
+                - Auth
+                - Arn

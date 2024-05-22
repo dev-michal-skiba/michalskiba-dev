@@ -1,7 +1,3 @@
-[run]
-omit =
-    */lib/*.py
-
 [report]
 skip_covered = true
 fail_under = 95

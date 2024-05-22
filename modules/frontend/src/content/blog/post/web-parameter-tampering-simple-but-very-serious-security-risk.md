@@ -23,43 +23,44 @@ Let's leave theory behind and get our hands on real live example. Imagine a site
 imaginary music festival that allows press organizations to apply for press accreditation and
 then check the status of it. In correctly implemented site, press organization member, after
 logging in to the press portal, should see theirs application. It should not change after
-modifying url path or query parameters. The whole code for the Web Parameter Tampering demo, 
-which is Django app, can be found in public
-[repository](https://github.com/dev-michal-skiba/michalskiba-dev/tree/master/michalskiba_dev/web_parameter_tampering)
+modifying url path or query/body parameters. The whole code for the Web Parameter Tampering demo API, 
+which is Lambda function, can be found in public
+[repository](https://github.com/dev-michal-skiba/michalskiba-dev/tree/master/modules/web_parameter_tampering)
 on GitHub.
 
 ## Exploiting Web Parameter Tampering vulnerability
 
-Going to the demo site [https://wpt.michalskiba.dev/](https://wpt.michalskiba.dev/), by
-default you will start with secure version off. You can access press portal either as a victim
-(username: *victim*, password: *Victim1234!*) or a hacker (username: *hacker*, password:
-*Hacker1234!*). No matter as who you are logged in, you will see the page with press
-application: approved for the victim with the accreditation number and waiting application for
-the hacker.
+Go to the [demo site](/demos/web-parameter-tampering/press/), by default you will start with secure version on. Please
+log in to press portal either as a victim (username: *victim*, password: *Victim1234!*) or
+a hacker (username: *hacker*, password: *Hacker1234!*). No matter as who you are logged in, you will see the page with
+press application: approved for the victim with the accreditation number and waiting application for the hacker.
 
 ![wpt_1.png](/post/wpt/1.png)
 ![wpt_2.png](/post/wpt/2.png)
+
+Please notice, in the network tab of the browser developer tools, that in secure version of the demo site, the request does not
+contain any user identifier in GET url. Whe you switch security off, you will see that the username is present in
+the url. **That is huge security threat**. It implies that basically anyone can try different user's names and try to
+steal accreditation of the other press organization.
+
 ![wpt_3.png](/post/wpt/3.png)
 
-You can also notice that urls for the victim and hacker look as follows:
-[https://wpt.michalskiba.dev/press/2](https://wpt.michalskiba.dev/press/2) and
-[https://wpt.michalskiba.dev/press/1](https://wpt.michalskiba.dev/press/1). As you can easily guess,
-the number in the url represents the user's primary key from the database. **That is huge security
-threat**. It implies that basically anyone can try different user's primary keys and try to steal
-accreditation of the other press organization. If you are logged in as the hacker, you can change
-"1" in url to "2" which will result in obtaining press application from the victim!. If you log out
-and try the same url [https://wpt.michalskiba.dev/press/2](https://wpt.michalskiba.dev/press/2),
-you will be redirected to the home page of the demo site. That is the issue for many broken access
-controls vulnerabilities. User can get any confidential resource based on being authenticated
-without authorizing user for a given resource.
+You can try to change the url query parameter to see others' press applications. For example, if you are logged in as a hacker,
+you can intercept the request using a tool like Burp Suite, Fiddler, or Charles Proxy, and change the url query parameter to
+`username=victim` to see the victim's press application. You can also copy the request as cURL in the network tab and then
+paste the cURL in the terminal or in a tool like Postman, modify the url query parameter and send the request. For the ease of the
+demo scenario you can also modify the local storage variable `wptUsername` to tamper the username sent to API.
+
+![wpt_4.png](/post/wpt/4.png)
+![wpt_5.png](/post/wpt/5.png)
 
 ## Example of correctly applied access control
 
-When you set security to be on, and you log in, you will see that user primary key disappears from
-the url. That is how it should be. User can only see the press application that belongs to them.
-Server authorize that based on user information safely encrypted in `auth_token` cookie. Potential
-hacker cannot decrypt, modify and change the value of the cookie without the secret that is stored
-securely on the server. There is no room for tampering the request data.
+When you set security to be on, and you log in, you will see that username disappears from the url. That is how it
+should be. User can only see the press application that belongs to them. Server authorize that based on user information
+safely stored in JWT token in `auth_token` http cookie. Cookie cannot be accessed and changed from javascript code.
+JWT Token is also securely signed and verified on backend, so it is impossible to correctly tamper the username on the
+JWT token.
 
 ## Conclusion
 

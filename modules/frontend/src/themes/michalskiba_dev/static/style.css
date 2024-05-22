@@ -176,6 +176,14 @@ input[type="checkbox"] {
     width: 100%;
 }
 
+.error {
+    color: red
+}
+
+.success {
+    color: green;
+}
+
 .nav-item .dropdown-toggle::after {
     display: none; /* Hide the arrow */
 }

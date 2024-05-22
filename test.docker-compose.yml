@@ -1,12 +1,12 @@
 version: '3.9'
 
 services:
-  michalskiba_dev_web_test:
-    image: michalskiba_dev_web
-    container_name: michalskiba_dev_web_test
+  api_test:
+    image: michalskiba_dev_api_test
+    container_name: michalskiba_dev_api_test
     volumes:
-      - ./michalskiba_dev:/code
-    ports:
-      - '8000:8000'
-    command: bash -c 'python manage.py migrate &&
-                      python manage.py runserver 0.0.0.0:8000'
+      - ./modules/auth:/code/auth
+      - ./modules/sql_injection:/code/sql_injection
+      - ./modules/web_parameter_tampering:/code/web_parameter_tampering
+      - ./pyproject.toml:/code/pyproject.toml
+      - ./.coveragerc:/code/.coveragerc

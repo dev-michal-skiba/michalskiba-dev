@@ -1,12 +1,8 @@
-# If you are using PyCharm
 .idea/
-# Cache files
-**/__pycache__/
-# Environments
+__pycache__/
 venv/
-# Devel database volume
-/data/
-/sql_injection_data/
-# Coverage report
 .coverage
 .aws-sam
+**/.pytest_cache
+.env.prod
+samconfig.prod.toml
