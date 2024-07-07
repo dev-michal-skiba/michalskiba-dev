@@ -51,7 +51,7 @@ body {
 .div-link:hover,
 .div-link:focus {
     text-decoration: none;
-    color: var(--primary-color) !important;;
+    color: var(--primary-color) !important;
 }
 
 .blog-post-tile {
@@ -59,6 +59,16 @@ body {
     border-color: var(--extra-color);
     margin: 10px;
     padding: 10px;
+}
+
+hr {
+    border: none;
+    border-top: 3px dashed var(--extra-color);
+    opacity: 1;
+}
+
+strong {
+    color: var(--secondary-text);
 }
 
 .navbar-toggler-icon {
@@ -87,14 +97,6 @@ li a:hover {
     border: 2px solid var(--extra-color);
     border-style: dashed none dashed none;
     margin: 40px 0 40px 0;
-}
-
-#about-me-meme-img {
-    display: block;
-    margin-top: 40px;
-    margin-left: auto;
-    margin-right: auto;
-    width: 50%;
 }
 
 #contact-info {
@@ -162,6 +164,13 @@ input[type="checkbox"] {
 .post-img {
     border: gray 1px solid;
     margin: 20px 0 20px 0;
+}
+
+.arch-img {
+    border: None;
+    width: 60%;
+    height: auto;
+    margin: 20px 20% 20px 20%;
 }
 
 .justify {
