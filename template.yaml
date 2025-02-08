@@ -96,6 +96,31 @@ Resources:
             - EnvVariables
             - !Ref Environment
             - AllowOrigin
+  HostHeaderInjection:
+    Type: AWS::Serverless::Function
+    Properties:
+      Runtime: python3.12
+      CodeUri: ./modules/host_header_injection/src
+      Handler: host_header_injection.lambda_function.lambda_handler
+      Events:
+        SendEmailApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Method: POST
+            Path: /demo/host-header-injection/password-reset/initiate
+        ChangePasswordApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Method: POST
+            Path: /demo/host-header-injection/password-reset/complete
+      Environment:
+        Variables:
+          ALLOW_ORIGIN: !FindInMap
+            - EnvVariables
+            - !Ref Environment
+            - AllowOrigin
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:

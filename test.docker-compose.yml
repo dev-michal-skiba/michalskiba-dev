@@ -8,5 +8,6 @@ services:
       - ./modules/auth:/code/auth
       - ./modules/sql_injection:/code/sql_injection
       - ./modules/web_parameter_tampering:/code/web_parameter_tampering
+      - ./modules/host_header_injection:/code/host_header_injection
       - ./pyproject.toml:/code/pyproject.toml
       - ./.coveragerc:/code/.coveragerc

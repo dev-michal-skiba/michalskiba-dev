@@ -3,8 +3,9 @@ Repository for [michalskiba.dev](https://www.michalskiba.dev/) webpage which is 
 # How to run
 
 - Install [AWS SAM CLI](https://docs.aws.amazon.com/serverless-application-model/latest/developerguide/install-sam-cli.html)
+- Install [Docker](https://docs.docker.com/get-docker/)
 - Run `./bin/build` to build the project
-- Run `./bin/start` to start the project locally
+- Run `./bin/run` to run the project locally
 
 # Modules
 
@@ -27,3 +28,8 @@ Repository for [michalskiba.dev](https://www.michalskiba.dev/) webpage which is 
 - Path: `/modules/web_parameter_tampering/`
 - Local URL: http://localhost:3000/demo/web-parameter-tampering
 - Lambda function that provides an API that is vulnerable or not to Web Parameter Tampering depending on the request query parameter.
+
+## Host Header Injection API
+- Path: `/modules/host_header_injection/`
+- Local URL: http://localhost:3000/demo/host-header-injection
+- Lambda function that provides an API that is vulnerable or not to Host Header Injection depending on the request headers.
