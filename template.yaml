@@ -11,6 +11,9 @@ Parameters:
   AuthSecretKey:
     Type: String
     NoEcho: true
+  HostHeaderInjectionSecretKey:
+    Type: String
+    NoEcho: true
 
 Mappings:
   EnvVariables:
@@ -121,6 +124,7 @@ Resources:
             - EnvVariables
             - !Ref Environment
             - AllowOrigin
+          SECRET_KEY: !Ref HostHeaderInjectionSecretKey
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:

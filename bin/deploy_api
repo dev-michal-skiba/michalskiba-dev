@@ -1,3 +1,3 @@
 #!/bin/bash
-source .env.prod && export AUTH_SECRET_KEY="$AUTH_SECRET_KEY" && envsubst < samconfig.toml > samconfig.prod.toml
+source .env.prod && export AUTH_SECRET_KEY="$AUTH_SECRET_KEY" && export HOST_HEADER_INJECTION_SECRET_KEY="$HOST_HEADER_INJECTION_SECRET_KEY" && envsubst < samconfig.toml > samconfig.prod.toml
 sam deploy --config-file samconfig.prod.toml

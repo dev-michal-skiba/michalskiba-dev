@@ -1,11 +1,46 @@
+import json
 from typing import Any
 
-from .utils import get_headers
+from .exception import HTTPException
+from .utils import (
+    generate_reset_link,
+    get_email,
+    get_headers,
+    get_host,
+    get_secure_version_flag,
+)
 
 
-def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
+def initiate_password_reset(event: dict[str, Any]) -> dict[str, Any]:
+    email = get_email(event)
+    is_secure_version_on = get_secure_version_flag(event)
+    host = get_host(event, is_secure_version_on)
+    reset_link = generate_reset_link(email, host)
+    return {
+        "statusCode": 200,
+        "body": json.dumps({"reset_link": reset_link}),
+        "headers": get_headers(),
+    }
+
+
+def complete_password_reset(event: dict[str, Any]) -> dict[str, Any]:
     return {
         "statusCode": 200,
         "body": "ok",
         "headers": get_headers(),
     }
+
+
+def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
+    try:
+        if event["rawPath"].endswith("/password-reset/initiate"):
+            return initiate_password_reset(event)
+        if event["rawPath"].endswith("/password-reset/complete"):
+            return complete_password_reset(event)
+        raise HTTPException(404, "Not Found")
+    except HTTPException as e:
+        return {
+            "statusCode": e.status_code,
+            "body": json.dumps({"detail": e.detail}),
+            "headers": get_headers(),
+        }
