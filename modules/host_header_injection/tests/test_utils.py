@@ -131,7 +131,7 @@ class TestGenerateResetLink:
         assert expiry == datetime(2025, 1, 15, 14, 15, 0, tzinfo=timezone.utc)
         assert (
             reset_link
-            == f"{host}/demo/host-header-injection/password-reset/complete?token={token}"
+            == f"{host}/demos/host-header-injection/password-reset/complete?token={token}"
         )
 
     def test_missing_secret_key(self, monkeypatch: pytest.MonkeyPatch) -> None:

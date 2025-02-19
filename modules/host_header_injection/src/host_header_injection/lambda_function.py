@@ -31,13 +31,26 @@ def complete_password_reset(event: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def preflight() -> dict[str, Any]:
+    return {
+        "statusCode": 200,
+        "body": "",
+        "headers": get_headers(),
+    }
+
+
 def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     try:
-        if event["rawPath"].endswith("/password-reset/initiate"):
-            return initiate_password_reset(event)
-        if event["rawPath"].endswith("/password-reset/complete"):
-            return complete_password_reset(event)
-        raise HTTPException(404, "Not Found")
+        http_method = event.get("requestContext", {}).get("http", {}).get("method")
+        if http_method == "OPTIONS":
+            return preflight()
+        if http_method == "POST":
+            if event["rawPath"].endswith("/password-reset/initiate"):
+                return initiate_password_reset(event)
+            if event["rawPath"].endswith("/password-reset/complete"):
+                return complete_password_reset(event)
+            raise HTTPException(404, "Not Found")
+        raise HTTPException(405, "Method Not Allowed")
     except HTTPException as e:
         return {
             "statusCode": e.status_code,

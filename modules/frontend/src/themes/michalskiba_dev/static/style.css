@@ -223,6 +223,12 @@ li a:hover {
     display: none; /* Hide the arrow */
 }
 
+.email-preview{
+    padding: 20px;
+    border-radius: 5px;
+    background-color: var(--secondary-bg);
+}
+
 @media (min-width: 576px) {
 
     .container-sm,

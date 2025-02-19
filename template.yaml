@@ -106,18 +106,12 @@ Resources:
       CodeUri: ./modules/host_header_injection/src
       Handler: host_header_injection.lambda_function.lambda_handler
       Events:
-        SendEmailApi:
+        HostHeaderInjectionApi:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
-            Method: POST
-            Path: /demo/host-header-injection/password-reset/initiate
-        ChangePasswordApi:
-          Type: HttpApi
-          Properties:
-            ApiId: !Ref Api
-            Method: POST
-            Path: /demo/host-header-injection/password-reset/complete
+            Method: ANY
+            Path: /demo/host-header-injection/password-reset/{proxy+}
       Environment:
         Variables:
           ALLOW_ORIGIN: !FindInMap

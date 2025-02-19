@@ -57,4 +57,4 @@ def generate_reset_link(email: str, host: str) -> str:
     if not secret_key:
         raise HTTPException(500, "Internal server error")
     token = jwt.encode({"email": email, "exp": expiry.timestamp()}, secret_key, algorithm="HS256")
-    return f"{host}/demo/host-header-injection/password-reset/complete?token={token}"
+    return f"{host}/demos/host-header-injection/password-reset/complete?token={token}"

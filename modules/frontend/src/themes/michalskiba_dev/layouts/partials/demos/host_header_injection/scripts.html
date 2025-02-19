@@ -1,0 +1,69 @@
+{{- partial "demos/scripts.html" .}}
+<script>
+    function getValidatedEmail() {
+        const email = document.getElementById("email").value;
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(email)) {
+            return email;
+        }
+        return null;
+    }
+
+    function clearError() {
+        document.getElementById("error-message").innerHTML = "";
+    }
+
+    function showError(message) {
+        document.getElementById("error-message").innerHTML = message;
+    }
+
+    function updateModalAndShow(email, resetLink) {
+        const modalEmail = document.getElementById('email');
+        modalEmail.innerHTML = email;
+
+        const modalLink = document.getElementById('reset-link');
+        modalLink.href = resetLink;
+
+        const emailModal = new bootstrap.Modal(document.getElementById('email-modal'));
+        emailModal.show();
+    }
+
+    function submitForm() {
+        clearError();
+        const email = getValidatedEmail();
+        if (email === null) {
+            showError("Please enter a valid email address");
+            return;
+        }
+        const isSecureVersionOn = getIsSecureVersionOn();
+        fetch(
+            getApiUrl() + "/demo/host-header-injection/password-reset/initiate?is_secure_version_on=" + isSecureVersionOn, 
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ email })
+            }
+        ).then(
+            response => response.json()
+        ).then(
+            data => {
+                updateModalAndShow(email, data.reset_link);
+            }
+        );
+    }
+
+    document.getElementById("password-reset-initiate-form").addEventListener("submit", (event) => {
+        event.preventDefault();
+        submitForm();
+    });
+
+    document.getElementById("submit-button").addEventListener("click", function() {
+        submitForm();
+    });
+
+    window.onload = function() {
+        document.getElementById("version-switch").checked = getIsSecureVersionOn();
+    };
+</script>
