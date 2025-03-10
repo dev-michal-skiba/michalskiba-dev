@@ -56,7 +56,7 @@ class TestLogin:
         assert response == {
             "statusCode": 200,
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Origin": "http://localhost:8080",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "GET,OPTIONS",
                 "Access-Control-Allow-Credentials": "true",
@@ -72,7 +72,7 @@ class TestLogin:
         assert response == {
             "statusCode": 401,
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Origin": "http://localhost:8080",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "GET,OPTIONS",
                 "Access-Control-Allow-Credentials": "true",
@@ -87,7 +87,7 @@ class TestLogout:
         assert response == {
             "statusCode": 200,
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Origin": "http://localhost:8080",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "GET,OPTIONS",
                 "Access-Control-Allow-Credentials": "true",

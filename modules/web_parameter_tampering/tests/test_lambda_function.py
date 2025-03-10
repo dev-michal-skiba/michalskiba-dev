@@ -20,7 +20,7 @@ class TestLambdaHandler:
                 '"organization": "Shady non-existing organization"}'
             ),
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Origin": "http://localhost:8080",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "GET,OPTIONS",
                 "Access-Control-Allow-Credentials": "true",
@@ -45,7 +45,7 @@ class TestLambdaHandler:
                 '"organization": "Legitimate organization"}'
             ),
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Origin": "http://localhost:8080",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "GET,OPTIONS",
                 "Access-Control-Allow-Credentials": "true",

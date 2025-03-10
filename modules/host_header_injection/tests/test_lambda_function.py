@@ -17,9 +17,9 @@ class TestPasswordResetInitiate:
 
         assert response == {
             "statusCode": 200,
-            "body": '{"reset_link": "http://localhost:1313/demos/host-header-injection/password-reset/complete?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3MzY5NTA1MDAuMH0.u_Jq2ySry2eme_RQkktBJTsUZ0lBbcqNh4xA_-1Xcro"}',
+            "body": '{"reset_link": "http://localhost:8080/demos/host-header-injection/password-reset/complete?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3MzY5NTA1MDAuMH0.u_Jq2ySry2eme_RQkktBJTsUZ0lBbcqNh4xA_-1Xcro"}',
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Origin": "http://localhost:8080",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "POST,OPTIONS",
                 "Access-Control-Allow-Credentials": "true",
@@ -42,7 +42,7 @@ class TestPasswordResetInitiate:
             "statusCode": 200,
             "body": '{"reset_link": "https://evil-host.com/demos/host-header-injection/password-reset/complete?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3MzY5NTA1MDAuMH0.u_Jq2ySry2eme_RQkktBJTsUZ0lBbcqNh4xA_-1Xcro"}',
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Origin": "http://localhost:8080",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "POST,OPTIONS",
                 "Access-Control-Allow-Credentials": "true",
@@ -63,7 +63,7 @@ class TestPreflight:
             "statusCode": 200,
             "body": "",
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Origin": "http://localhost:8080",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "POST,OPTIONS",
                 "Access-Control-Allow-Credentials": "true",
@@ -84,7 +84,7 @@ class TestMethodNotAllowed:
             "statusCode": 405,
             "body": '{"detail": "Method Not Allowed"}',
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:1313",
+                "Access-Control-Allow-Origin": "http://localhost:8080",
                 "Access-Control-Allow-Headers": "*",
                 "Access-Control-Allow-Methods": "POST,OPTIONS",
                 "Access-Control-Allow-Credentials": "true",

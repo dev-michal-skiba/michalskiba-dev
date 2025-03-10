@@ -20,7 +20,7 @@ class TestGetHeaders:
         headers = get_headers()
 
         assert headers == {
-            "Access-Control-Allow-Origin": "http://localhost:1313",
+            "Access-Control-Allow-Origin": "http://localhost:8080",
             "Access-Control-Allow-Headers": "*",
             "Access-Control-Allow-Methods": "POST,OPTIONS",
             "Access-Control-Allow-Credentials": "true",
@@ -77,7 +77,7 @@ class TestGetSecureVersionFlag:
 class TestGetHost:
     def test_secure_version_on(self) -> None:
         event: dict[str, Any] = {}
-        assert get_host(event, is_secure_version_on=True) == "http://localhost:1313"
+        assert get_host(event, is_secure_version_on=True) == "http://localhost:8080"
 
     def test_missing_allow_origin(self, monkeypatch: pytest.MonkeyPatch) -> None:
         event = {"headers": {"Host": "test-host.com"}}
