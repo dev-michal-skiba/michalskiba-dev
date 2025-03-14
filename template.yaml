@@ -119,6 +119,7 @@ Resources:
             - !Ref Environment
             - AllowOrigin
           SECRET_KEY: !Ref HostHeaderInjectionSecretKey
+          ENVIRONMENT: !Ref Environment
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:

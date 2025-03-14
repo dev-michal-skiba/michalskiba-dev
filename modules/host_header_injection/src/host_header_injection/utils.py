@@ -46,9 +46,15 @@ def get_host(event: dict[str, Any], is_secure_version_on: bool = False) -> str:
     host: str | None = headers.get("x-forwarded-host") or headers.get("host")
     if not host:
         raise HTTPException(400, "Invalid host header")
-    if host.startswith(("http://", "https://")):
-        return host
-    return f"https://{host}"
+
+    domain_parts = host.split(".")
+    if len(domain_parts) > 2:
+        host = ".".join(domain_parts[-2:])
+
+    environment = os.environ.get("ENVIRONMENT", "Production").lower()
+    protocol = "http" if environment == "local" else "https"
+
+    return f"{protocol}://{host}"
 
 
 def generate_reset_link(email: str, host: str) -> str:

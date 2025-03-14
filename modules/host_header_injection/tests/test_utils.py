@@ -96,8 +96,18 @@ class TestGetHost:
                 {"Host": "test-host.com", "X-Forwarded-Host": "forwarded-host.com"},
                 "https://forwarded-host.com",
             ),
+            ({"Host": "a.test-host.com"}, "https://test-host.com"),
+            ({"Host": "b.a.test-host.com"}, "https://test-host.com"),
+            ({"Host": "c.b.a.test-host.com"}, "https://test-host.com"),
         ],
-        ids=["host_header", "x_forwarded_host", "both_headers"],
+        ids=[
+            "host_header",
+            "x_forwarded_host",
+            "both_headers",
+            "single_subdomain",
+            "double_subdomain",
+            "triple_subdomain",
+        ],
     )
     def test_host_headers(
         self, headers: dict[str, str], expected_host: str, monkeypatch: pytest.MonkeyPatch
