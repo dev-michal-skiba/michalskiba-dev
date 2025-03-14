@@ -16,20 +16,20 @@ Repository for [michalskiba.dev](https://www.michalskiba.dev/) webpage which is 
 
 ## Auth API
 - Path: `/modules/auth/`
-- Local URL: http://api.localhost:8080/demo/auth
+- Local URL: http://localhost:8080/api/demo/auth
 - Lambda authorizer function. Used by other APIs to authorize requests.
 
 ## SQL Injection API
 - Path: `/modules/sql_injection/`
-- Local URL: http://api.localhost:8080/demo/sql-injection
+- Local URL: http://localhost:8080/api/demo/sql-injection
 - Lambda function that provides an API that is vulnerable or not to SQL Injection depending on the request query parameter.
 
 ## Web Parameter Tampering API
 - Path: `/modules/web_parameter_tampering/`
-- Local URL: http://api.localhost:8080/demo/web-parameter-tampering
+- Local URL: http://localhost:8080/api/demo/web-parameter-tampering
 - Lambda function that provides an API that is vulnerable or not to Web Parameter Tampering depending on the request query parameter.
 
 ## Host Header Injection API
 - Path: `/modules/host_header_injection/`
-- Local URL: http://api.localhost:8080/demo/host-header-injection
+- Local URL: http://localhost:8080/api/demo/host-header-injection
 - Lambda function that provides an API that is vulnerable or not to Host Header Injection depending on the request headers.

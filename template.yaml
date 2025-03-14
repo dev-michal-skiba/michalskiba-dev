@@ -19,7 +19,7 @@ Mappings:
   EnvVariables:
     Local:
       AllowOrigin: http://localhost:8080
-      CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax; Path=/demo"
+      CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax; Path=/api/demo"
     Production:
       AllowOrigin: https://www.michalskiba.dev
       CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/demo"
