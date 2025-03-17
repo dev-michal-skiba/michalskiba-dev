@@ -18,7 +18,7 @@
     }
 
     function updateModalAndShow(email, resetLink) {
-        const modalEmail = document.getElementById('email');
+        const modalEmail = document.getElementById('email-email');
         modalEmail.innerHTML = email;
 
         const modalLink = document.getElementById('reset-link');
@@ -54,14 +54,34 @@
         );
     }
 
-    document.getElementById("password-reset-initiate-form").addEventListener("submit", (event) => {
-        event.preventDefault();
-        submitForm();
-    });
-
-    document.getElementById("submit-button").addEventListener("click", function() {
-        submitForm();
-    });
+    function submitNewPassword() {
+        clearError();
+        const token = new URLSearchParams(window.location.search).get('token');
+        const password = document.getElementById("new-password").value;
+        if (!password) {
+            showError("Please enter a new password");
+            return;
+        }
+        fetch(
+            getApiUrl() + "/demo/host-header-injection/password-reset/complete",
+            {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ token, password })
+            }
+        )
+        .then(response => {
+            if (response.status !== 204) {
+                throw new Error("Failed to reset password, please try again.");
+            }
+            window.location.href = "/demos/host-header-injection/password-reset/success";
+        })
+        .catch(error => {
+            showError(error.message);
+        });
+    }
 
     window.onload = function() {
         document.getElementById("version-switch").checked = getIsSecureVersionOn();

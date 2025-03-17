@@ -8,13 +8,13 @@
         <div class="container-lg">
              <h2 class="mb-4">Password Reset</h2>
              <p class="mb-4">Enter your email address below and we'll send you instructions to reset your password.</p>
-             <form id="password-reset-initiate-form">
+             <form id="password-reset-initiate-form" onsubmit="event.preventDefault(); submitForm();">
                  <div class="row">
                      <div class="col-7">
                          <input type="email" class="form-control" id="email" placeholder="Email address" required>
                      </div>
                      <div class="col-4">
-                         <button id="submit-button" type="button" class="btn primary-button m-0">Reset Password</button>
+                         <button id="submit-password-reset-initiate-button" type="button" class="btn primary-button" onclick="submitForm()">Reset Password</button>
                      </div>
                  </div>
                  <div class="row">
@@ -30,7 +30,7 @@
                 <div class="modal-content email-preview">
                     <div class="modal-body">
                         <p><strong>From:</strong> support@example.com</p>
-                        <p><strong>To:</strong> <span id="email">user@example.com</span></p>
+                        <p><strong>To:</strong> <span id="email-email">user@example.com</span></p>
                         <p><strong>Subject:</strong> Password Reset Request</p>
                         <hr>
                         <p>Hello,</p>
