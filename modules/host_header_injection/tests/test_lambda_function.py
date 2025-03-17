@@ -1,3 +1,6 @@
+from datetime import datetime, timedelta, timezone
+
+import jwt
 from freezegun import freeze_time
 from host_header_injection.lambda_function import lambda_handler
 
@@ -83,6 +86,35 @@ class TestMethodNotAllowed:
         assert response == {
             "statusCode": 405,
             "body": '{"detail": "Method Not Allowed"}',
+            "headers": {
+                "Access-Control-Allow-Origin": "http://localhost:8080",
+                "Access-Control-Allow-Headers": "*",
+                "Access-Control-Allow-Methods": "POST,OPTIONS",
+                "Access-Control-Allow-Credentials": "true",
+            },
+        }
+
+
+class TestCompletePasswordReset:
+    def test_complete_password_reset(self) -> None:
+        secret_key = "test-secret-key"
+        expiry = datetime.now(timezone.utc) + timedelta(minutes=15)
+        token = jwt.encode(
+            {"email": "test@example.com", "exp": expiry.timestamp()},
+            secret_key,
+            algorithm="HS256",
+        )
+        event = {
+            "rawPath": "/demo/host-header-injection/password-reset/complete",
+            "body": f'{{"token": "{token}", "password": "new-password"}}',
+            "requestContext": {"http": {"method": "POST"}},
+        }
+
+        response = lambda_handler(event=event, context={})
+
+        assert response == {
+            "statusCode": 204,
+            "body": "",
             "headers": {
                 "Access-Control-Allow-Origin": "http://localhost:8080",
                 "Access-Control-Allow-Headers": "*",

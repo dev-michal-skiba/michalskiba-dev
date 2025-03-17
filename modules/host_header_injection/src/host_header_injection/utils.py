@@ -64,3 +64,31 @@ def generate_reset_link(email: str, host: str) -> str:
         raise HTTPException(500, "Internal server error")
     token = jwt.encode({"email": email, "exp": expiry.timestamp()}, secret_key, algorithm="HS256")
     return f"{host}/demos/host-header-injection/password-reset/complete?token={token}"
+
+
+def extract_token_and_new_password(event: dict[str, Any]) -> tuple[str, str]:
+    try:
+        body = json.loads(event.get("body") or "{}")
+    except json.JSONDecodeError:
+        raise HTTPException(400, "Invalid JSON body")
+    token = body.get("token")
+    new_password = body.get("password")
+    if not token or not new_password:
+        raise HTTPException(400, "Please provide token and new password")
+    return token, new_password
+
+
+def validate_token(token: str) -> None:
+    secret_key = os.environ.get("SECRET_KEY")
+    if not secret_key:
+        raise HTTPException(500, "Internal server error")
+    try:
+        jwt.decode(token, secret_key, algorithms=["HS256"])
+    except jwt.ExpiredSignatureError:
+        raise HTTPException(400, "Token has expired")
+    except jwt.InvalidTokenError:
+        raise HTTPException(400, "Invalid token")
+
+
+def update_password(token: str, new_password: str) -> None:
+    pass

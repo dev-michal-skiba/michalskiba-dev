@@ -3,11 +3,14 @@ from typing import Any
 
 from .exception import HTTPException
 from .utils import (
+    extract_token_and_new_password,
     generate_reset_link,
     get_email,
     get_headers,
     get_host,
     get_secure_version_flag,
+    update_password,
+    validate_token,
 )
 
 
@@ -24,10 +27,13 @@ def initiate_password_reset(event: dict[str, Any]) -> dict[str, Any]:
 
 
 def complete_password_reset(event: dict[str, Any]) -> dict[str, Any]:
+    token, new_password = extract_token_and_new_password(event)
+    validate_token(token)
+    update_password(token, new_password)
     return {
-        "statusCode": 200,
-        "body": "ok",
+        "statusCode": 204,
         "headers": get_headers(),
+        "body": "",
     }
 
 

@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Any
 
 import jwt
@@ -7,11 +7,14 @@ import pytest
 from freezegun import freeze_time
 from host_header_injection.exception import HTTPException
 from host_header_injection.utils import (
+    extract_token_and_new_password,
     generate_reset_link,
     get_email,
     get_headers,
     get_host,
     get_secure_version_flag,
+    update_password,
+    validate_token,
 )
 
 
@@ -152,3 +155,80 @@ class TestGenerateResetLink:
 
         assert exc_info.value.status_code == 500
         assert str(exc_info.value.detail) == "Internal server error"
+
+
+class TestExtractTokenAndNewPassword:
+    def test_valid_token_and_new_password(self) -> None:
+        event = {"body": json.dumps({"token": "test-token", "password": "new-password"})}
+
+        token, new_password = extract_token_and_new_password(event)
+
+        assert token == "test-token"
+        assert new_password == "new-password"
+
+    @pytest.mark.parametrize(
+        "body",
+        [
+            {"body": json.dumps({"password": "new-password"})},
+            {"body": json.dumps({"token": "test-token"})},
+            {"body": json.dumps({})},
+        ],
+        ids=["missing_token", "missing_password", "missing_both"],
+    )
+    def test_missing_token(self, body: dict[str, Any]) -> None:
+        with pytest.raises(HTTPException) as exc_info:
+            extract_token_and_new_password(body)
+
+        assert exc_info.value.status_code == 400
+        assert str(exc_info.value.detail) == "Please provide token and new password"
+
+
+class TestValidateToken:
+    def test_valid_token(self) -> None:
+        secret_key = "test-secret-key"
+        expiry = datetime.now(timezone.utc) + timedelta(minutes=15)
+        token = jwt.encode(
+            {"email": "test@example.com", "exp": expiry.timestamp()},
+            secret_key,
+            algorithm="HS256",
+        )
+
+        assert validate_token(token) is None
+
+    def test_expired_token(self) -> None:
+        secret_key = "test-secret-key"
+        expiry = datetime.now(timezone.utc) - timedelta(minutes=1)
+        token = jwt.encode(
+            {"email": "test@example.com", "exp": expiry.timestamp()},
+            secret_key,
+            algorithm="HS256",
+        )
+
+        with pytest.raises(HTTPException) as exc_info:
+            validate_token(token)
+
+        assert exc_info.value.status_code == 400
+        assert str(exc_info.value.detail) == "Token has expired"
+
+    def test_invalid_token(self) -> None:
+        token = "invalid-token"
+
+        with pytest.raises(HTTPException) as exc_info:
+            validate_token(token)
+
+        assert exc_info.value.status_code == 400
+        assert str(exc_info.value.detail) == "Invalid token"
+
+    def test_missing_secret_key(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        monkeypatch.delenv("SECRET_KEY", raising=False)
+
+        with pytest.raises(HTTPException) as exc_info:
+            validate_token("test-token")
+
+        assert exc_info.value.status_code == 500
+        assert str(exc_info.value.detail) == "Internal server error"
+
+
+class TestUpdatePassword:
+    def test_update_password(self) -> None:
+        assert update_password(token="test-token", new_password="new-password") is None
