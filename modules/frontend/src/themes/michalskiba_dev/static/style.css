@@ -1,16 +1,43 @@
 :root {
-    --primary-bg: #000000;
-    --secondary-bg: #333333;
-    --primary-text: #cccccc;
+    --primary-bg: #0A0A0A;
+    --secondary-bg: #111111;
+    --primary-text: #D3D3D3;
     --secondary-text: #00FF00;
-    --extra-color: #ffff33;
+    --extra-color: #FFFF33;
 }
 
 body {
     background-color: var(--primary-bg);
     color: var(--primary-text) !important;
-    font-family: 'Ubuntu', sans-serif;
+    font-family: "IBM Plex Mono", monospace;
     margin-bottom: 70px;
+}
+
+h1::before, h2::before, h3::before, h4::before, h5::before, h6::before {
+    content: ":~$ ";
+    color: var(--secondary-text);
+    font-weight: bold;
+    opacity: 0.65;
+}
+
+strong {
+    opacity: 0.65;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    margin: 30px 0 10px 0;
+}
+
+h1 {
+    font-size: 30px;
+}
+
+h2 {
+    font-size: 24px;
+}
+
+h3 {
+    font-size: 16px;
 }
 
 .navbar-font-size {
@@ -36,7 +63,7 @@ body {
 .secondary-text,
 .secondary-text:focus {
     color: var(--secondary-text) !important;;
-    font-family: 'VT323', sans-serif;
+    font-family: 'VT323', monospace;
 }
 
 .secondary-text:hover {
@@ -51,24 +78,21 @@ body {
 .div-link:hover,
 .div-link:focus {
     text-decoration: none;
-    color: var(--primary-color) !important;
+    color: var(--secondary-color) !important;
 }
 
 .blog-post-tile {
-    border-style: none none dashed none;
-    border-color: var(--extra-color);
-    margin: 10px;
-    padding: 10px;
-}
-
-hr {
-    border: none;
-    border-top: 3px dashed var(--extra-color);
-    opacity: 1;
+    margin: 0 0 20px 0;
 }
 
 strong {
     color: var(--secondary-text);
+}
+
+code {
+    opacity: 0.85;
+    font-size: 16px;
+    font-family: "IBM Plex Mono", monospace;
 }
 
 .navbar-toggler-icon {
@@ -83,20 +107,22 @@ li a:focus,
 li a:visited,
 .link:active,
 li a:active {
-    color: var(--secondary-text) !important;;
+    color: var(--secondary-text);
+    opacity: 0.65;
     text-decoration: none;
 }
 
 .link:hover,
 li a:hover {
-    color: var(--extra-color) !important;;
+    color: var(--extra-color);
+}
+
+.blog-post-lead {
+    margin: 30px 0 0 0;
 }
 
 .toc_container {
-    padding: 20px;
-    border: 2px solid var(--extra-color);
-    border-style: dashed none dashed none;
-    margin: 40px 0 40px 0;
+    margin: 30px 0 0 0;
 }
 
 #contact-info {

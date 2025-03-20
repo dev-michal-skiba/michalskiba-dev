@@ -4,16 +4,14 @@ draft: false
 type: "root"
 ---
 
-## About Me
+# About Me
 
 I am a dedicated computer science enthusiast with solid experience in developing backend of web applications. My true
 passion lies in the world of Python programming, but I am always eager to expand my skill set and take new and exciting
 challenges. In my free time, I am constantly exploring and experimenting with new areas of computer science that
 interest me.
 
----
-
-## Idea behind the page
+# Idea behind the page
 
 I have developed an interest in web application security, a field that fascinates me for its complexity and the critical
 role it plays in protecting digital assets. To delve deeper into this area, I created this portfolio blog as a platform
@@ -23,9 +21,7 @@ provide practical, hands-on examples of web vulnerabilities and defenses, reflec
 exciting domain. Feel free to explore my work and see how I am applying my skills to tackle real-world security
 challenges.
 
----
-
-## Frontend
+<!-- ### Frontend
 
 ##### Stack
 
@@ -76,4 +72,4 @@ setup ensures efficient, scalable, and cost-effective backend.
 The backend is deployed using [AWS SAM](https://aws.amazon.com/serverless/sam/), which automates the packaging and
 deployment of serverless resources like [AWS API Gateway](https://aws.amazon.com/api-gateway/) and
 [AWS Lambda](https://aws.amazon.com/lambda/). SAM CLI commands manage the deployment process, ensuring a consistent and
-efficient setup for backend services.
+efficient setup for backend services. -->
