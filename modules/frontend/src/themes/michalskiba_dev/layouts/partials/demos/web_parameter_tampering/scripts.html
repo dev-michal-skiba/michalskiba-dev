@@ -67,7 +67,7 @@
     function displayLogoutButton() {
         let button = document.createElement("button");
         button.id = "wpt-logout-button";
-        button.className = "nav-link link-button secondary-text";
+        button.className = "nav-link link-button secondary-color";
         button.innerText = "logout";
         button.addEventListener("click", logout);
         document.getElementById("wpt-logout-container").appendChild(button);
@@ -80,15 +80,15 @@
         container.append(header);
         if (pressApplication.accreditation_code) {
             let status = document.createElement("p");
-            status.innerHTML = "Status: <span class='success'>Accepted</span></p>";
-            container.append(status)
+            status.innerHTML = "Status: <span class='success'>Accepted</span>";
+            container.append(status);
             let accreditation_code = document.createElement("p");
             accreditation_code.innerHTML = "Accreditation code: <b>" + pressApplication.accreditation_code + "</b>";
-            container.append(accreditation_code)
+            container.append(accreditation_code);
         } else {
             let status = document.createElement("p");
-            status.innerHTML = "Status: <span class='error'>Waiting for approval</span></p>";
-            container.append(status)
+            status.innerHTML = "Status: <span class='warning'>Waiting for approval</span>";
+            container.append(status);
         }
         let organization = document.createElement("p");
         organization.innerText = "Organization: " + pressApplication.organization;
@@ -119,7 +119,7 @@
         div_1_2_1.className = "mb-3";
         let label_1_2_1 = document.createElement("label");
         label_1_2_1.for = "wpt-username";
-        label_1_2_1.className = "form-label primary-text";
+        label_1_2_1.className = "form-label primary-color";
         label_1_2_1.innerText = "Username";
         let input_1_2_1 = document.createElement("input");
         input_1_2_1.type = "text";
@@ -133,7 +133,7 @@
         div_1_2_2.className = "mb-3";
         let label_1_2_2 = document.createElement("label");
         label_1_2_2.for = "wpt-password";
-        label_1_2_2.className = "form-label primary-text";
+        label_1_2_2.className = "form-label primary-color";
         label_1_2_2.innerText = "Password";
         let input_1_2_2 = document.createElement("input");
         input_1_2_2.type = "password";
@@ -190,7 +190,7 @@
 
     function clearPage() {
         clearLogoutButton();
-        document.getElementById("wpt-press-container").innerHTML = "";
+        document.getElementById("wpt-press-container").innerText = "";
     }
 
     function loadPage() {
