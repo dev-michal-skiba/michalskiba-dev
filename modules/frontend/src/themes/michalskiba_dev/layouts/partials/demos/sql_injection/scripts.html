@@ -19,29 +19,40 @@
             const tile = document.createElement('div');
             tile.classList.add('sql-injection-parcel-store-tile');
             const nameParagraph = document.createElement('p');
-            nameParagraph.innerHTML = `<b>Name:</b> ${store.name}`;
+            const nameB = document.createElement('b');
+            nameB.innerText = 'Name: ';
+            nameParagraph.appendChild(nameB);
+            nameParagraph.appendChild(document.createTextNode(store.name));
+            
             const addressParagraph = document.createElement('p');
-            addressParagraph.innerHTML = `<b>Address:</b> ${store.address}`;
+            const addressB = document.createElement('b');
+            addressB.innerText = 'Address: ';
+            addressParagraph.appendChild(addressB);
+            addressParagraph.appendChild(document.createTextNode(store.address));
+            
             const openingHoursParagraph = document.createElement('p');
-            openingHoursParagraph.innerHTML = `<b>Opening hours:</b> ${store.opening_hours}`;
+            const hoursB = document.createElement('b');
+            hoursB.innerText = 'Opening hours: ';
+            openingHoursParagraph.appendChild(hoursB);
+            openingHoursParagraph.appendChild(document.createTextNode(store.opening_hours));
             tile.appendChild(nameParagraph);
             tile.appendChild(addressParagraph);
             tile.appendChild(openingHoursParagraph);
             container.appendChild(tile);
         });
         const parentContainer = document.getElementById("parent-container");
-        parentContainer.innerHTML = '';
+        parentContainer.innerText = '';
         parentContainer.appendChild(container);
     }
 
     async function setLoading() {
         const parentContainer = document.getElementById("parent-container");
-        parentContainer.innerHTML = 'Loading ...';
+        parentContainer.innerText = 'Loading ...';
     }
 
     async function unsetLoading() {
         const parentContainer = document.getElementById("parent-container");
-        parentContainer.innerHTML = '';
+        parentContainer.innerText = '';
     }
 
     function submitForm() {

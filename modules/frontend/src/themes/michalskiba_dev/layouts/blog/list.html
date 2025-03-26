@@ -8,8 +8,8 @@
     <div class="container-lg justify">
         {{ range .Pages }}
             <a class="div-link" href="{{ .RelPermalink }}">
-                <div class="container-md blog-post-tile">
-                    <h2>{{ .Title }}</h2>
+                <div class="blog-post-tile">
+                    <h1>{{ .Title }}</h2>
                     <p>{{ .Params.Lead }}</p>
                 </div>
             </a>
