@@ -1,8 +1,9 @@
 import os
-
 import boto3
+from uuid import uuid4
 
 BUCKET_NAME = "michalskiba-dev"
+CLOUDFRONT_DISTRIBUTION_ID = "EHDF4BK8T14W9"
 LOCAL_SOURCE_DIRECTORY = "src/public/"
 REMOTE_DESTINATION_DIRECTORY = "frontend/"
 BUILD_DEPLOY_SCRIPT_PATH = "bin/build_deploy"
@@ -71,11 +72,32 @@ def upload(s3_client):
     print("Uploaded")
 
 
+def invalidate_cloudfront_cache(cloudfront_client):
+    print("Invalidating CloudFront cache...")
+    response = cloudfront_client.create_invalidation(
+        DistributionId=CLOUDFRONT_DISTRIBUTION_ID,
+        InvalidationBatch={
+            'Paths': {
+                'Quantity': 1,
+                'Items': ['/*'],
+            },
+            'CallerReference': str(uuid4())
+        }
+    )
+    print(f"Invalidation created: {response['Invalidation']['Id']}")
+
+
+
 def deploy() -> None:
-    build_module()
-    s3_client = boto3.client("s3")
-    clean_remote_destination_directory(s3_client)
-    upload(s3_client)
+    try:
+        build_module()
+        s3_client = boto3.client("s3")
+        clean_remote_destination_directory(s3_client)
+        upload(s3_client)
+        cloudfront_client = boto3.client('cloudfront')
+        invalidate_cloudfront_cache(cloudfront_client)
+    except boto3.exceptions.Boto3Error as e:
+        print(f"AWS Error occurred: {str(e)}")
 
 
 if __name__ == "__main__":
