@@ -22,9 +22,7 @@ Imagine an attacker who knows that a victim has an account on this service and i
 
 The reset link might look like this:
 
-```html
-<a href="http://malicious.com/reset?token=abc123">Reset your password</a>
-```
+`<a href="http://malicious.com/reset?token=abc123">Reset your password</a>`
 
 In this scenario, the token to reset the password is included in the query parameters. The malicious site can log this token and use it to change the victim's password, effectively compromising the victim's account.
 
