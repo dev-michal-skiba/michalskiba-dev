@@ -9,15 +9,6 @@ import jwt
 from .exception import HTTPException
 
 
-def get_headers() -> dict[str, str]:
-    return {
-        "Access-Control-Allow-Headers": "*",
-        "Access-Control-Allow-Methods": "POST,OPTIONS",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Origin": os.environ.get("ALLOW_ORIGIN") or "",
-    }
-
-
 def get_email(event: dict[str, Any]) -> str:
     try:
         body = json.loads(event["body"])
@@ -46,11 +37,6 @@ def get_host(event: dict[str, Any], is_secure_version_on: bool = False) -> str:
     host: str | None = headers.get("x-forwarded-host") or headers.get("host")
     if not host:
         raise HTTPException(400, "Invalid host header")
-
-    domain_parts = host.split(".")
-    if len(domain_parts) > 2:
-        host = ".".join(domain_parts[-2:])
-
     environment = os.environ.get("ENVIRONMENT", "Production").lower()
     protocol = "http" if environment == "local" else "https"
 
@@ -63,7 +49,7 @@ def generate_reset_link(email: str, host: str) -> str:
     if not secret_key:
         raise HTTPException(500, "Internal server error")
     token = jwt.encode({"email": email, "exp": expiry.timestamp()}, secret_key, algorithm="HS256")
-    return f"{host}/demos/host-header-injection/password-reset/complete?token={token}"
+    return f"{host}/demos/host-header-injection/password-reset/complete/?token={token}"
 
 
 def extract_token_and_new_password(event: dict[str, Any]) -> tuple[str, str]:

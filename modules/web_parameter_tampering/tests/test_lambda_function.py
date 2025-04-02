@@ -19,12 +19,6 @@ class TestLambdaHandler:
                 '{"accreditation_code": null, '
                 '"organization": "Shady non-existing organization"}'
             ),
-            "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:8080",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Methods": "GET,OPTIONS",
-                "Access-Control-Allow-Credentials": "true",
-            },
         }
 
     def test_for_insecure_version(self) -> None:
@@ -44,10 +38,4 @@ class TestLambdaHandler:
                 '{"accreditation_code": "258c4453-4eff-463d-8169-1d0596fe0b7a", '
                 '"organization": "Legitimate organization"}'
             ),
-            "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:8080",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Methods": "GET,OPTIONS",
-                "Access-Control-Allow-Credentials": "true",
-            },
         }

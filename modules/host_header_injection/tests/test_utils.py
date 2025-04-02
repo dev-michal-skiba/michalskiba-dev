@@ -10,24 +10,11 @@ from host_header_injection.utils import (
     extract_token_and_new_password,
     generate_reset_link,
     get_email,
-    get_headers,
     get_host,
     get_secure_version_flag,
     update_password,
     validate_token,
 )
-
-
-class TestGetHeaders:
-    def test_correct_headers(self) -> None:
-        headers = get_headers()
-
-        assert headers == {
-            "Access-Control-Allow-Origin": "http://localhost:8080",
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Allow-Methods": "POST,OPTIONS",
-            "Access-Control-Allow-Credentials": "true",
-        }
 
 
 class TestGetEmail:
@@ -99,9 +86,9 @@ class TestGetHost:
                 {"Host": "test-host.com", "X-Forwarded-Host": "forwarded-host.com"},
                 "https://forwarded-host.com",
             ),
-            ({"Host": "a.test-host.com"}, "https://test-host.com"),
-            ({"Host": "b.a.test-host.com"}, "https://test-host.com"),
-            ({"Host": "c.b.a.test-host.com"}, "https://test-host.com"),
+            ({"Host": "a.test-host.com"}, "https://a.test-host.com"),
+            ({"Host": "b.a.test-host.com"}, "https://b.a.test-host.com"),
+            ({"Host": "c.b.a.test-host.com"}, "https://c.b.a.test-host.com"),
         ],
         ids=[
             "host_header",
@@ -144,7 +131,7 @@ class TestGenerateResetLink:
         assert expiry == datetime(2025, 1, 15, 14, 15, 0, tzinfo=timezone.utc)
         assert (
             reset_link
-            == f"{host}/demos/host-header-injection/password-reset/complete?token={token}"
+            == f"{host}/demos/host-header-injection/password-reset/complete/?token={token}"
         )
 
     def test_missing_secret_key(self, monkeypatch: pytest.MonkeyPatch) -> None:

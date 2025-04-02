@@ -33,12 +33,6 @@ class TestLambdaHandler:
                 '[{"name": "parcel_store_1", "address": "Red Street 1, 00-001 Warsaw, Poland", '
                 '"opening_hours": "8:00-18:00", "access_code": "743763"}]'
             ),
-            "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:8080",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Methods": "GET,OPTIONS",
-                "Access-Control-Allow-Credentials": "false",
-            },
         }
         mock_extract_query_parameters.assert_called_once_with(event)
         mock_get_parcel_stores.assert_called_once_with(

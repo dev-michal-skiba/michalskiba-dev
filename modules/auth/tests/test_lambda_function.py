@@ -11,7 +11,7 @@ class TestTestLambdaHandler:
     def test_for_login(self, mock_logout: Mock, mock_login: Mock, mock_authorize: Mock) -> None:
         expected_response = {"statusCode": 200, "body": "ok"}
         mock_login.return_value = expected_response
-        event = {"rawPath": "/demo/auth/login"}
+        event = {"rawPath": "/api/demo/auth/login"}
 
         response = lambda_handler(event, context={})
 
@@ -23,7 +23,7 @@ class TestTestLambdaHandler:
     def test_for_logout(self, mock_logout: Mock, mock_login: Mock, mock_authorize: Mock) -> None:
         expected_response = {"statusCode": 200, "body": "ok"}
         mock_logout.return_value = expected_response
-        event = {"rawPath": "/demo/auth/logout"}
+        event = {"rawPath": "/api/demo/auth/logout"}
 
         response = lambda_handler(event, context={})
 
@@ -56,11 +56,7 @@ class TestLogin:
         assert response == {
             "statusCode": 200,
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:8080",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Methods": "GET,OPTIONS",
-                "Access-Control-Allow-Credentials": "true",
-                "Set-Cookie": f"access_token={victim_access_token}; Secure; HttpOnly; SameSite=Lax; Path=/demo",
+                "Set-Cookie": f"access_token={victim_access_token}; Secure; HttpOnly; SameSite=Lax; Path=/api/demo",
             },
         }
 
@@ -71,12 +67,6 @@ class TestLogin:
 
         assert response == {
             "statusCode": 401,
-            "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:8080",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Methods": "GET,OPTIONS",
-                "Access-Control-Allow-Credentials": "true",
-            },
         }
 
 
@@ -87,11 +77,7 @@ class TestLogout:
         assert response == {
             "statusCode": 200,
             "headers": {
-                "Access-Control-Allow-Origin": "http://localhost:8080",
-                "Access-Control-Allow-Headers": "*",
-                "Access-Control-Allow-Methods": "GET,OPTIONS",
-                "Access-Control-Allow-Credentials": "true",
-                "Set-Cookie": "access_token=; Secure; HttpOnly; SameSite=Lax; Path=/demo",
+                "Set-Cookie": "access_token=; Secure; HttpOnly; SameSite=Lax; Path=/api/demo",
             },
         }
 

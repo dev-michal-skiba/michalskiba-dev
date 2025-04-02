@@ -6,7 +6,6 @@ from .utils import (
     extract_token_and_new_password,
     generate_reset_link,
     get_email,
-    get_headers,
     get_host,
     get_secure_version_flag,
     update_password,
@@ -22,7 +21,6 @@ def initiate_password_reset(event: dict[str, Any]) -> dict[str, Any]:
     return {
         "statusCode": 200,
         "body": json.dumps({"reset_link": reset_link}),
-        "headers": get_headers(),
     }
 
 
@@ -32,24 +30,13 @@ def complete_password_reset(event: dict[str, Any]) -> dict[str, Any]:
     update_password(token, new_password)
     return {
         "statusCode": 204,
-        "headers": get_headers(),
         "body": "",
-    }
-
-
-def preflight() -> dict[str, Any]:
-    return {
-        "statusCode": 200,
-        "body": "",
-        "headers": get_headers(),
     }
 
 
 def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
     try:
         http_method = event.get("requestContext", {}).get("http", {}).get("method")
-        if http_method == "OPTIONS":
-            return preflight()
         if http_method == "POST":
             if event["rawPath"].endswith("/password-reset/initiate"):
                 return initiate_password_reset(event)
@@ -61,5 +48,4 @@ def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, 
         return {
             "statusCode": e.status_code,
             "body": json.dumps({"detail": e.detail}),
-            "headers": get_headers(),
         }

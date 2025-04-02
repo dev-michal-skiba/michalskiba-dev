@@ -1,4 +1,4 @@
-from sql_injection.utils import extract_query_parameters, get_headers
+from sql_injection.utils import extract_query_parameters
 
 
 class TestExtractQueryParameters:
@@ -28,15 +28,3 @@ class TestExtractQueryParameters:
 
         assert address_search_phrase == ""
         assert is_secure_version_on is True
-
-
-class TestGetHeaders:
-    def test_correct_headers(self) -> None:
-        headers = get_headers()
-
-        assert headers == {
-            "Access-Control-Allow-Origin": "http://localhost:8080",
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Allow-Methods": "GET,OPTIONS",
-            "Access-Control-Allow-Credentials": "false",
-        }

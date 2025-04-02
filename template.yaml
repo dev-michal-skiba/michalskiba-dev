@@ -18,11 +18,9 @@ Parameters:
 Mappings:
   EnvVariables:
     Local:
-      AllowOrigin: http://localhost:8080
       CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax; Path=/api/demo"
     Production:
-      AllowOrigin: https://www.michalskiba.dev
-      CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/demo"
+      CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/api/demo"
 
 Resources:
   SqlInjection:
@@ -37,14 +35,10 @@ Resources:
           Properties:
             ApiId: !Ref Api
             Method: GET
-            Path: /demo/sql-injection
+            Path: /api/demo/sql-injection
       Environment:
         Variables:
           DB_PATH: sql_injection/data.db
-          ALLOW_ORIGIN: !FindInMap
-            - EnvVariables
-            - !Ref Environment
-            - AllowOrigin
   Auth:
     Type: AWS::Serverless::Function
     Properties:
@@ -58,20 +52,16 @@ Resources:
           Properties:
             ApiId: !Ref Api
             Method: POST
-            Path: /demo/auth/login
+            Path: /api/demo/auth/login
         LogoutApi:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
             Method: POST
-            Path: /demo/auth/logout
+            Path: /api/demo/auth/logout
       Environment:
         Variables:
           DB_PATH: auth/data.db
-          ALLOW_ORIGIN: !FindInMap
-            - EnvVariables
-            - !Ref Environment
-            - AllowOrigin
           COOKIE_TEMPLATE: !FindInMap
             - EnvVariables
             - !Ref Environment
@@ -89,16 +79,12 @@ Resources:
           Properties:
             ApiId: !Ref Api
             Method: GET
-            Path: /demo/web-parameter-tampering
+            Path: /api/demo/web-parameter-tampering
             Auth:
               Authorizer: CustomAuthorizer
       Environment:
         Variables:
           DB_PATH: web_parameter_tampering/data.db
-          ALLOW_ORIGIN: !FindInMap
-            - EnvVariables
-            - !Ref Environment
-            - AllowOrigin
   HostHeaderInjection:
     Type: AWS::Serverless::Function
     Properties:
@@ -106,26 +92,25 @@ Resources:
       CodeUri: ./modules/host_header_injection/src
       Handler: host_header_injection.lambda_function.lambda_handler
       Events:
-        HostHeaderInjectionApi:
+        PasswordResetInitiateApi:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
-            Method: ANY
-            Path: /demo/host-header-injection/password-reset/{proxy+}
+            Method: POST
+            Path: /api/demo/host-header-injection/password-reset/initiate
+        PasswordResetCompleteApi:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref Api
+            Method: POST
+            Path: /api/demo/host-header-injection/password-reset/complete
       Environment:
         Variables:
-          ALLOW_ORIGIN: !FindInMap
-            - EnvVariables
-            - !Ref Environment
-            - AllowOrigin
           SECRET_KEY: !Ref HostHeaderInjectionSecretKey
           ENVIRONMENT: !Ref Environment
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:
-      Domain:
-        CertificateArn: arn:aws:acm:eu-central-1:628924145931:certificate/c8335665-cc74-46ee-b24f-b615ac09a6c3
-        DomainName: api.michalskiba.dev
       Auth:
         Authorizers:
           CustomAuthorizer:

@@ -1,14 +1,4 @@
-import os
 from typing import Any
-
-
-def get_headers() -> dict[str, str]:
-    return {
-        "Access-Control-Allow-Headers": "*",
-        "Access-Control-Allow-Methods": "GET,OPTIONS",
-        "Access-Control-Allow-Credentials": "true",
-        "Access-Control-Allow-Origin": os.environ.get("ALLOW_ORIGIN") or "",
-    }
 
 
 def get_is_secure_version_on(event: dict[str, Any]) -> bool:

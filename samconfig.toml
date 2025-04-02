@@ -16,9 +16,9 @@ lint=true
 use_container="true"
 
 [default.deploy.parameters]
-profile="michalskiba-dev-infra"
 stack_name="michalskiba-dev"
 resolve_s3=true
+region="eu-central-1"
 capabilities=[
   "CAPABILITY_IAM",
 ]

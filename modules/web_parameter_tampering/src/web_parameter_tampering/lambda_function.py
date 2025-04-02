@@ -2,7 +2,7 @@ import json
 from typing import Any
 
 from .db import get_press_application
-from .utils import get_headers, get_is_secure_version_on, get_username
+from .utils import get_is_secure_version_on, get_username
 
 
 def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
@@ -17,5 +17,4 @@ def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, 
                 "organization": press_application.organization,
             }
         ),
-        "headers": get_headers(),
     }
