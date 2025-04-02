@@ -2,7 +2,7 @@ import json
 from typing import Any
 
 from .db import get_parcel_stores
-from .utils import extract_query_parameters, get_headers
+from .utils import extract_query_parameters
 
 
 def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
@@ -14,5 +14,4 @@ def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, 
     return {
         "statusCode": 200,
         "body": json.dumps(parcel_stores),
-        "headers": get_headers(),
     }

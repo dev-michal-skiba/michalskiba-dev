@@ -22,4 +22,8 @@ COPY ./modules/web_parameter_tampering /code/web_parameter_tampering
 RUN pip install -e /code/web_parameter_tampering/src/
 ENV PYTHONPATH=/code/web_parameter_tampering/src/web_parameter_tampering:$PYTHONPATH
 
+COPY ./modules/host_header_injection /code/host_header_injection
+RUN pip install -e /code/host_header_injection/src/
+ENV PYTHONPATH=/code/host_header_injection/src/host_header_injection:$PYTHONPATH
+
 WORKDIR /code

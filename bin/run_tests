@@ -1,16 +1,21 @@
 #!/bin/bash
-echo -e "\033[0;94m==== Auth Tests ====\033[0m"
-docker compose --file test.docker-compose.yml run api_test bash -c \
-  'DB_PATH=auth/src/auth/data.db ALLOW_ORIGIN=http://localhost:1313 COOKIE_TEMPLATE="access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/demo" SECRET_KEY=test-secret-key python -m pytest --cov=auth/tests auth/tests &&
+echo -e "\n\033[0;94m==== Auth Tests ====\033[0m\n"
+docker compose --file test.docker-compose.yml run --rm api_test bash -c \
+  'DB_PATH=auth/src/auth/data.db ALLOW_ORIGIN=http://localhost:8080 COOKIE_TEMPLATE="access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/api/demo" SECRET_KEY=test-secret-key python -m pytest -vv --cov=auth/tests auth/tests &&
   python -m coverage report' || exit $?
 
 
-echo -e "\033[0;94m==== SQL Injection Tests ====\033[0m"
-docker compose --file test.docker-compose.yml run api_test bash -c \
-  'DB_PATH=sql_injection/src/sql_injection/data.db ALLOW_ORIGIN=http://localhost:1313 python -m pytest --cov=sql_injection/tests sql_injection/tests &&
+echo -e "\n\033[0;94m==== SQL Injection Tests ====\033[0m\n"
+docker compose --file test.docker-compose.yml run --rm api_test bash -c \
+  'DB_PATH=sql_injection/src/sql_injection/data.db ALLOW_ORIGIN=http://localhost:8080 python -m pytest -vv --cov=sql_injection/tests sql_injection/tests &&
   python -m coverage report' || exit $?
 
-echo -e "\033[0;94m==== Web Parameter Tampering Tests ====\033[0m"
-docker compose --file test.docker-compose.yml run api_test bash -c \
-  'DB_PATH=web_parameter_tampering/src/web_parameter_tampering/data.db ALLOW_ORIGIN=http://localhost:1313 python -m pytest --cov=web_parameter_tampering/tests web_parameter_tampering/tests &&
+echo -e "\n\033[0;94m==== Web Parameter Tampering Tests ====\033[0m\n"
+docker compose --file test.docker-compose.yml run --rm api_test bash -c \
+  'DB_PATH=web_parameter_tampering/src/web_parameter_tampering/data.db ALLOW_ORIGIN=http://localhost:8080 python -m pytest -vv --cov=web_parameter_tampering/tests web_parameter_tampering/tests &&
+  python -m coverage report' || exit $?
+
+echo -e "\n\033[0;94m==== Host Header Injection Tests ====\033[0m\n"
+docker compose --file test.docker-compose.yml run --rm api_test bash -c \
+  'ALLOW_ORIGIN=http://localhost:8080 SECRET_KEY=test-secret-key python -m pytest -vv --cov=host_header_injection/tests host_header_injection/tests &&
   python -m coverage report' || exit $?

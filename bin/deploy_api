@@ -1,3 +1,16 @@
 #!/bin/bash
-source .env.prod && export AUTH_SECRET_KEY="$AUTH_SECRET_KEY" && envsubst < samconfig.toml > samconfig.prod.toml
-sam deploy --config-file samconfig.prod.toml
+
+PROFILE="michalskiba-dev-api-deploy-628924145931"
+if ! aws configure list-profiles | grep -q "^${PROFILE}$"; then
+    echo "Profile ${PROFILE} not found. Creating..."
+    aws configure set sso_start_url "https://d-9967682f1a.awsapps.com/start/#" --profile ${PROFILE}
+    aws configure set sso_region "eu-central-1" --profile ${PROFILE}
+    aws configure set sso_account_id "628924145931" --profile ${PROFILE}
+    aws configure set sso_role_name "michalskiba-dev-api-deploy" --profile ${PROFILE}
+    aws configure set output json --profile ${PROFILE}
+fi
+aws sso login --profile ${PROFILE}
+
+source .env.prod && export AUTH_SECRET_KEY="$AUTH_SECRET_KEY" && export HOST_HEADER_INJECTION_SECRET_KEY="$HOST_HEADER_INJECTION_SECRET_KEY" && envsubst < samconfig.toml > samconfig.prod.toml
+
+AWS_PROFILE=${PROFILE} sam deploy --config-file samconfig.prod.toml

@@ -6,24 +6,10 @@ from auth.utils import get_access_token, get_headers
 
 class TestGetHeaders:
     def test_correct_headers(self) -> None:
-        headers = get_headers()
-
-        assert headers == {
-            "Access-Control-Allow-Origin": "http://localhost:1313",
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Allow-Methods": "GET,OPTIONS",
-            "Access-Control-Allow-Credentials": "true",
-        }
-
-    def test_correct_headers_with_access_token(self) -> None:
         headers = get_headers(access_token="token")
 
         assert headers == {
-            "Access-Control-Allow-Origin": "http://localhost:1313",
-            "Access-Control-Allow-Headers": "*",
-            "Access-Control-Allow-Methods": "GET,OPTIONS",
-            "Access-Control-Allow-Credentials": "true",
-            "Set-Cookie": "access_token=token; Secure; HttpOnly; SameSite=Lax; Path=/demo",
+            "Set-Cookie": "access_token=token; Secure; HttpOnly; SameSite=Lax; Path=/api/demo",
         }
 
 

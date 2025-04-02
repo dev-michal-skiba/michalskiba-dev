@@ -1,11 +1,14 @@
 #!/bin/bash
 
-aws configure set sso_start_url "https://d-9967682f1a.awsapps.com/start/#"
-aws configure set sso_region "eu-central-1"
-aws configure set sso_account_id "628924145931"
-aws configure set sso_role_name "michalskiba-dev-frontend-deploy"
-aws configure set output json
-aws sso login
+PROFILE="michalskiba-dev-frontend-deploy-628924145931"
+if ! aws configure list-profiles | grep -q "^${PROFILE}$"; then
+    aws configure set sso_start_url "https://d-9967682f1a.awsapps.com/start/#" --profile ${PROFILE}
+    aws configure set sso_region "eu-central-1" --profile ${PROFILE}
+    aws configure set sso_account_id "628924145931" --profile ${PROFILE}
+    aws configure set sso_role_name "michalskiba-dev-frontend-deploy" --profile ${PROFILE}
+    aws configure set output json --profile ${PROFILE}
+fi
+aws sso login --profile ${PROFILE}
 
 if [ ! -d "venv" ]; then
     echo "Creating virtual environment..."
@@ -15,4 +18,4 @@ source venv/bin/activate
 pip3 install -r deploy.requirements.txt
 
 cd modules/frontend/
-AWS_PROFILE=michalskiba-dev-frontend-deploy-628924145931 python3 bin/deploy.py
+AWS_PROFILE=${PROFILE} python3 bin/deploy.py

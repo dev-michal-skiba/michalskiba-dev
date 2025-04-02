@@ -21,7 +21,6 @@ def login(event: dict[str, Any]) -> dict[str, Any]:
     if user is None:
         return {
             "statusCode": 401,
-            "headers": get_headers(),
         }
     return {
         "statusCode": 200,

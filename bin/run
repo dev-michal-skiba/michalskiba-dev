@@ -1,4 +1,28 @@
 #!/bin/bash
-(sam local start-api) &
-(cd modules/frontend && docker compose up)
-wait
+
+cleanup() {
+  echo "Shutting down services..."
+
+  if [ -n "$SAM_PID" ]; then
+    echo "Stopping SAM local API..."
+    kill $SAM_PID
+  fi
+
+
+  echo "Stopping Docker containers..."
+  docker compose down
+
+  echo "Cleanup complete."
+  exit 0
+}
+
+trap cleanup SIGINT SIGTERM EXIT
+
+echo "Starting SAM local API..."
+sam local start-api &
+SAM_PID=$!
+
+echo "Starting Docker containers..."
+docker compose up
+
+wait $SAM_PID
