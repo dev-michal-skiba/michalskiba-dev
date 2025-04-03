@@ -23,12 +23,24 @@ Mappings:
       CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/api/demo"
 
 Resources:
+  Core:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: core
+      ContentUri: ./modules/core/src
+      CompatibleRuntimes:
+        - python3.12
+    Metadata:
+      BuildMethod: python3.12
+
   SqlInjection:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: python3.12
       CodeUri: ./modules/sql_injection/src
       Handler: sql_injection.lambda_function.lambda_handler
+      Layers:
+        - !Ref Core
       Events:
         Api:
           Type: HttpApi
@@ -46,6 +58,8 @@ Resources:
       CodeUri: ./modules/auth/src
       Handler: auth.lambda_function.lambda_handler
       MemorySize: 512
+      Layers:
+        - !Ref Core
       Events:
         LoginApi:
           Type: HttpApi
@@ -73,6 +87,8 @@ Resources:
       Runtime: python3.12
       CodeUri: ./modules/web_parameter_tampering/src
       Handler: web_parameter_tampering.lambda_function.lambda_handler
+      Layers:
+        - !Ref Core
       Events:
         Api:
           Type: HttpApi
@@ -91,6 +107,8 @@ Resources:
       Runtime: python3.12
       CodeUri: ./modules/host_header_injection/src
       Handler: host_header_injection.lambda_function.lambda_handler
+      Layers:
+        - !Ref Core
       Events:
         PasswordResetInitiateApi:
           Type: HttpApi
