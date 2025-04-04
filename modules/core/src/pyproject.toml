@@ -5,8 +5,3 @@ build-backend = "hatchling.build"
 [project]
 name = "core"
 version = "0.0.1"
-description = "Shared core functionality for Lambda functions"
-requires-python = ">=3.10"
-dependencies = [
-    "peewee>=3.16.0",
-]
