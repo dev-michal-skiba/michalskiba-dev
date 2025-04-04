@@ -10,6 +10,10 @@ COPY ./requirements.txt code/
 COPY ./test.requirements.txt code/
 RUN pip install -r code/test.requirements.txt
 
+COPY ./modules/core /code/core
+RUN pip install -e /code/core/src/
+ENV PYTHONPATH=/code/core/src/core:$PYTHONPATH
+
 COPY ./modules/auth /code/auth
 RUN pip install -e /code/auth/src/
 ENV PYTHONPATH=/code/auth/src/auth:$PYTHONPATH

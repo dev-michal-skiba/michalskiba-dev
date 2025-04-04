@@ -5,6 +5,7 @@ services:
     image: michalskiba_dev_api_test
     container_name: michalskiba_dev_api_test
     volumes:
+      - ./modules/core:/code/core
       - ./modules/auth:/code/auth
       - ./modules/sql_injection:/code/sql_injection
       - ./modules/web_parameter_tampering:/code/web_parameter_tampering
