@@ -1,5 +1,6 @@
 from unittest.mock import Mock, patch
 
+from core.api import RouteRequest
 from sql_injection.lambda_function import lambda_handler
 
 
@@ -30,6 +31,7 @@ class TestLambdaHandler:
                 }
             },
         }
+        request = RouteRequest(query_paramaters={"address_search_phrase": "Warsaw"})
 
         response = lambda_handler(event, context={})
 
@@ -40,7 +42,7 @@ class TestLambdaHandler:
                 '"opening_hours": "8:00-18:00", "access_code": "743763"}]'
             ),
         }
-        mock_extract_query_parameters.assert_called_once_with(event)
+        mock_extract_query_parameters.assert_called_once_with(request)
         mock_get_parcel_stores.assert_called_once_with(
             address_search_phrase=address_search_phrase,
             is_secure_version_on=is_secure_version_on,

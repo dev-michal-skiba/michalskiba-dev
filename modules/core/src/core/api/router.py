@@ -1,6 +1,12 @@
 from typing import Callable
 
-from .domain import HttpMethod, LambdaContext, LambdaEvent, LambdaResponse
+from .domain import (
+    HttpMethod,
+    LambdaEvent,
+    LambdaResponse,
+    RouteRequest,
+    RouteResponse,
+)
 from .exception import HttpException, NotFoundException
 
 
@@ -9,7 +15,7 @@ class Route:
         self,
         path: str,
         method: HttpMethod,
-        handler: Callable[[LambdaEvent, LambdaContext], LambdaResponse],
+        handler: Callable[[RouteRequest], RouteResponse],
     ):
         self.path = path
         self.method = method
@@ -23,13 +29,21 @@ class Router:
     def add_route(self, route: Route) -> None:
         self.__routes.append(route)
 
-    def __call__(self, event: LambdaEvent, context: LambdaContext) -> LambdaResponse:
+    def _get_request(self, event: LambdaEvent) -> RouteRequest:
+        return RouteRequest(query_paramaters=event.get("queryStringParameters") or {})
+
+    def __call__(self, event: LambdaEvent) -> LambdaResponse:
         path = event["requestContext"]["http"]["path"]
         method = event["requestContext"]["http"]["method"]
         try:
             for route in self.__routes:
                 if route.path == path and route.method == method:
-                    return route.handler(event, context)
+                    request = self._get_request(event)
+                    route_response = route.handler(request)
+                    response = LambdaResponse(statusCode=route_response.status_code)
+                    if route_response.body:
+                        response["body"] = route_response.body
+                    return response
         except HttpException as e:
             return e.response()
         return NotFoundException().response()

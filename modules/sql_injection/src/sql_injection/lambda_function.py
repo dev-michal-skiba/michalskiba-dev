@@ -1,17 +1,25 @@
 import json
 
-from core.api import LambdaContext, LambdaEvent, LambdaResponse, Route, Router
+from core.api import (
+    LambdaContext,
+    LambdaEvent,
+    LambdaResponse,
+    Route,
+    Router,
+    RouteRequest,
+    RouteResponse,
+)
 
 from . import db, utils
 
 
-def get_parcel_stores(event: LambdaEvent, context: LambdaContext) -> LambdaResponse:
-    address_search_phrase, is_secure_version_on = utils.extract_query_parameters(event)
+def get_parcel_stores(request: RouteRequest) -> RouteResponse:
+    address_search_phrase, is_secure_version_on = utils.extract_query_parameters(request)
     parcel_stores = db.get_parcel_stores(
         address_search_phrase=address_search_phrase,
         is_secure_version_on=is_secure_version_on,
     )
-    return LambdaResponse(statusCode=200, body=json.dumps(parcel_stores))
+    return RouteResponse(status_code=200, body=json.dumps(parcel_stores))
 
 
 router = Router()
@@ -25,4 +33,4 @@ router.add_route(
 
 
 def lambda_handler(event: LambdaEvent, context: LambdaContext) -> LambdaResponse:
-    return router(event, context)
+    return router(event)
