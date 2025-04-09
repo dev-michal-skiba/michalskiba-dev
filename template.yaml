@@ -46,8 +46,8 @@ Resources:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
-            Method: GET
-            Path: /api/demo/sql-injection
+            Method: ANY
+            Path: /api/demo/sql-injection/{proxy+}
       Environment:
         Variables:
           DB_PATH: sql_injection/data.db
