@@ -18,8 +18,10 @@ Parameters:
 Mappings:
   EnvVariables:
     Local:
+      AllowOrigin: http://localhost:8080
       CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax; Path=/api/demo"
     Production:
+      AllowOrigin: https://www.michalskiba.dev
       CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/api/demo"
 
 Resources:
@@ -110,22 +112,20 @@ Resources:
       Layers:
         - !Ref Core
       Events:
-        PasswordResetInitiateApi:
+        Api:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
-            Method: POST
-            Path: /api/demo/host-header-injection/password-reset/initiate
-        PasswordResetCompleteApi:
-          Type: HttpApi
-          Properties:
-            ApiId: !Ref Api
-            Method: POST
-            Path: /api/demo/host-header-injection/password-reset/complete
+            Method: ANY
+            Path: /api/demo/host-header-injection/{proxy+}
       Environment:
         Variables:
           SECRET_KEY: !Ref HostHeaderInjectionSecretKey
           ENVIRONMENT: !Ref Environment
+          ALLOW_ORIGIN: !FindInMap
+            - EnvVariables
+            - !Ref Environment
+            - AllowOrigin
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:

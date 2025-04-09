@@ -15,9 +15,7 @@ class TestRouter:
             Route(
                 path="/",
                 method="GET",
-                handler=lambda request: RouteResponse(
-                    status_code=200, body=request.model_dump_json()
-                ),
+                handler=lambda request: RouteResponse(status_code=200),
             )
         )
         event: LambdaEvent = {
@@ -31,7 +29,7 @@ class TestRouter:
 
         response = router(event)
 
-        assert response == {"statusCode": 200, "body": '{"query_paramaters":{}}'}
+        assert response == {"statusCode": 200}
 
     def test_route_does_not_exist(self) -> None:
         router = Router()
@@ -66,3 +64,31 @@ class TestRouter:
         response = router(event)
 
         assert response == {"statusCode": 400, "body": '{"detail": "Bad Request"}'}
+
+    def test_get_request(self) -> None:
+        router = Router()
+        event: LambdaEvent = {
+            "requestContext": {
+                "http": {
+                    "method": "GET",
+                    "path": "/",
+                }
+            },
+            "queryStringParameters": {
+                "param_1": "value_1",
+                "param_2": "value_2",
+            },
+            "body": "{}",
+            "headers": {
+                "Host": "value_1",
+                "X-Forwarded-Host": "value_2",
+            },
+        }
+
+        response = router._get_request(event)
+
+        assert response == RouteRequest(
+            query_paramaters={"param_1": "value_1", "param_2": "value_2"},
+            body="{}",
+            headers={"host": "value_1", "x-forwarded-host": "value_2"},
+        )

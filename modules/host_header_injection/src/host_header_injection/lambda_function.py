@@ -1,7 +1,15 @@
 import json
-from typing import Any
 
-from .exception import HTTPException
+from core.api import (
+    LambdaContext,
+    LambdaEvent,
+    LambdaResponse,
+    Route,
+    Router,
+    RouteRequest,
+    RouteResponse,
+)
+
 from .utils import (
     extract_token_and_new_password,
     generate_reset_link,
@@ -13,39 +21,37 @@ from .utils import (
 )
 
 
-def initiate_password_reset(event: dict[str, Any]) -> dict[str, Any]:
-    email = get_email(event)
-    is_secure_version_on = get_secure_version_flag(event)
-    host = get_host(event, is_secure_version_on)
+def initiate_password_reset(request: RouteRequest) -> RouteResponse:
+    email = get_email(request)
+    is_secure_version_on = get_secure_version_flag(request)
+    host = get_host(request, is_secure_version_on)
     reset_link = generate_reset_link(email, host)
-    return {
-        "statusCode": 200,
-        "body": json.dumps({"reset_link": reset_link}),
-    }
+    return RouteResponse(status_code=200, body=json.dumps({"reset_link": reset_link}))
 
 
-def complete_password_reset(event: dict[str, Any]) -> dict[str, Any]:
-    token, new_password = extract_token_and_new_password(event)
+def complete_password_reset(request: RouteRequest) -> RouteResponse:
+    token, new_password = extract_token_and_new_password(request)
     validate_token(token)
     update_password(token, new_password)
-    return {
-        "statusCode": 204,
-        "body": "",
-    }
+    return RouteResponse(status_code=204)
 
 
-def lambda_handler(event: dict[str, Any], context: dict[str, Any]) -> dict[str, Any]:
-    try:
-        http_method = event.get("requestContext", {}).get("http", {}).get("method")
-        if http_method == "POST":
-            if event["rawPath"].endswith("/password-reset/initiate"):
-                return initiate_password_reset(event)
-            if event["rawPath"].endswith("/password-reset/complete"):
-                return complete_password_reset(event)
-            raise HTTPException(404, "Not Found")
-        raise HTTPException(405, "Method Not Allowed")
-    except HTTPException as e:
-        return {
-            "statusCode": e.status_code,
-            "body": json.dumps({"detail": e.detail}),
-        }
+router = Router()
+router.add_route(
+    Route(
+        path="/api/demo/host-header-injection/password-reset/initiate",
+        method="POST",
+        handler=initiate_password_reset,
+    )
+)
+router.add_route(
+    Route(
+        path="/api/demo/host-header-injection/password-reset/complete",
+        method="POST",
+        handler=complete_password_reset,
+    )
+)
+
+
+def lambda_handler(event: LambdaEvent, context: LambdaContext) -> LambdaResponse:
+    return router(event)

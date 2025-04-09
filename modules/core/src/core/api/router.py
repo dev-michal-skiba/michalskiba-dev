@@ -30,7 +30,13 @@ class Router:
         self.__routes.append(route)
 
     def _get_request(self, event: LambdaEvent) -> RouteRequest:
-        return RouteRequest(query_paramaters=event.get("queryStringParameters") or {})
+        headers = event.get("headers") or {}
+        headers = {k.lower(): v for k, v in headers.items()}
+        return RouteRequest(
+            query_paramaters=event.get("queryStringParameters") or {},
+            body=event.get("body") or "",
+            headers=headers,
+        )
 
     def __call__(self, event: LambdaEvent) -> LambdaResponse:
         path = event["requestContext"]["http"]["path"]

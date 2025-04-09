@@ -31,7 +31,9 @@ class TestLambdaHandler:
                 }
             },
         }
-        request = RouteRequest(query_paramaters={"address_search_phrase": "Warsaw"})
+        request = RouteRequest(
+            query_paramaters={"address_search_phrase": "Warsaw"}, body="", headers={}
+        )
 
         response = lambda_handler(event, context={})
 

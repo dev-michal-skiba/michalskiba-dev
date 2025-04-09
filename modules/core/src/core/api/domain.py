@@ -17,6 +17,8 @@ class LambdaRequestContext(TypedDict):
 class LambdaEvent(TypedDict):
     requestContext: LambdaRequestContext
     queryStringParameters: NotRequired[dict[str, str]]
+    body: NotRequired[str]
+    headers: NotRequired[dict[str, str]]
 
 
 class LambdaContext(TypedDict):
@@ -30,6 +32,8 @@ class LambdaResponse(TypedDict):
 
 class RouteRequest(BaseModel):
     query_paramaters: dict[str, str]
+    body: str
+    headers: dict[str, str]
 
 
 class RouteResponse(BaseModel):

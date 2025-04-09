@@ -8,6 +8,14 @@ class HttpException(Exception):
         self.__status_code = status_code
         self.__detail = detail
 
+    @property
+    def status_code(self) -> int:
+        return self.__status_code
+
+    @property
+    def detail(self) -> str | None:
+        return self.__detail
+
     def response(self) -> LambdaResponse:
         response = LambdaResponse(statusCode=self.__status_code)
         if self.__detail:
