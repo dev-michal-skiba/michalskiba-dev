@@ -27,7 +27,7 @@ class TestLambdaHandler:
             "requestContext": {
                 "http": {
                     "method": "GET",
-                    "path": "/api/demo/sql-injection",
+                    "path": "/api/demo/sql-injection/parcel-stores",
                 }
             },
         }

@@ -25,7 +25,7 @@ def get_parcel_stores(request: RouteRequest) -> RouteResponse:
 router = Router()
 router.add_route(
     Route(
-        path="/api/demo/sql-injection",
+        path="/api/demo/sql-injection/parcel-stores",
         method="GET",
         handler=get_parcel_stores,
     )
@@ -33,4 +33,5 @@ router.add_route(
 
 
 def lambda_handler(event: LambdaEvent, context: LambdaContext) -> LambdaResponse:
+    print("sql_injection", "event", event)
     return router(event)
