@@ -63,18 +63,12 @@ Resources:
       Layers:
         - !Ref Core
       Events:
-        LoginApi:
+        Api:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
-            Method: POST
-            Path: /api/demo/auth/login
-        LogoutApi:
-          Type: HttpApi
-          Properties:
-            ApiId: !Ref Api
-            Method: POST
-            Path: /api/demo/auth/logout
+            Method: ANY
+            Path: /api/demo/auth/{proxy+}
       Environment:
         Variables:
           DB_PATH: auth/data.db

@@ -33,5 +33,4 @@ router.add_route(
 
 
 def lambda_handler(event: LambdaEvent, context: LambdaContext) -> LambdaResponse:
-    print("sql_injection", "event", event)
     return router(event)

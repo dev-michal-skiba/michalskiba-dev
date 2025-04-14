@@ -1,4 +1,6 @@
 from .domain import (
+    AuthorizerResponse,
+    LambdaAuthorizerResponse,
     LambdaContext,
     LambdaEvent,
     LambdaResponse,
@@ -6,16 +8,19 @@ from .domain import (
     RouteResponse,
 )
 from .exception import HttpException, NotFoundException
-from .router import Route, Router
+from .router import AuthorizerRoute, Route, Router
 
 __all__ = [
     "Router",
     "Route",
+    "AuthorizerRoute",
     "LambdaEvent",
     "LambdaContext",
     "LambdaResponse",
     "RouteRequest",
     "RouteResponse",
+    "AuthorizerResponse",
     "HttpException",
     "NotFoundException",
+    "LambdaAuthorizerResponse",
 ]

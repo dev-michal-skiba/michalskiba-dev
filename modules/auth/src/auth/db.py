@@ -1,15 +1,6 @@
-import os
-
-from peewee import CharField, Model, SqliteDatabase
-
-db = SqliteDatabase(os.environ.get("DB_PATH"))
+from core.db import BaseDatabaseModel, CharField
 
 
-class BaseModel(Model):
-    class Meta:
-        database: SqliteDatabase = db
-
-
-class User(BaseModel):
+class User(BaseDatabaseModel):
     username: CharField = CharField(max_length=32, unique=True)
     hashed_password: CharField = CharField()
