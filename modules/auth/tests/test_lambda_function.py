@@ -70,7 +70,7 @@ class TestAuthorize:
             "cookies": [f"access_token={victim_access_token}"],
             "requestContext": {
                 "http": {
-                    "path": "/api/demo/web-parameter-tampering/press",
+                    "path": "/api/demo/web-parameter-tampering/press-application",
                     "method": "GET",
                 }
             },
@@ -87,7 +87,7 @@ class TestAuthorize:
             "cookies": cookies,
             "requestContext": {
                 "http": {
-                    "path": "/api/demo/web-parameter-tampering/press",
+                    "path": "/api/demo/web-parameter-tampering/press-application",
                     "method": "GET",
                 }
             },

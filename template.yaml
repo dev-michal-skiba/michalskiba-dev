@@ -91,7 +91,7 @@ Resources:
           Properties:
             ApiId: !Ref Api
             Method: GET
-            Path: /api/demo/web-parameter-tampering
+            Path: /api/demo/web-parameter-tampering/{proxy+}
             Auth:
               Authorizer: CustomAuthorizer
       Environment:

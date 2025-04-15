@@ -1,20 +1,16 @@
-import os
+from typing import cast
 
-from peewee import CharField, Model, SqliteDatabase
-
-db = SqliteDatabase(os.environ.get("DB_PATH"))
+from core.db import BaseDatabaseModel, CharField
 
 
-class BaseModel(Model):
-    class Meta:
-        database: SqliteDatabase = db
-
-
-class PressApplication(BaseModel):
+class PressApplication(BaseDatabaseModel):
     username: CharField = CharField(max_length=32, unique=True)
     organization: CharField = CharField(max_length=64)
     accreditation_code: CharField = CharField(max_length=36, null=True)
 
 
-def get_press_application(username: str) -> PressApplication:
-    return PressApplication.get(PressApplication.username == username)  # type: ignore[no-any-return]
+def get_press_application(username: str) -> PressApplication | None:
+    try:
+        return cast(PressApplication, PressApplication.get(PressApplication.username == username))
+    except PressApplication.DoesNotExist:
+        return None

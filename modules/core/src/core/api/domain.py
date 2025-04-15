@@ -10,8 +10,17 @@ class LambdaHttp(TypedDict):
     path: str
 
 
+class Lambda(TypedDict):
+    username: NotRequired[str]
+
+
+class LambdaAuthorizer(TypedDict):
+    lambda: NotRequired[Lambda]  # type: ignore[misc]
+
+
 class LambdaRequestContext(TypedDict):
     http: LambdaHttp
+    authorizer: NotRequired[LambdaAuthorizer]
 
 
 class LambdaEvent(TypedDict):
@@ -47,6 +56,7 @@ class RouteRequest(BaseModel):
     headers: dict[str, str] = {}
     cookies: dict[str, str] = {}
     query_paramaters: dict[str, str] = {}
+    authorizer_username: str | None = None
 
 
 class RouteResponse(BaseModel):

@@ -50,11 +50,17 @@ class Router:
             for c in (cookie.split("=", 1) for cookie in event.get("cookies") or [])
             if len(c) == 2
         }
+        try:
+            authorizer_username = event["requestContext"]["authorizer"]["lambda"]["username"]  # type: ignore[typeddict-item]
+        except KeyError:
+            authorizer_username = None
+
         return RouteRequest(
             query_paramaters=event.get("queryStringParameters") or {},
             body=event.get("body") or "",
             headers=headers,
             cookies=cookies,
+            authorizer_username=authorizer_username,
         )
 
     def __handle_route_request(
