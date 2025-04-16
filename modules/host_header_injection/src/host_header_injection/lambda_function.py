@@ -1,5 +1,3 @@
-import json
-
 from core.api import (
     LambdaContext,
     LambdaEvent,
@@ -26,7 +24,7 @@ def initiate_password_reset(request: RouteRequest) -> RouteResponse:
     is_secure_version_on = get_secure_version_flag(request)
     host = get_host(request, is_secure_version_on)
     reset_link = generate_reset_link(email, host)
-    return RouteResponse(status_code=200, body=json.dumps({"reset_link": reset_link}))
+    return RouteResponse(status_code=200, body={"reset_link": reset_link})
 
 
 def complete_password_reset(request: RouteRequest) -> RouteResponse:

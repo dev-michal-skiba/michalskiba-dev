@@ -1,5 +1,3 @@
-import json
-
 from core.api import (
     LambdaContext,
     LambdaEvent,
@@ -19,7 +17,7 @@ def get_parcel_stores(request: RouteRequest) -> RouteResponse:
         address_search_phrase=address_search_phrase,
         is_secure_version_on=is_secure_version_on,
     )
-    return RouteResponse(status_code=200, body=json.dumps(parcel_stores))
+    return RouteResponse(status_code=200, body={"parcel_stores": parcel_stores})
 
 
 router = Router()

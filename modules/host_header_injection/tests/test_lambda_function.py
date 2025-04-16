@@ -1,3 +1,4 @@
+import json
 from datetime import datetime, timedelta, timezone
 
 import jwt
@@ -9,7 +10,7 @@ class TestPasswordResetInitiate:
     @freeze_time("2025-01-15 14:00:00")
     def test_secure_version(self) -> None:
         event = {
-            "body": '{"email": "test@example.com"}',
+            "body": json.dumps({"email": "test@example.com"}),
             "queryStringParameters": {"is_secure_version_on": "true"},
             "headers": {"Host": "test-host.com", "X-Forwarded-Host": "evil-host.com"},
             "requestContext": {
@@ -30,7 +31,7 @@ class TestPasswordResetInitiate:
     @freeze_time("2025-01-15 14:00:00")
     def test_insecure_version_with_malicious_header(self) -> None:
         event = {
-            "body": '{"email": "test@example.com"}',
+            "body": json.dumps({"email": "test@example.com"}),
             "queryStringParameters": {"is_secure_version_on": "false"},
             "headers": {"Host": "test-host.com", "X-Forwarded-Host": "evil-host.com"},
             "requestContext": {
@@ -59,7 +60,7 @@ class TestCompletePasswordReset:
             algorithm="HS256",
         )
         event = {
-            "body": f'{{"token": "{token}", "password": "new-password"}}',
+            "body": json.dumps({"token": token, "password": "new-password"}),
             "requestContext": {
                 "http": {
                     "method": "POST",

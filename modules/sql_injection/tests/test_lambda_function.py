@@ -31,18 +31,13 @@ class TestLambdaHandler:
                 }
             },
         }
-        request = RouteRequest(
-            query_paramaters={"address_search_phrase": "Warsaw"}, body="", headers={}
-        )
+        request = RouteRequest(query_paramaters={"address_search_phrase": "Warsaw"})
 
         response = lambda_handler(event, context={})
 
         assert response == {
             "statusCode": 200,
-            "body": (
-                '[{"name": "parcel_store_1", "address": "Red Street 1, 00-001 Warsaw, Poland", '
-                '"opening_hours": "8:00-18:00", "access_code": "743763"}]'
-            ),
+            "body": '{"parcel_stores": [{"name": "parcel_store_1", "address": "Red Street 1, 00-001 Warsaw, Poland", "opening_hours": "8:00-18:00", "access_code": "743763"}]}',
         }
         mock_extract_query_parameters.assert_called_once_with(request)
         mock_get_parcel_stores.assert_called_once_with(

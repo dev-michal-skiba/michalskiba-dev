@@ -63,8 +63,9 @@
             getApiUrl() + "/demo/sql-injection/parcel-stores?address_search_phrase=" + addressSearchPhrase + "&is_secure_version_on=" + isSecureVersionOn,
             {method: "GET"}
         ).then(
-            response => {
-                return response.json();
+            async response => {
+                data = await response.json();
+                return data.parcel_stores;
             }
         ).then(
             parcelStores => {

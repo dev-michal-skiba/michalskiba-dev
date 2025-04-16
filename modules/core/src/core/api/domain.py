@@ -1,4 +1,4 @@
-from typing import Literal, NotRequired, TypedDict
+from typing import Any, Literal, NotRequired, TypedDict
 
 from pydantic import BaseModel
 
@@ -52,7 +52,7 @@ class LambdaAuthorizerResponse(TypedDict):
 
 
 class RouteRequest(BaseModel):
-    body: str = ""
+    body: dict[str, Any] = {}
     headers: dict[str, str] = {}
     cookies: dict[str, str] = {}
     query_paramaters: dict[str, str] = {}
@@ -61,7 +61,7 @@ class RouteRequest(BaseModel):
 
 class RouteResponse(BaseModel):
     status_code: int
-    body: str | None = None
+    body: dict[str, Any] | None = None
     headers: dict[str, str] | None = None
 
 

@@ -1,3 +1,4 @@
+import json
 from typing import Callable
 
 from .domain import (
@@ -54,10 +55,19 @@ class Router:
             authorizer_username = event["requestContext"]["authorizer"]["lambda"]["username"]  # type: ignore[typeddict-item]
         except KeyError:
             authorizer_username = None
-
+        event_body = event.get("body")
+        if event_body:
+            try:
+                body = json.loads(event_body)
+                if not isinstance(body, dict):
+                    raise HttpException(status_code=400, detail="Expected JSON dictionary in body")
+            except json.JSONDecodeError:
+                raise HttpException(status_code=400, detail="Invalid JSON body")
+        else:
+            body = {}
         return RouteRequest(
             query_paramaters=event.get("queryStringParameters") or {},
-            body=event.get("body") or "",
+            body=body,
             headers=headers,
             cookies=cookies,
             authorizer_username=authorizer_username,
@@ -69,7 +79,11 @@ class Router:
         route_response = handler(request)
         response = LambdaResponse(statusCode=route_response.status_code)
         if route_response.body:
-            response["body"] = route_response.body
+            try:
+                response["body"] = json.dumps(route_response.body)
+            except TypeError:
+                print(f"Failed to serialize response body: [{request}] [{route_response}]")
+                raise HttpException(status_code=500, detail="Internal server error")
         if route_response.headers:
             response["headers"] = route_response.headers
         return response

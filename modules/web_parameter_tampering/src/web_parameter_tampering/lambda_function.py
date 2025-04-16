@@ -1,5 +1,3 @@
-import json
-
 from core.api import (
     HttpException,
     LambdaContext,
@@ -24,12 +22,10 @@ def get_press_application_route_handler(request: RouteRequest) -> RouteResponse:
         raise HttpException(status_code=404, detail="Press application not found")
     return RouteResponse(
         status_code=200,
-        body=json.dumps(
-            {
-                "accreditation_code": press_application.accreditation_code,
-                "organization": press_application.organization,
-            }
-        ),
+        body={
+            "accreditation_code": press_application.accreditation_code,
+            "organization": press_application.organization,
+        },
     )
 
 

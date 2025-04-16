@@ -18,25 +18,14 @@ from host_header_injection.utils import (
 
 class TestGetEmail:
     def test_valid_email(self) -> None:
-        request = RouteRequest(
-            query_paramaters={}, body='{"email": "test@example.com"}', headers={}
-        )
+        request = RouteRequest(body={"email": "test@example.com"})
 
         email = get_email(request)
 
         assert email == "test@example.com"
 
-    def test_invalid_json_body(self) -> None:
-        request = RouteRequest(query_paramaters={}, body="not a json body", headers={})
-
-        with pytest.raises(HttpException) as exc_info:
-            get_email(request)
-
-        assert exc_info.value.status_code == 400
-        assert str(exc_info.value.detail) == "Invalid JSON body"
-
     def test_missing_email_in_body(self) -> None:
-        request = RouteRequest(query_paramaters={}, body='{"other_field": "value"}', headers={})
+        request = RouteRequest(body={"other_field": "value"})
 
         with pytest.raises(HttpException) as exc_info:
             get_email(request)
@@ -45,7 +34,7 @@ class TestGetEmail:
         assert str(exc_info.value.detail) == "Invalid email"
 
     def test_invalid_email_format(self) -> None:
-        request = RouteRequest(query_paramaters={}, body='{"email": "invalid-email"}', headers={})
+        request = RouteRequest(body={"email": "invalid-email"})
 
         with pytest.raises(HttpException) as exc_info:
             get_email(request)
@@ -56,35 +45,31 @@ class TestGetEmail:
 
 class TestGetSecureVersionFlag:
     def test_empty_query_string_parameters(self) -> None:
-        request = RouteRequest(query_paramaters={}, body="", headers={})
+        request = RouteRequest()
         assert get_secure_version_flag(request) is True
 
     @pytest.mark.parametrize(
         "flag_value", ["false", "FALSE", "FaLsE"], ids=["lowercase", "uppercase", "mixed_case"]
     )
     def test_parameter_false(self, flag_value: str) -> None:
-        request = RouteRequest(
-            query_paramaters={"is_secure_version_on": flag_value}, body="", headers={}
-        )
+        request = RouteRequest(query_paramaters={"is_secure_version_on": flag_value})
         assert get_secure_version_flag(request) is False
 
     @pytest.mark.parametrize(
         "flag_value", ["true", "TRUE", "TrUe"], ids=["lowercase", "uppercase", "mixed_case"]
     )
     def test_parameter_true(self, flag_value: str) -> None:
-        request = RouteRequest(
-            query_paramaters={"is_secure_version_on": flag_value}, body="", headers={}
-        )
+        request = RouteRequest(query_paramaters={"is_secure_version_on": flag_value})
         assert get_secure_version_flag(request) is True
 
 
 class TestGetHost:
     def test_secure_version_on(self) -> None:
-        request = RouteRequest(query_paramaters={}, body="", headers={})
+        request = RouteRequest()
         assert get_host(request, is_secure_version_on=True) == "http://localhost:8080"
 
     def test_missing_allow_origin(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        request = RouteRequest(query_paramaters={}, body="", headers={"host": "test-host.com"})
+        request = RouteRequest(headers={"host": "test-host.com"})
         monkeypatch.delenv("ALLOW_ORIGIN", raising=False)
         with pytest.raises(HttpException) as exc_info:
             get_host(request, is_secure_version_on=True)
@@ -116,12 +101,12 @@ class TestGetHost:
     def test_host_headers(
         self, headers: dict[str, str], expected_host: str, monkeypatch: pytest.MonkeyPatch
     ) -> None:
-        request = RouteRequest(query_paramaters={}, body="", headers=headers)
+        request = RouteRequest(headers=headers)
         monkeypatch.setenv("ALLOW_ORIGIN", expected_host)
         assert get_host(request, is_secure_version_on=False) == expected_host
 
     def test_missing_headers(self) -> None:
-        request = RouteRequest(query_paramaters={}, body="", headers={})
+        request = RouteRequest()
         with pytest.raises(HttpException) as exc_info:
             get_host(request, is_secure_version_on=False)
         assert exc_info.value.status_code == 400
@@ -160,11 +145,7 @@ class TestGenerateResetLink:
 
 class TestExtractTokenAndNewPassword:
     def test_valid_token_and_new_password(self) -> None:
-        request = RouteRequest(
-            query_paramaters={},
-            body='{"token": "test-token", "password": "new-password"}',
-            headers={},
-        )
+        request = RouteRequest(body={"token": "test-token", "password": "new-password"})
 
         token, new_password = extract_token_and_new_password(request)
 
@@ -174,14 +155,14 @@ class TestExtractTokenAndNewPassword:
     @pytest.mark.parametrize(
         "body",
         [
-            '{"password": "new-password"}',
-            '{"token": "test-token"}',
-            "{}",
+            {"password": "new-password"},
+            {"token": "test-token"},
+            {},
         ],
         ids=["missing_token", "missing_password", "missing_both"],
     )
     def test_missing_token(self, body: dict[str, Any]) -> None:
-        request = RouteRequest(query_paramaters={}, body=body, headers={})
+        request = RouteRequest(body=body)
 
         with pytest.raises(HttpException) as exc_info:
             extract_token_and_new_password(request)

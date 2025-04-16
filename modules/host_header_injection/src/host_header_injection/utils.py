@@ -1,4 +1,3 @@
-import json
 import os
 import re
 from datetime import datetime, timedelta, timezone
@@ -8,11 +7,7 @@ from core.api import HttpException, RouteRequest
 
 
 def get_email(request: RouteRequest) -> str:
-    try:
-        body = json.loads(request.body)
-    except json.JSONDecodeError:
-        raise HttpException(status_code=400, detail="Invalid JSON body")
-    email: str | None = body.get("email")
+    email: str | None = request.body.get("email")
     if not email or not re.match(r"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$", email):
         raise HttpException(status_code=400, detail="Invalid email")
     return email
@@ -48,12 +43,8 @@ def generate_reset_link(email: str, host: str) -> str:
 
 
 def extract_token_and_new_password(request: RouteRequest) -> tuple[str, str]:
-    try:
-        body = json.loads(request.body)
-    except json.JSONDecodeError:
-        raise HttpException(status_code=400, detail="Invalid JSON body")
-    token = body.get("token")
-    new_password = body.get("password")
+    token = request.body.get("token")
+    new_password = request.body.get("password")
     if not token or not new_password:
         raise HttpException(status_code=400, detail="Please provide token and new password")
     return token, new_password

@@ -1,5 +1,3 @@
-import json
-
 from core.api import (
     AuthorizerResponse,
     AuthorizerRoute,
@@ -27,9 +25,8 @@ def authorize(request: RouteRequest) -> AuthorizerResponse:
 
 
 def login(request: RouteRequest) -> RouteResponse:
-    body = json.loads(request.body)
-    username = body.get("username") or ""
-    password = body.get("password") or ""
+    username = request.body.get("username") or ""
+    password = request.body.get("password") or ""
     user = User.from_credentials(username, password)
     if user is None:
         return RouteResponse(status_code=401)
