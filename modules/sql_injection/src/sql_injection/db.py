@@ -1,16 +1,7 @@
-import os
-
-from peewee import CharField, Model, SqliteDatabase
-
-db = SqliteDatabase(os.environ.get("DB_PATH"))
+from core.db import BaseDatabaseModel, CharField
 
 
-class BaseModel(Model):
-    class Meta:
-        database: SqliteDatabase = db
-
-
-class ParcelStore(BaseModel):
+class ParcelStore(BaseDatabaseModel):
     name: CharField = CharField(max_length=64)
     address: CharField = CharField(max_length=64)
     opening_hours: CharField = CharField(max_length=64)

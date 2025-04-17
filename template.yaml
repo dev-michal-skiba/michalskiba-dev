@@ -18,24 +18,38 @@ Parameters:
 Mappings:
   EnvVariables:
     Local:
+      AllowOrigin: http://localhost:8080
       CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax; Path=/api/demo"
     Production:
+      AllowOrigin: https://www.michalskiba.dev
       CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/api/demo"
 
 Resources:
+  Core:
+    Type: AWS::Serverless::LayerVersion
+    Properties:
+      LayerName: core
+      ContentUri: ./modules/core/src
+      CompatibleRuntimes:
+        - python3.12
+    Metadata:
+      BuildMethod: python3.12
+
   SqlInjection:
     Type: AWS::Serverless::Function
     Properties:
       Runtime: python3.12
       CodeUri: ./modules/sql_injection/src
       Handler: sql_injection.lambda_function.lambda_handler
+      Layers:
+        - !Ref Core
       Events:
         Api:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
-            Method: GET
-            Path: /api/demo/sql-injection
+            Method: ANY
+            Path: /api/demo/sql-injection/{proxy+}
       Environment:
         Variables:
           DB_PATH: sql_injection/data.db
@@ -46,19 +60,15 @@ Resources:
       CodeUri: ./modules/auth/src
       Handler: auth.lambda_function.lambda_handler
       MemorySize: 512
+      Layers:
+        - !Ref Core
       Events:
-        LoginApi:
+        Api:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
-            Method: POST
-            Path: /api/demo/auth/login
-        LogoutApi:
-          Type: HttpApi
-          Properties:
-            ApiId: !Ref Api
-            Method: POST
-            Path: /api/demo/auth/logout
+            Method: ANY
+            Path: /api/demo/auth/{proxy+}
       Environment:
         Variables:
           DB_PATH: auth/data.db
@@ -73,13 +83,15 @@ Resources:
       Runtime: python3.12
       CodeUri: ./modules/web_parameter_tampering/src
       Handler: web_parameter_tampering.lambda_function.lambda_handler
+      Layers:
+        - !Ref Core
       Events:
         Api:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
             Method: GET
-            Path: /api/demo/web-parameter-tampering
+            Path: /api/demo/web-parameter-tampering/{proxy+}
             Auth:
               Authorizer: CustomAuthorizer
       Environment:
@@ -91,23 +103,23 @@ Resources:
       Runtime: python3.12
       CodeUri: ./modules/host_header_injection/src
       Handler: host_header_injection.lambda_function.lambda_handler
+      Layers:
+        - !Ref Core
       Events:
-        PasswordResetInitiateApi:
+        Api:
           Type: HttpApi
           Properties:
             ApiId: !Ref Api
-            Method: POST
-            Path: /api/demo/host-header-injection/password-reset/initiate
-        PasswordResetCompleteApi:
-          Type: HttpApi
-          Properties:
-            ApiId: !Ref Api
-            Method: POST
-            Path: /api/demo/host-header-injection/password-reset/complete
+            Method: ANY
+            Path: /api/demo/host-header-injection/{proxy+}
       Environment:
         Variables:
           SECRET_KEY: !Ref HostHeaderInjectionSecretKey
           ENVIRONMENT: !Ref Environment
+          ALLOW_ORIGIN: !FindInMap
+            - EnvVariables
+            - !Ref Environment
+            - AllowOrigin
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:
