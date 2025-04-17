@@ -12,7 +12,7 @@ class TestPasswordResetInitiate:
         event = {
             "body": json.dumps({"email": "test@example.com"}),
             "queryStringParameters": {"is_secure_version_on": "true"},
-            "headers": {"Host": "test-host.com", "X-Forwarded-Host": "evil-host.com"},
+            "headers": {"Origin": "https://test-host.com", "X-Forwarded-Host": "evil-host.com"},
             "requestContext": {
                 "http": {
                     "method": "POST",
@@ -33,7 +33,7 @@ class TestPasswordResetInitiate:
         event = {
             "body": json.dumps({"email": "test@example.com"}),
             "queryStringParameters": {"is_secure_version_on": "false"},
-            "headers": {"Host": "test-host.com", "X-Forwarded-Host": "evil-host.com"},
+            "headers": {"Origin": "https://test-host.com", "X-Forwarded-Host": "evil-host.com"},
             "requestContext": {
                 "http": {
                     "method": "POST",

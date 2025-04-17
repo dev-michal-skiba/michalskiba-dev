@@ -24,9 +24,13 @@ def get_host(request: RouteRequest, is_secure_version_on: bool = False) -> str:
         if not allow_origin:
             raise HttpException(status_code=500, detail="Internal server error")
         return allow_origin
-    host: str | None = request.headers.get("x-forwarded-host") or request.headers.get("host")
+    # I'm using origin instead of host header because the host header injection is not possible with AWS Cloudfront + AWS API gateway
+    # Host header is filled with AWS API gateway domain name instead of AWS Cloudfront domain name, I think its acceptable for the demo purpose
+    host: str | None = request.headers.get("x-forwarded-host") or request.headers.get("origin")
     if not host:
         raise HttpException(status_code=400, detail="Invalid host header")
+    if host.startswith("http"):
+        host = host.split("://")[1]
     environment = os.environ.get("ENVIRONMENT", "Production").lower()
     protocol = "http" if environment == "local" else "https"
 
