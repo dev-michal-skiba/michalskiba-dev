@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if [ ! -d "./venv" ]; then
+    python3.12 -m venv venv
+    if [ $? -ne 0 ]; then
+        echo "Failed to create virtual environment. Make sure Python 3.12 is installed."
+        exit 1
+    fi
+fi
+
+source ./venv/bin/activate
+
+pip install --upgrade pip
+pip install -r requirements.bin.txt

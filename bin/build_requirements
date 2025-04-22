@@ -1,0 +1,13 @@
+#!/bin/bash
+
+source ./venv/bin/activate
+
+pip-compile --generate-hashes --allow-unsafe --upgrade--output-file=requirements.bin.txt requirements.bin.in
+
+pip-compile --generate-hashes --upgrade --output-file=requirements.test.txt requirements.test.in
+
+find ./modules -type f -path "*/src/requirements.in" | while read -r req_file; do
+    module_dir=$(dirname $(dirname "$req_file"))
+    output_file="$module_dir/src/requirements.txt"
+    pip-compile --generate-hashes --upgrade --output-file="$output_file" "$req_file"
+done
