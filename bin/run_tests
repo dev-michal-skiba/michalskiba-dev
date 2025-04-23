@@ -1,6 +1,21 @@
 #!/bin/bash
 
-env_files=($(find ./modules -type f -path "*/.env.test" | sort))
+modules=("$@")
+
+if [ ${#modules[@]} -eq 0 ]; then
+  env_files=($(find ./modules -type f -path "*/.env.test" | sort))
+else
+  env_files=()
+  for module in "${modules[@]}"; do
+    if [ -f "./modules/$module/.env.test" ]; then
+      env_files+=("./modules/$module/.env.test")
+    else
+      echo -e "\033[0;91mModule '$module' not found or missing .env.test file\033[0m"
+      exit 1
+    fi
+  done
+fi
+
 for env_file in "${env_files[@]}"; do
   source "$env_file"
   module_name=$(echo "$env_file" | sed -n 's|^./modules/\([^/]*\)/.*|\1|p')
