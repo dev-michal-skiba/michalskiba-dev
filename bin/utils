@@ -1,0 +1,21 @@
+#!/bin/bash
+
+get_module_test_env_files() {
+    local modules=("$@")
+    local test_env_files=()
+
+    if [ ${#modules[@]} -eq 0 ]; then
+        test_env_files=($(find ./modules -type f -path "*/.env.test" | sort))
+    else
+        for module in "${modules[@]}"; do
+            if [ -f "./modules/$module/.env.test" ]; then
+                test_env_files+=("./modules/$module/.env.test")
+            else
+                echo -e "\033[0;91mModule '$module' not found or missing .env.test file\033[0m"
+                exit 1
+            fi
+        done
+    fi
+
+    echo "${test_env_files[@]}"
+}
