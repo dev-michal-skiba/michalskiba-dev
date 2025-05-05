@@ -34,7 +34,6 @@ Resources:
         - python3.12
     Metadata:
       BuildMethod: python3.12
-
   SqlInjection:
     Type: AWS::Serverless::Function
     Properties:
@@ -133,3 +132,8 @@ Resources:
               Fn::GetAtt:
                 - Auth
                 - Arn
+  StaticFilesBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Sub '${AWS::StackName}-static-files'
