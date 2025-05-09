@@ -1,0 +1,31 @@
+#!/bin/bash
+
+./bin/init
+source ./venv/bin/activate
+source .env.prod
+
+export PROFILE="${SSO_ROLE_NAME}-${ACCOUNT_ID}"
+
+if ! aws configure list-profiles | grep -q "^${PROFILE}$"; then
+    echo "Profile ${PROFILE} not found. Creating..."
+    aws configure set sso_start_url "${SSO_START_URL}" --profile ${PROFILE}
+    aws configure set sso_region "${REGION}" --profile ${PROFILE}
+    aws configure set sso_account_id "${ACCOUNT_ID}" --profile ${PROFILE}
+    aws configure set sso_role_name "${SSO_ROLE_NAME}" --profile ${PROFILE}
+    aws configure set output json --profile ${PROFILE}
+fi
+
+if ! aws sts get-caller-identity --profile ${PROFILE} &>/dev/null; then
+    aws sso login --profile ${PROFILE}
+fi
+
+envsubst < samconfig.toml > samconfig.prod.toml
+
+# Deploy infrastructure with API
+AWS_PROFILE=${PROFILE} sam deploy --config-file samconfig.prod.toml
+
+BUCKET_NAME=$(AWS_PROFILE=${PROFILE} aws cloudformation describe-stacks --stack-name ${STACK_NAME} --region ${REGION} --query "Stacks[0].Outputs[?OutputKey=='StaticFilesBucketName'].OutputValue" --output text)
+CLOUDFRONT_DISTRIBUTION_ID=$(AWS_PROFILE=${PROFILE} aws cloudformation describe-stacks --stack-name ${STACK_NAME} --region ${REGION} --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue" --output text)
+
+# Deploy frontend
+cd modules/frontend/ && AWS_PROFILE=${PROFILE} BUCKET_NAME=${BUCKET_NAME} CLOUDFRONT_DISTRIBUTION_ID=${CLOUDFRONT_DISTRIBUTION_ID} python3 bin/deploy.py

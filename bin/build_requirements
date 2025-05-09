@@ -2,7 +2,7 @@
 
 source ./venv/bin/activate
 
-pip-compile --generate-hashes --allow-unsafe --upgrade--output-file=requirements.bin.txt requirements.bin.in
+pip-compile --generate-hashes --allow-unsafe --upgrade --output-file=requirements.bin.txt requirements.bin.in
 
 pip-compile --generate-hashes --upgrade --output-file=requirements.test.txt requirements.test.in
 
