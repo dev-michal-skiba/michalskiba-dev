@@ -10,16 +10,16 @@ parameter_overrides=[
 ]
 
 [default.validate.parameters]
-profile="michalskiba-dev-infra"
+profile="${PROFILE}"
 lint=true
 
 [default.build.parameters]
 use_container="true"
 
 [default.deploy.parameters]
-stack_name="michalskiba-dev"
+stack_name="${STACK_NAME}",
 resolve_s3=true
-region="eu-central-1"
+region="${REGION}"
 capabilities=[
   "CAPABILITY_IAM",
 ]

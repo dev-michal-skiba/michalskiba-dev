@@ -197,3 +197,15 @@ Resources:
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4
+
+Outputs:
+  StaticFilesBucketName:
+    Description: Name of the S3 bucket for static files
+    Value: !Ref StaticFilesBucket
+    Export:
+      Name: StaticFilesBucketName
+  CloudFrontDistributionId:
+    Description: ID of the CloudFront distribution
+    Value: !Ref CloudFrontDistribution
+    Export:
+      Name: CloudFrontDistributionId
