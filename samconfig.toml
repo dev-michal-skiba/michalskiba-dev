@@ -17,7 +17,7 @@ lint=true
 use_container="true"
 
 [default.deploy.parameters]
-stack_name="${STACK_NAME}",
+stack_name="${STACK_NAME}"
 resolve_s3=true
 region="${REGION}"
 capabilities=[

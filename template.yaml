@@ -180,6 +180,9 @@ Resources:
           MinTTL: 0
           DefaultTTL: 86400
           MaxTTL: 31536000
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt AddIndexHtmlFunction.FunctionARN
         HttpVersion: 'http2'
         PriceClass: PriceClass_100
         ViewerCertificate:
@@ -197,6 +200,25 @@ Resources:
         OriginAccessControlOriginType: s3
         SigningBehavior: always
         SigningProtocol: sigv4
+  AddIndexHtmlFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub '${AWS::StackName}-add-index-html'
+      FunctionCode: |
+        function handler(event) {
+            var request = event.request;
+            var uri = request.uri;
+            if (uri.endsWith('/')) {
+                request.uri += 'index.html';
+            } else if (!uri.includes('.')) {
+                request.uri += '/index.html';
+            }
+            return request;
+        }
+      AutoPublish: true
+      FunctionConfig:
+        Comment: !Sub '${AWS::StackName}: Add index.html to the request if it is missing'
+        Runtime: cloudfront-js-2.0
 
 Outputs:
   StaticFilesBucketName:
