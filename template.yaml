@@ -161,6 +161,12 @@ Resources:
             Id: S3Origin
             OriginAccessControlId: !Ref OriginAccessControl
             S3OriginConfig: {}
+          - DomainName: !Sub '${Api}.execute-api.${AWS::Region}.amazonaws.com'
+            Id: ApiOrigin
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols:
+                - TLSv1.2
         Enabled: true
         DefaultRootObject: index.html
         DefaultCacheBehavior:
@@ -170,19 +176,23 @@ Resources:
           AllowedMethods:
             - GET
             - HEAD
-          CachedMethods:
-            - GET
-            - HEAD
-          ForwardedValues:
-            QueryString: false
-            Cookies:
-              Forward: none
-          MinTTL: 0
-          DefaultTTL: 86400
-          MaxTTL: 31536000
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # Managed-CachingOptimized
           FunctionAssociations:
             - EventType: viewer-request
               FunctionARN: !GetAtt AddIndexHtmlFunction.FunctionARN
+        CacheBehaviors:
+          - PathPattern: '/api/*'
+            TargetOriginId: ApiOrigin
+            ViewerProtocolPolicy: https-only
+            AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad  # Managed-CachingDisabled
         HttpVersion: 'http2'
         PriceClass: PriceClass_100
         ViewerCertificate:
