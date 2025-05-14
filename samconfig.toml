@@ -7,6 +7,8 @@ parameter_overrides=[
   "Environment=Local",
   "AuthSecretKey=local-secret-key",
   "HostHeaderInjectionSecretKey=local-secret-key",
+  "DomainName=localhost:8080",
+  "Protocol=http",
 ]
 
 [default.validate.parameters]
@@ -27,4 +29,6 @@ parameter_overrides=[
   "Environment=Production",
   "AuthSecretKey=${AUTH_SECRET_KEY}",
   "HostHeaderInjectionSecretKey=${HOST_HEADER_INJECTION_SECRET_KEY}",
+  "DomainName=${DOMAIN_NAME}",
+  "CertificateArn=${CERTIFICATE_ARN}",
 ]

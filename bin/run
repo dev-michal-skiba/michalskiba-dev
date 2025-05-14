@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source ./bin/sso_login
+
 cleanup() {
   if [ -n "$SAM_PID" ]; then
     echo "Stopping SAM local API..."
@@ -17,8 +19,10 @@ cleanup() {
 
 trap cleanup SIGINT SIGTERM EXIT
 
+echo "Profile: ${PROFILE}"
+
 (
-  sam local start-api &
+  sam local start-api --profile ${PROFILE} &
   SAM_PID=$!
 
   exec docker compose up --abort-on-container-exit

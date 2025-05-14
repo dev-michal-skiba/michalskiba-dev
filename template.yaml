@@ -14,14 +14,23 @@ Parameters:
   HostHeaderInjectionSecretKey:
     Type: String
     NoEcho: true
+  Protocol:
+    Type: String
+    AllowedValues:
+      - http
+      - https
+    Default: https
+  DomainName:
+    Type: String
+  CertificateArn:
+    Type: String
+    Default: ""
 
 Mappings:
   EnvVariables:
     Local:
-      AllowOrigin: http://localhost:8080
       CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax; Path=/api/demo"
     Production:
-      AllowOrigin: https://www.michalskiba.dev
       CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/api/demo"
 
 Resources:
@@ -115,10 +124,7 @@ Resources:
         Variables:
           SECRET_KEY: !Ref HostHeaderInjectionSecretKey
           ENVIRONMENT: !Ref Environment
-          ALLOW_ORIGIN: !FindInMap
-            - EnvVariables
-            - !Ref Environment
-            - AllowOrigin
+          BASE_URL: !Sub ${Protocol}://${DomainName}
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:
@@ -169,6 +175,8 @@ Resources:
                 - TLSv1.2
         Enabled: true
         DefaultRootObject: index.html
+        Aliases:
+          - !Ref DomainName
         DefaultCacheBehavior:
           Compress: true
           TargetOriginId: S3Origin
@@ -196,7 +204,9 @@ Resources:
         HttpVersion: 'http2'
         PriceClass: PriceClass_100
         ViewerCertificate:
-          CloudFrontDefaultCertificate: true
+          AcmCertificateArn: !Ref CertificateArn
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
       Tags:
         - Key: Name
           Value: michalskiba-dev
