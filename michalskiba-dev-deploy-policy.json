@@ -1,0 +1,107 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "cloudformation:*",
+            "Resource": [
+                "arn:aws:cloudformation:*:*:stack/michalskiba-dev/*",
+                "arn:aws:cloudformation:*:*:stackset/michalskiba-dev:*",
+                "arn:aws:cloudformation:*:*:stack/aws-sam-cli-managed-default/*",
+                "arn:aws:cloudformation:*:aws:transform/Serverless-2016-10-31"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": [
+                "arn:aws:s3:::aws-sam-cli-managed-*",
+                "arn:aws:s3:::aws-sam-cli-managed-*/*",
+                "arn:aws:s3:::michalskiba-dev-static-files",
+                "arn:aws:s3:::michalskiba-dev-static-files/*"
+            ]
+        },
+        {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "arn:aws:lambda:*:*:function:michalskiba-dev-*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "arn:aws:lambda:*:*:layer:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "*",
+            "Resource": "arn:aws:iam::*:role/*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "apigateway:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "cloudfront:*",
+            "Resource": "arn:aws:cloudfront::*:distribution/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/Name": "michalskiba-dev"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cloudfront:CreateDistribution",
+                "cloudfront:TagResource",
+                "cloudfront:ListDistributions",
+                "cloudfront:ListTagsForResource",
+                "cloudfront:CreateOriginAccessControl",
+                "cloudfront:DeleteOriginAccessControl",
+                "cloudfront:GetOriginAccessControl",
+                "cloudfront:UpdateOriginAccessControl",
+                "cloudfront:ListOriginAccessControls",
+                "cloudfront:CreateFunction",
+                "cloudfront:UpdateFunction",
+                "cloudfront:DeleteFunction",
+                "cloudfront:DescribeFunction",
+                "cloudfront:PublishFunction",
+                "cloudfront:GetFunction",
+                "cloudfront:ListFunctions",
+                "cloudfront:GetDistribution",
+                "cloudfront:UpdateDistribution"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "cloudfront:*",
+            "Resource": "arn:aws:cloudfront::*:origin-access-control/*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/Name": "michalskiba-dev"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "acm:RequestCertificate",
+                "acm:AddTagsToCertificate"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "acm:*",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "aws:ResourceTag/Name": "michalskiba-dev"
+                }
+            }
+        }
+    ]
+}
