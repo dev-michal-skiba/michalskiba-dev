@@ -14,14 +14,23 @@ Parameters:
   HostHeaderInjectionSecretKey:
     Type: String
     NoEcho: true
+  Protocol:
+    Type: String
+    AllowedValues:
+      - http
+      - https
+    Default: https
+  DomainName:
+    Type: String
+  CertificateArn:
+    Type: String
+    Default: ""
 
 Mappings:
   EnvVariables:
     Local:
-      AllowOrigin: http://localhost:8080
       CookieTemplate: "access_token={}; HttpOnly; SameSite=Lax; Path=/api/demo"
     Production:
-      AllowOrigin: https://www.michalskiba.dev
       CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/api/demo"
 
 Resources:
@@ -34,7 +43,6 @@ Resources:
         - python3.12
     Metadata:
       BuildMethod: python3.12
-
   SqlInjection:
     Type: AWS::Serverless::Function
     Properties:
@@ -116,10 +124,7 @@ Resources:
         Variables:
           SECRET_KEY: !Ref HostHeaderInjectionSecretKey
           ENVIRONMENT: !Ref Environment
-          ALLOW_ORIGIN: !FindInMap
-            - EnvVariables
-            - !Ref Environment
-            - AllowOrigin
+          BASE_URL: !Sub ${Protocol}://${DomainName}
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:
@@ -133,3 +138,117 @@ Resources:
               Fn::GetAtt:
                 - Auth
                 - Arn
+  StaticFilesBucket:
+    Type: AWS::S3::Bucket
+    DeletionPolicy: Retain
+    Properties:
+      BucketName: !Sub '${AWS::StackName}-static-files'
+  StaticFilesBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref 'StaticFilesBucket'
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Action: s3:GetObject
+            Principal:
+              Service: 'cloudfront.amazonaws.com'
+            Effect: Allow
+            Resource: !Sub '${StaticFilesBucket.Arn}/*'
+            Condition:
+              StringEquals:
+                'AWS:SourceArn': !Sub 'arn:aws:cloudfront::${AWS::AccountId}:distribution/${CloudFrontDistribution}'
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - DomainName: !GetAtt StaticFilesBucket.DomainName
+            Id: S3Origin
+            OriginAccessControlId: !Ref OriginAccessControl
+            S3OriginConfig: {}
+          - DomainName: !Sub '${Api}.execute-api.${AWS::Region}.amazonaws.com'
+            Id: ApiOrigin
+            CustomOriginConfig:
+              OriginProtocolPolicy: https-only
+              OriginSSLProtocols:
+                - TLSv1.2
+        Enabled: true
+        DefaultRootObject: index.html
+        Aliases:
+          - !Ref DomainName
+        DefaultCacheBehavior:
+          Compress: true
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachePolicyId: 658327ea-f89d-4fab-a63d-7e88639e58f6  # Managed-CachingOptimized
+          FunctionAssociations:
+            - EventType: viewer-request
+              FunctionARN: !GetAtt AddIndexHtmlFunction.FunctionARN
+        CacheBehaviors:
+          - PathPattern: '/api/*'
+            TargetOriginId: ApiOrigin
+            ViewerProtocolPolicy: https-only
+            AllowedMethods:
+              - DELETE
+              - GET
+              - HEAD
+              - OPTIONS
+              - PATCH
+              - POST
+              - PUT
+            CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad  # Managed-CachingDisabled
+            OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac  # Managed-AllViewerExceptHostHeader
+        HttpVersion: 'http2'
+        PriceClass: PriceClass_100
+        ViewerCertificate:
+          AcmCertificateArn: !Ref CertificateArn
+          SslSupportMethod: sni-only
+          MinimumProtocolVersion: TLSv1.2_2021
+      Tags:
+        - Key: Name
+          Value: michalskiba-dev
+  OriginAccessControl:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Name: !Sub
+          - michalskiba-dev-static-site-${guid}
+          - guid: !Select [2, !Split ['/', !Ref 'AWS::StackId']]
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+  AddIndexHtmlFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub '${AWS::StackName}-add-index-html'
+      FunctionCode: |
+        function handler(event) {
+            var request = event.request;
+            var uri = request.uri;
+            if (uri.endsWith('/')) {
+                request.uri += 'index.html';
+            } else if (!uri.includes('.')) {
+                request.uri += '/index.html';
+            }
+            return request;
+        }
+      AutoPublish: true
+      FunctionConfig:
+        Comment: !Sub '${AWS::StackName}: Add index.html to the request if it is missing'
+        Runtime: cloudfront-js-2.0
+
+Outputs:
+  StaticFilesBucketName:
+    Description: Name of the S3 bucket for static files
+    Value: !Ref StaticFilesBucket
+    Export:
+      Name: StaticFilesBucketName
+  CloudFrontDistributionId:
+    Description: ID of the CloudFront distribution
+    Value: !Ref CloudFrontDistribution
+    Export:
+      Name: CloudFrontDistributionId

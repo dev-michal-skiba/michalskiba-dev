@@ -1,0 +1,17 @@
+#!/bin/bash
+
+source .env.prod
+export PROFILE="${SSO_ROLE_NAME}-${ACCOUNT_ID}"
+
+if ! aws configure list-profiles | grep -q "^${PROFILE}$"; then
+    echo "Profile ${PROFILE} not found. Creating..."
+    aws configure set sso_start_url "${SSO_START_URL}" --profile ${PROFILE}
+    aws configure set sso_region "${REGION}" --profile ${PROFILE}
+    aws configure set sso_account_id "${ACCOUNT_ID}" --profile ${PROFILE}
+    aws configure set sso_role_name "${SSO_ROLE_NAME}" --profile ${PROFILE}
+    aws configure set output json --profile ${PROFILE}
+fi
+
+if ! aws sts get-caller-identity --profile ${PROFILE} &>/dev/null; then
+    aws sso login --profile ${PROFILE}
+fi

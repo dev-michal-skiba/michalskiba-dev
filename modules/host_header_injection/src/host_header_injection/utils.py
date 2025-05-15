@@ -20,10 +20,10 @@ def get_secure_version_flag(request: RouteRequest) -> bool:
 
 def get_host(request: RouteRequest, is_secure_version_on: bool = False) -> str:
     if is_secure_version_on:
-        allow_origin = os.environ.get("ALLOW_ORIGIN")
-        if not allow_origin:
+        base_url = os.environ.get("BASE_URL")
+        if not base_url:
             raise HttpException(status_code=500, detail="Internal server error")
-        return allow_origin
+        return base_url
     # I'm using origin instead of host header because the host header injection is not possible with AWS Cloudfront + AWS API gateway
     # Host header is filled with AWS API gateway domain name instead of AWS Cloudfront domain name, I think its acceptable for the demo purpose
     host: str | None = request.headers.get("x-forwarded-host") or request.headers.get("origin")
