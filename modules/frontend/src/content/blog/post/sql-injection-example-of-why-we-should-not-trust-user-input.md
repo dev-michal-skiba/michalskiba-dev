@@ -16,7 +16,7 @@ SQL Injection attack works when we pass SQL query built with user input as a nor
 
 ## Introduction to demo scenario
 
-Let's leave theory behind and get our hands on real live example. Go to the [demo site](/demos/sql-injection/). It is a simple mockup site of fake carrier that provides user with view to search for parcel stores by address. The site itself is primitive, but what is most important it provides a way for user to input search query which is later used in SQL query to filter parcel stores. In the navbar you can also specify whether you want to use secure version of the application (with SQL Injection protection) or whether you want to use insecure version (without SQL Injection protection).
+Let's leave theory behind and get our hands on real live example. Go to the [demo site](/demo/sql-injection/). It is a simple mockup site of fake carrier that provides user with view to search for parcel stores by address. The site itself is primitive, but what is most important it provides a way for user to input search query which is later used in SQL query to filter parcel stores. In the navbar you can also specify whether you want to use secure version of the application (with SQL Injection protection) or whether you want to use insecure version (without SQL Injection protection).
 
 ## Exploiting SQL Injection vulnerability
 

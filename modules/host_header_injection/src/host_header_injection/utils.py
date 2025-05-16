@@ -20,10 +20,10 @@ def get_secure_version_flag(request: RouteRequest) -> bool:
 
 def get_host(request: RouteRequest, is_secure_version_on: bool = False) -> str:
     if is_secure_version_on:
-        base_url = os.environ.get("BASE_URL")
-        if not base_url:
+        domain = os.environ.get("DOMAIN")
+        if not domain:
             raise HttpException(status_code=500, detail="Internal server error")
-        return base_url
+        return domain
     # I'm using origin instead of host header because the host header injection is not possible with AWS Cloudfront + AWS API gateway
     # Host header is filled with AWS API gateway domain name instead of AWS Cloudfront domain name, I think its acceptable for the demo purpose
     host: str | None = request.headers.get("x-forwarded-host") or request.headers.get("origin")
@@ -43,7 +43,7 @@ def generate_reset_link(email: str, host: str) -> str:
     if not secret_key:
         raise HttpException(status_code=500, detail="Internal server error")
     token = jwt.encode({"email": email, "exp": expiry.timestamp()}, secret_key, algorithm="HS256")
-    return f"{host}/demos/host-header-injection/password-reset/complete/?token={token}"
+    return f"{host}/demo/host-header-injection/password-reset/complete/?token={token}"
 
 
 def extract_token_and_new_password(request: RouteRequest) -> tuple[str, str]:

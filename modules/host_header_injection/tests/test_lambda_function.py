@@ -25,7 +25,7 @@ class TestPasswordResetInitiate:
 
         assert response == {
             "statusCode": 200,
-            "body": '{"reset_link": "http://localhost:8080/demos/host-header-injection/password-reset/complete/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3MzY5NTA1MDAuMH0.u_Jq2ySry2eme_RQkktBJTsUZ0lBbcqNh4xA_-1Xcro"}',
+            "body": '{"reset_link": "http://localhost:8080/demo/host-header-injection/password-reset/complete/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3MzY5NTA1MDAuMH0.u_Jq2ySry2eme_RQkktBJTsUZ0lBbcqNh4xA_-1Xcro"}',
         }
 
     @freeze_time("2025-01-15 14:00:00")
@@ -46,7 +46,7 @@ class TestPasswordResetInitiate:
 
         assert response == {
             "statusCode": 200,
-            "body": '{"reset_link": "https://evil-host.com/demos/host-header-injection/password-reset/complete/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3MzY5NTA1MDAuMH0.u_Jq2ySry2eme_RQkktBJTsUZ0lBbcqNh4xA_-1Xcro"}',
+            "body": '{"reset_link": "https://evil-host.com/demo/host-header-injection/password-reset/complete/?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3RAZXhhbXBsZS5jb20iLCJleHAiOjE3MzY5NTA1MDAuMH0.u_Jq2ySry2eme_RQkktBJTsUZ0lBbcqNh4xA_-1Xcro"}',
         }
 
 

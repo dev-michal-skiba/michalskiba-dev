@@ -68,9 +68,9 @@ class TestGetHost:
         request = RouteRequest()
         assert get_host(request, is_secure_version_on=True) == "http://localhost:8080"
 
-    def test_missing_base_url(self, monkeypatch: pytest.MonkeyPatch) -> None:
+    def test_missing_domain(self, monkeypatch: pytest.MonkeyPatch) -> None:
         request = RouteRequest(headers={"origin": "https://test-host.com"})
-        monkeypatch.delenv("BASE_URL", raising=False)
+        monkeypatch.delenv("DOMAIN", raising=False)
         with pytest.raises(HttpException) as exc_info:
             get_host(request, is_secure_version_on=True)
         assert exc_info.value.status_code == 500
@@ -102,7 +102,7 @@ class TestGetHost:
         self, headers: dict[str, str], expected_host: str, monkeypatch: pytest.MonkeyPatch
     ) -> None:
         request = RouteRequest(headers=headers)
-        monkeypatch.setenv("BASE_URL", expected_host)
+        monkeypatch.setenv("DOMAIN", expected_host)
         assert get_host(request, is_secure_version_on=False) == expected_host
 
     def test_missing_headers(self) -> None:
@@ -130,7 +130,7 @@ class TestGenerateResetLink:
         assert expiry == datetime(2025, 1, 15, 14, 15, 0, tzinfo=timezone.utc)
         assert (
             reset_link
-            == f"{host}/demos/host-header-injection/password-reset/complete/?token={token}"
+            == f"{host}/demo/host-header-injection/password-reset/complete/?token={token}"
         )
 
     def test_missing_secret_key(self, monkeypatch: pytest.MonkeyPatch) -> None:
