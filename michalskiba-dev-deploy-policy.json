@@ -17,8 +17,8 @@
             "Resource": [
                 "arn:aws:s3:::aws-sam-cli-managed-*",
                 "arn:aws:s3:::aws-sam-cli-managed-*/*",
-                "arn:aws:s3:::michalskiba-dev-static-files",
-                "arn:aws:s3:::michalskiba-dev-static-files/*"
+                "arn:aws:s3:::michalskiba-dev-static",
+                "arn:aws:s3:::michalskiba-dev-static/*"
             ]
         },
         {
@@ -88,20 +88,14 @@
         {
             "Effect": "Allow",
             "Action": [
-                "acm:RequestCertificate",
-                "acm:AddTagsToCertificate"
+                "acm:RequestCertificate"
             ],
             "Resource": "*"
         },
         {
             "Effect": "Allow",
-            "Action": "acm:*",
-            "Resource": "*",
-            "Condition": {
-                "StringEquals": {
-                    "aws:ResourceTag/Name": "michalskiba-dev"
-                }
-            }
+            "Action": "route53:*",
+            "Resource": "*"
         }
     ]
 }

@@ -14,15 +14,12 @@ Parameters:
   HostHeaderInjectionSecretKey:
     Type: String
     NoEcho: true
-  Protocol:
+  Subdomain:
     Type: String
-    AllowedValues:
-      - http
-      - https
-    Default: https
-  DomainName:
+    Default: ""
+  Domain:
     Type: String
-  CertificateArn:
+  CertificateArn:  # Certificate must be created and validated manually in us-east-1
     Type: String
     Default: ""
 
@@ -124,7 +121,7 @@ Resources:
         Variables:
           SECRET_KEY: !Ref HostHeaderInjectionSecretKey
           ENVIRONMENT: !Ref Environment
-          BASE_URL: !Sub ${Protocol}://${DomainName}
+          DOMAIN: !Sub ${Domain}
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:
@@ -142,7 +139,7 @@ Resources:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
     Properties:
-      BucketName: !Sub '${AWS::StackName}-static-files'
+      BucketName: !Sub '${AWS::StackName}-static'
   StaticFilesBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:
@@ -176,7 +173,8 @@ Resources:
         Enabled: true
         DefaultRootObject: index.html
         Aliases:
-          - !Ref DomainName
+          - !Ref Domain
+          - !Sub "${Subdomain}.${Domain}"
         DefaultCacheBehavior:
           Compress: true
           TargetOriginId: S3Origin
@@ -240,6 +238,31 @@ Resources:
       FunctionConfig:
         Comment: !Sub '${AWS::StackName}: Add index.html to the request if it is missing'
         Runtime: cloudfront-js-2.0
+  HostedZone:
+    Type: AWS::Route53::HostedZone
+    Properties:
+      Name: !Ref Domain
+      HostedZoneConfig:
+        Comment: !Sub "Hosted zone for ${Domain}"
+  RootDomainRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Ref Domain
+      Type: A
+      AliasTarget:
+        DNSName: !GetAtt CloudFrontDistribution.DomainName
+        HostedZoneId: Z2FDTNDATAQYW2  # CloudFront's hosted zone ID (this is a constant value)
+        EvaluateTargetHealth: false
+  SubdomainRecord:
+    Type: AWS::Route53::RecordSet
+    Properties:
+      HostedZoneId: !Ref HostedZone
+      Name: !Sub "${Subdomain}.${Domain}"
+      Type: CNAME
+      TTL: 300
+      ResourceRecords:
+        - !GetAtt CloudFrontDistribution.DomainName
 
 Outputs:
   StaticFilesBucketName:

@@ -30,7 +30,7 @@ The demo application includes a "secure version" checkbox, allowing users to tog
 
 ## Demonstration
 
-The demo application provides a hands-on experience of both insecure and secure methods for handling password reset links. By toggling the "secure version" checkbox in the upper right corner of the demo interface, you can observe the differences in behavior. Explore the demo and see these scenarios in action at the [Host Header Injection Demo](/demos/host-header-injection/password-reset/initiate/)
+The demo application provides a hands-on experience of both insecure and secure methods for handling password reset links. By toggling the "secure version" checkbox in the upper right corner of the demo interface, you can observe the differences in behavior. Explore the demo and see these scenarios in action at the [Host Header Injection Demo](/demo/host-header-injection/password-reset/initiate/)
 
 ### Insecure Scenario
 

@@ -16,7 +16,7 @@ Let's leave theory behind and get our hands on real live example. Imagine a site
 
 ## Exploiting Web Parameter Tampering vulnerability
 
-Go to the [demo site](/demos/web-parameter-tampering/press/), by default you will start with secure version on. Please log in to press portal either as a victim (username: *victim*, password: *Victim1234!*) or a hacker (username: *hacker*, password: *Hacker1234!*). No matter as who you are logged in, you will see the page with press application: approved for the victim with the accreditation number and waiting application for the hacker.
+Go to the [demo site](/demo/web-parameter-tampering/press/), by default you will start with secure version on. Please log in to press portal either as a victim (username: *victim*, password: *Victim1234!*) or a hacker (username: *hacker*, password: *Hacker1234!*). No matter as who you are logged in, you will see the page with press application: approved for the victim with the accreditation number and waiting application for the hacker.
 
 Please notice, in the network tab of the browser developer tools, that in secure version of the demo site, the request does not contain any user identifier in GET url. When you switch security off, you will see that the username is present in the url. **That is huge security threat**. It implies that basically anyone can try different user's names and try to steal accreditation of the other press organization.
 
