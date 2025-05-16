@@ -66,7 +66,7 @@ class TestGetSecureVersionFlag:
 class TestGetHost:
     def test_secure_version_on(self) -> None:
         request = RouteRequest()
-        assert get_host(request, is_secure_version_on=True) == "http://localhost:8080"
+        assert get_host(request, is_secure_version_on=True) == "https://localhost:8080"
 
     def test_missing_domain(self, monkeypatch: pytest.MonkeyPatch) -> None:
         request = RouteRequest(headers={"origin": "https://test-host.com"})
