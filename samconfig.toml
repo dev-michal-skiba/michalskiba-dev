@@ -7,7 +7,7 @@ parameter_overrides=[
   "Environment=Local",
   "AuthSecretKey=local-secret-key",
   "HostHeaderInjectionSecretKey=local-secret-key",
-  "DomainName=localhost:8080",
+  "Domain=localhost:8080",
 ]
 
 [default.validate.parameters]

@@ -1,0 +1,11 @@
+{
+    "name": "frontend",
+    "version": "1.0.0",
+    "type": "module",
+    "dependencies": {
+        "eslint": "latest",
+        "eslint-plugin-no-unsanitized": "latest",
+        "eslint-plugin-html": "latest",
+        "globals": "latest"
+    }
+}

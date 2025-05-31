@@ -1,15 +1,8 @@
 #!/bin/bash
 
-source "$(dirname "$0")/utils"
-
-modules=("$@")
-env_files=($(get_module_test_env_files "${modules[@]}"))
-
-for env_file in "${env_files[@]}"; do
-  source "$env_file"
-  module_name=$(echo "$env_file" | sed -n 's|^./modules/\([^/]*\)/.*|\1|p')
-  echo -e "\n\033[0;94m==== $MODULE_NAME Tests ====\033[0m\n"
-  bash_command="isort $module_name && "
+run_api_lint_checks() {
+  local module_name=$1
+  local bash_command="isort $module_name && "
   bash_command="$bash_command echo -e '\033[0;32mIsort check succeeded\033[0m' && "
   bash_command="$bash_command black $module_name && "
   bash_command="$bash_command echo -e '\033[0;32mBlack check succeeded\033[0m' && "
@@ -18,4 +11,25 @@ for env_file in "${env_files[@]}"; do
   bash_command="$bash_command mypy $module_name && "
   bash_command="$bash_command echo -e '\033[0;32mMypy check succeeded\033[0m'"
   docker compose --file test.docker-compose.yml run --rm api_test bash -c "$bash_command" || exit $?
+}
+
+run_frontend_lint_checks() {
+  local module_name=$1
+  docker compose --file test.docker-compose.yml run --rm frontend_test npx eslint ./src/themes/ || exit $?
+}
+
+source "$(dirname "$0")/utils"
+
+modules=("$@")
+env_files=($(get_module_test_env_files "${modules[@]}"))
+
+for env_file in "${env_files[@]}"; do
+  source "$env_file"
+  module_name=$(echo "$env_file" | sed -n 's|^./modules/\([^/]*\)/.*|\1|p')
+  echo -e "\n\033[0;94m==== $NAME Tests ====\033[0m\n"
+  if [[ "$TYPE" == "api" ]]; then
+    run_api_lint_checks "$module_name"
+  elif [[ "$TYPE" == "frontend" ]]; then
+    run_frontend_lint_checks "$module_name"
+  fi
 done

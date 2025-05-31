@@ -121,7 +121,7 @@ Resources:
         Variables:
           SECRET_KEY: !Ref HostHeaderInjectionSecretKey
           ENVIRONMENT: !Ref Environment
-          DOMAIN: !Sub ${Domain}
+          DOMAIN: !Ref Domain
   Api:
     Type: AWS::Serverless::HttpApi
     Properties:
@@ -275,3 +275,8 @@ Outputs:
     Value: !Ref CloudFrontDistribution
     Export:
       Name: CloudFrontDistributionId
+  ApiUrl:
+    Description: URL of the API
+    Value: !Sub 'https://${Domain}/api'
+    Export:
+      Name: ApiUrl

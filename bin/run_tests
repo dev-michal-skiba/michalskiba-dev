@@ -1,5 +1,16 @@
 #!/bin/bash
 
+run_api_tests() {
+  local module_name=$1
+  local bash_command="$env_vars python -m pytest -vv --cov=$module_name/tests $module_name/tests && python -m coverage report"
+  docker compose --file test.docker-compose.yml run --rm api_test bash -c "$bash_command" || exit $?
+}
+
+run_frontend_tests() {
+  local module_name=$1
+  echo "Not implemented"
+}
+
 source "$(dirname "$0")/utils"
 
 modules=("$@")
@@ -13,7 +24,10 @@ for env_file in "${env_files[@]}"; do
     [[ $key =~ ^#.*$ || -z $key ]] && continue
     env_vars="$env_vars $key=$value"
   done < "$env_file"
-  bash_command="$env_vars python -m pytest -vv --cov=$module_name/tests $module_name/tests && python -m coverage report"
-  echo -e "\n\033[0;94m==== $MODULE_NAME Tests ====\033[0m\n"
-  docker compose --file test.docker-compose.yml run --rm api_test bash -c "$bash_command" || exit $?
+  echo -e "\n\033[0;94m==== $NAME Tests ====\033[0m\n"
+  if [[ "$TYPE" == "api" ]]; then
+    run_api_tests "$module_name"
+  elif [[ "$TYPE" == "frontend" ]]; then
+    run_frontend_tests "$module_name"
+  fi
 done

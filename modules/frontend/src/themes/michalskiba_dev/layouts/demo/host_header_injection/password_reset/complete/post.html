@@ -9,7 +9,7 @@
             <div class="row justify-content-center mt-5">
                 <div class="col-md-6">
                     <h2 class="text-center mb-4">Reset Your Password</h2>
-                    <form id="password-reset-form" onsubmit="event.preventDefault(); submitNewPassword()">
+                    <form id="password-reset-form">
                         <div class="mb-3">
                             <input type="password" class="form-control" id="new-password" required>
                         </div>
@@ -17,13 +17,12 @@
                             <p class="error mt-4" id="error-message"></p>
                         </div>
                         <div class="text-center">
-                            <button type="button" class="btn primary-button" onclick="submitNewPassword()">Reset Password</button>
+                            <button id="submit-password-reset-button" type="button" class="btn primary-button">Reset Password</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
         {{- partial "demo/host_header_injection/footer.html" .}}
-        {{- partial "demo/host_header_injection/scripts.html" .}}
     </body>
 </html>

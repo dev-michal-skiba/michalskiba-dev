@@ -1,4 +1,4 @@
-Repository for [michalskiba.dev](https://www.michalskiba.dev/) webpage which is a portfolio of Michał Skiba.
+Repository for [michalskiba.dev](https://michalskiba.dev/) webpage which is a portfolio of Michał Skiba.
 
 # How to run
 
