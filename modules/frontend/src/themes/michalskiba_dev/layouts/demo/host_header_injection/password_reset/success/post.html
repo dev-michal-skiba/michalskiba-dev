@@ -1,20 +1,20 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        {{- partial "head.html" .}}
-    </head>
-    <body>
-        {{- partial "demo/host_header_injection/header.html" .}}
-        <div class="container-lg">
-            <div class="row justify-content-center mt-5">
-                <div class="col-md-6">
-                    <h2 class="text-center mb-4">Password Reset Successful</h2>
-                    <div class="text-center">
-                        <p>Your password has been successfully reset</p>
-                    </div>
-                </div>
-            </div>
+  <head>
+    {{- partial "head.html" .}}
+  </head>
+  <body>
+    {{- partial "demo/host_header_injection/header.html" .}}
+    <div class="container-lg">
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+          <h2 class="text-center mb-4">Password Reset Successful</h2>
+          <div class="text-center">
+            <p>Your password has been successfully reset</p>
+          </div>
         </div>
-        {{- partial "demo/host_header_injection/footer.html" .}}
-    </body>
+      </div>
+    </div>
+    {{- partial "demo/host_header_injection/footer.html" .}}
+  </body>
 </html>

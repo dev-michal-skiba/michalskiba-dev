@@ -6,6 +6,7 @@
         "eslint": "latest",
         "eslint-plugin-no-unsanitized": "latest",
         "eslint-plugin-html": "latest",
-        "globals": "latest"
+        "globals": "latest",
+        "prettier": "latest"
     }
 }
