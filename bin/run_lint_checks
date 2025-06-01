@@ -10,11 +10,11 @@ run_api_lint_checks() {
   bash_command="$bash_command echo -e '\033[0;32mRuff check succeeded\033[0m' && "
   bash_command="$bash_command mypy $module_name && "
   bash_command="$bash_command echo -e '\033[0;32mMypy check succeeded\033[0m'"
-  docker compose --file test.docker-compose.yml run --rm api_test bash -c "$bash_command" || exit $?
+  docker compose --file docker-compose.test.yml run --rm test_api bash -c "$bash_command" || exit $?
 }
 
 run_frontend_lint_checks() {
-  local docker_run_command="docker compose --file test.docker-compose.yml run --rm frontend_test"
+  local docker_run_command="docker compose --file docker-compose.test.yml run --rm test_frontend"
   local file_path="./src/themes/michalskiba_dev"
   local prettier_paths="$file_path/static/ \
     $file_path/layouts/blog/ \

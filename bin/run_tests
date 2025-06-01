@@ -3,7 +3,7 @@
 run_api_tests() {
   local module_name=$1
   local bash_command="$env_vars python -m pytest -vv --cov=$module_name/tests $module_name/tests && python -m coverage report"
-  docker compose --file test.docker-compose.yml run --rm api_test bash -c "$bash_command" || exit $?
+  docker compose --file docker-compose.test.yml run --rm test_api bash -c "$bash_command" || exit $?
 }
 
 run_frontend_tests() {

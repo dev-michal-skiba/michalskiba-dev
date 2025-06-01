@@ -6,9 +6,9 @@ if [ ${#modules[@]} -eq 0 ]; then
 fi
 
 if [[ " ${modules[@]} " =~ " api " ]]; then
-    docker build --tag michalskiba_dev_api_test --file test.api.dockerfile ./
+    docker build --tag michalskiba_dev_test_api --file dockerfile.test.api ./
 fi
 
 if [[ " ${modules[@]} " =~ " frontend " ]]; then
-    docker build --tag michalskiba_dev_frontend_test --file test.frontend.dockerfile ./
+    docker build --tag michalskiba_dev_test_frontend --file dockerfile.test.frontend ./
 fi
