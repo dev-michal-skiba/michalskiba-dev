@@ -139,7 +139,7 @@ Resources:
     Type: AWS::S3::Bucket
     DeletionPolicy: Retain
     Properties:
-      BucketName: !Sub '${AWS::StackName}-static'
+      BucketName: !Sub '${AWS::StackName}-static-${AWS::AccountId}-${AWS::Region}'
   StaticFilesBucketPolicy:
     Type: AWS::S3::BucketPolicy
     Properties:

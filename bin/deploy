@@ -7,8 +7,13 @@ source .env.prod
 
 envsubst < samconfig.toml > samconfig.prod.toml
 
+modules=("$@")
+if [ ${#modules[@]} -eq 0 ]; then
+    modules=("sam" "frontend")
+fi
+
 # Deploy infrastructure with API
-if [[ "$@" =~ "sam" ]]; then
+if [[ " ${modules[@]} " =~ " sam " ]]; then
     AWS_PROFILE=${PROFILE} sam deploy --config-file samconfig.prod.toml
 
     if [ $? -ne 0 ]; then
@@ -24,7 +29,7 @@ CLOUDFRONT_DISTRIBUTION_ID=$(AWS_PROFILE=${PROFILE} aws cloudformation describe-
 API_URL=$(AWS_PROFILE=${PROFILE} aws cloudformation describe-stacks --stack-name ${STACK_NAME} --region ${REGION} --query "Stacks[0].Outputs[?OutputKey=='ApiUrl'].OutputValue" --output text)
 
 # Deploy frontend
-if [[ "$@" =~ "frontend" ]]; then
+if [[ " ${modules[@]} " =~ " frontend " ]]; then
     cd modules/frontend/ && AWS_PROFILE=${PROFILE} BUCKET_NAME=${BUCKET_NAME} CLOUDFRONT_DISTRIBUTION_ID=${CLOUDFRONT_DISTRIBUTION_ID} API_URL=${API_URL} python3 bin/deploy.py
 
     if [ $? -ne 0 ]; then
