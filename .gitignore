@@ -5,4 +5,5 @@ venv/
 .aws-sam
 **/.pytest_cache
 .env.prod
+.env.sso
 samconfig.prod.toml

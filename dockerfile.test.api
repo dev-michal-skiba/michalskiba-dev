@@ -11,7 +11,7 @@ COPY ./requirements.test.txt /code/requirements.test.txt
 RUN pip install -r /code/requirements.test.txt
 
 RUN for module in $(find /code -maxdepth 1 -mindepth 1 -type d -exec basename {} \; | grep -v '^[.]'); do \
-    if [ -f "/code/$module/.env.test" ]; then \
+    if [ -f "/code/$module/.env.test" ] && [ "$module" != "frontend" ]; then \
         echo "Processing module: $module" && \
         pip install -e "/code/$module/src/" && \
         ([ -f "/code/$module/src/requirements.txt" ] && pip install -r "/code/$module/src/requirements.txt" || echo "No requirements.txt found for $module") && \

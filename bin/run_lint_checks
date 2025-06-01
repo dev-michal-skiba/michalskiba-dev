@@ -1,5 +1,32 @@
 #!/bin/bash
 
+run_api_lint_checks() {
+  local module_name=$1
+  local bash_command="isort $module_name && "
+  bash_command="$bash_command echo -e '\033[0;32mIsort check succeeded\033[0m' && "
+  bash_command="$bash_command black $module_name && "
+  bash_command="$bash_command echo -e '\033[0;32mBlack check succeeded\033[0m' && "
+  bash_command="$bash_command ruff check --fix --exclude lib $module_name && "
+  bash_command="$bash_command echo -e '\033[0;32mRuff check succeeded\033[0m' && "
+  bash_command="$bash_command mypy $module_name && "
+  bash_command="$bash_command echo -e '\033[0;32mMypy check succeeded\033[0m'"
+  docker compose --file docker-compose.test.yml run --rm test_api bash -c "$bash_command" || exit $?
+}
+
+run_frontend_lint_checks() {
+  local docker_run_command="docker compose --file docker-compose.test.yml run --rm test_frontend"
+  local file_path="./src/themes/michalskiba_dev"
+  local prettier_paths="$file_path/static/ \
+    $file_path/layouts/blog/ \
+    $file_path/layouts/demo/ \
+    $file_path/layouts/partials/ \
+    $file_path/layouts/root/"
+  $docker_run_command npx prettier --check --write $prettier_paths || exit $?
+  echo -e "\033[0;32mPrettier check succeeded\033[0m"
+  $docker_run_command npx eslint $file_path || exit $?
+  echo -e "\033[0;32mESLint check succeeded\033[0m"
+}
+
 source "$(dirname "$0")/utils"
 
 modules=("$@")
@@ -8,14 +35,10 @@ env_files=($(get_module_test_env_files "${modules[@]}"))
 for env_file in "${env_files[@]}"; do
   source "$env_file"
   module_name=$(echo "$env_file" | sed -n 's|^./modules/\([^/]*\)/.*|\1|p')
-  echo -e "\n\033[0;94m==== $MODULE_NAME Tests ====\033[0m\n"
-  bash_command="isort $module_name && "
-  bash_command="$bash_command echo -e '\033[0;32mIsort check succeeded\033[0m' && "
-  bash_command="$bash_command black $module_name && "
-  bash_command="$bash_command echo -e '\033[0;32mBlack check succeeded\033[0m' && "
-  bash_command="$bash_command ruff check --fix --exclude lib $module_name && "
-  bash_command="$bash_command echo -e '\033[0;32mRuff check succeeded\033[0m' && "
-  bash_command="$bash_command mypy $module_name && "
-  bash_command="$bash_command echo -e '\033[0;32mMypy check succeeded\033[0m'"
-  docker compose --file test.docker-compose.yml run --rm api_test bash -c "$bash_command" || exit $?
+  echo -e "\n\033[0;94m==== $NAME Tests ====\033[0m\n"
+  if [[ "$TYPE" == "api" ]]; then
+    run_api_lint_checks "$module_name"
+  elif [[ "$TYPE" == "frontend" ]]; then
+    run_frontend_lint_checks "$module_name"
+  fi
 done

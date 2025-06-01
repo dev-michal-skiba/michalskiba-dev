@@ -1,4 +1,6 @@
-<a class="link" href="{{ .Destination | safeURL }}"
+<a
+  class="link"
+  href="{{ .Destination | safeURL }}"
   {{- with .Title }} title="{{ . }}"{{ end -}}
 >
   {{- with .Text | safeHTML }}{{ . }}{{ end -}}

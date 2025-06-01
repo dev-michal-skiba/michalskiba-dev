@@ -1,2 +1,14 @@
 #!/bin/bash
-docker build --tag michalskiba_dev_api_test --file test.dockerfile ./
+
+modules=("$@")
+if [ ${#modules[@]} -eq 0 ]; then
+    modules=("api" "frontend")
+fi
+
+if [[ " ${modules[@]} " =~ " api " ]]; then
+    docker build --tag michalskiba_dev_test_api --file dockerfile.test.api ./
+fi
+
+if [[ " ${modules[@]} " =~ " frontend " ]]; then
+    docker build --tag michalskiba_dev_test_frontend --file dockerfile.test.frontend ./
+fi

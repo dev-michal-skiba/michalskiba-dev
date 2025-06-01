@@ -4,5 +4,5 @@ compose \
 run \
 --entrypoint=hugo \
 --rm \
--e HUGO_API_URL=https://www.michalskiba.dev/api \
+-e HUGO_API_URL=$1 \
 frontend

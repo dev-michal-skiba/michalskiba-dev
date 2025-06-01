@@ -1,29 +1,39 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-    <head>
-        {{- partial "head.html" .}}
-    </head>
-    <body>
-        {{- partial "demo/host_header_injection/header.html" .}}
-        <div class="container-lg">
-            <div class="row justify-content-center mt-5">
-                <div class="col-md-6">
-                    <h2 class="text-center mb-4">Reset Your Password</h2>
-                    <form id="password-reset-form" onsubmit="event.preventDefault(); submitNewPassword()">
-                        <div class="mb-3">
-                            <input type="password" class="form-control" id="new-password" required>
-                        </div>
-                        <div class="text-center">
-                            <p class="error mt-4" id="error-message"></p>
-                        </div>
-                        <div class="text-center">
-                            <button type="button" class="btn primary-button" onclick="submitNewPassword()">Reset Password</button>
-                        </div>
-                    </form>
-                </div>
+  <head>
+    {{- partial "head.html" .}}
+  </head>
+  <body>
+    {{- partial "demo/host_header_injection/header.html" .}}
+    <div class="container-lg">
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+          <h2 class="text-center mb-4">Reset Your Password</h2>
+          <form id="password-reset-form">
+            <div class="mb-3">
+              <input
+                type="password"
+                class="form-control"
+                id="new-password"
+                required
+              />
             </div>
+            <div class="text-center">
+              <p class="error mt-4" id="error-message"></p>
+            </div>
+            <div class="text-center">
+              <button
+                id="submit-password-reset-button"
+                type="button"
+                class="btn primary-button"
+              >
+                Reset Password
+              </button>
+            </div>
+          </form>
         </div>
-        {{- partial "demo/host_header_injection/footer.html" .}}
-        {{- partial "demo/host_header_injection/scripts.html" .}}
-    </body>
+      </div>
+    </div>
+    {{- partial "demo/host_header_injection/footer.html" .}}
+  </body>
 </html>

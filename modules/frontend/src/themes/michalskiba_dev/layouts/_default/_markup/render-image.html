@@ -1,15 +1,20 @@
 {{ if eq .Page.Type "root" }}
-    <img class="img-fluid arch-img" src="{{ .Destination | safeURL }}"
+    <img
+      class="img-fluid arch-img"
+      src="{{ .Destination | safeURL }}"
       {{- with .Text }} alt="{{ . }}"{{ end -}}
       {{- with .Title }} title="{{ . }}"{{ end -}}
     >
 {{ else if eq .Page.Type "blog" }}
-    <img class="img-fluid post-img" src="{{ .Destination | safeURL }}"
+    <img
+      class="img-fluid post-img"
+      src="{{ .Destination | safeURL }}"
       {{- with .Text }} alt="{{ . }}"{{ end -}}
       {{- with .Title }} title="{{ . }}"{{ end -}}
     >
 {{ else }}
-    <img src="{{ .Destination | safeURL }}"
+    <img
+      src="{{ .Destination | safeURL }}"
       {{- with .Text }} alt="{{ . }}"{{ end -}}
       {{- with .Title }} title="{{ . }}"{{ end -}}
     >

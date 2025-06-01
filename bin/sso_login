@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source .env.prod
+source .env.sso
 export PROFILE="${SSO_ROLE_NAME}-${ACCOUNT_ID}"
 
 if ! aws configure list-profiles | grep -q "^${PROFILE}$"; then

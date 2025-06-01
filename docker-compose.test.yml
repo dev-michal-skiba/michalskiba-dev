@@ -1,7 +1,7 @@
 services:
-  api_test:
-    image: michalskiba_dev_api_test
-    container_name: michalskiba_dev_api_test
+  test_api:
+    image: michalskiba_dev_test_api
+    container_name: michalskiba_dev_test_api
     volumes:
       - ./pyproject.toml:/code/pyproject.toml
       - ./.coveragerc:/code/.coveragerc
@@ -11,3 +11,9 @@ services:
       - ./modules/host_header_injection:/code/host_header_injection
       - ./modules/sql_injection:/code/sql_injection
       - ./modules/web_parameter_tampering:/code/web_parameter_tampering
+  test_frontend:
+    image: michalskiba_dev_test_frontend
+    container_name: michalskiba_dev_test_frontend
+    volumes:
+      - ./modules/frontend/src:/code/src
+      - ./modules/frontend/eslint.config.js:/code/eslint.config.js
