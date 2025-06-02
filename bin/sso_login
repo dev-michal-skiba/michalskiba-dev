@@ -1,5 +1,6 @@
 #!/bin/bash
 
+[ ! -f ".env.sso" ] && exit 0
 source .env.sso
 export PROFILE="${SSO_ROLE_NAME}-${ACCOUNT_ID}"
 
