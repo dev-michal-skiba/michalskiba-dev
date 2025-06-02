@@ -69,7 +69,7 @@ class TestGetHost:
         assert get_host(request, is_secure_version_on=True) == "https://localhost:8080"
 
     def test_missing_domain(self, monkeypatch: pytest.MonkeyPatch) -> None:
-        request = RouteRequest(headers={"origin": "https://test-host.com"})
+        request = RouteRequest(headers={"host": "https://test-host.com"})
         monkeypatch.delenv("DOMAIN", raising=False)
         with pytest.raises(HttpException) as exc_info:
             get_host(request, is_secure_version_on=True)
@@ -79,15 +79,15 @@ class TestGetHost:
     @pytest.mark.parametrize(
         "headers,expected_host",
         [
-            ({"origin": "https://test-host.com"}, "https://test-host.com"),
+            ({"host": "https://test-host.com"}, "https://test-host.com"),
             ({"x-forwarded-host": "forwarded-host.com"}, "https://forwarded-host.com"),
             (
-                {"origin": "https://test-host.com", "x-forwarded-host": "forwarded-host.com"},
+                {"host": "https://test-host.com", "x-forwarded-host": "forwarded-host.com"},
                 "https://forwarded-host.com",
             ),
-            ({"origin": "https://a.test-host.com"}, "https://a.test-host.com"),
-            ({"origin": "https://b.a.test-host.com"}, "https://b.a.test-host.com"),
-            ({"origin": "https://c.b.a.test-host.com"}, "https://c.b.a.test-host.com"),
+            ({"host": "https://a.test-host.com"}, "https://a.test-host.com"),
+            ({"host": "https://b.a.test-host.com"}, "https://b.a.test-host.com"),
+            ({"host": "https://c.b.a.test-host.com"}, "https://c.b.a.test-host.com"),
         ],
         ids=[
             "origin_header",
