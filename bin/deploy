@@ -9,11 +9,11 @@ envsubst < samconfig.toml > samconfig.prod.toml
 
 modules=("$@")
 if [ ${#modules[@]} -eq 0 ]; then
-    modules=("sam" "frontend")
+    modules=("cf_stack" "frontend")
 fi
 
 # Deploy infrastructure with API
-if [[ " ${modules[@]} " =~ " sam " ]]; then
+if [[ " ${modules[@]} " =~ " cf_stack " ]]; then
     AWS_PROFILE=${PROFILE} sam deploy --config-file samconfig.prod.toml
 
     if [ $? -ne 0 ]; then
