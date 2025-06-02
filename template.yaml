@@ -200,6 +200,9 @@ Resources:
               - PUT
             CachePolicyId: 4135ea2d-6df8-44a3-9df3-4b5a84be39ad  # Managed-CachingDisabled
             OriginRequestPolicyId: b689b0a8-53d0-40ab-baf2-68738e2966ac  # Managed-AllViewerExceptHostHeader
+            FunctionAssociations:
+              - EventType: viewer-request
+                FunctionARN: !GetAtt AddXForwardedHostFunction.FunctionARN
         HttpVersion: 'http2'
         PriceClass: PriceClass_100
         ViewerCertificate:
@@ -237,6 +240,22 @@ Resources:
       AutoPublish: true
       FunctionConfig:
         Comment: !Sub '${AWS::StackName}: Add index.html to the request if it is missing'
+        Runtime: cloudfront-js-2.0
+  AddXForwardedHostFunction:
+    Type: AWS::CloudFront::Function
+    Properties:
+      Name: !Sub '${AWS::StackName}-add-x-forwarded-host'
+      FunctionCode: |
+        function handler(event) {
+            var request = event.request;
+            if (request.headers['host'] && !request.headers['x-forwarded-host']) {
+                request.headers['x-forwarded-host'] = request.headers['host'];
+            }
+            return request;
+        }
+      AutoPublish: true
+      FunctionConfig:
+        Comment: !Sub '${AWS::StackName}: Add X-Forwarded-Host header from Host'
         Runtime: cloudfront-js-2.0
   HostedZone:
     Type: AWS::Route53::HostedZone
