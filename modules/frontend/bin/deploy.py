@@ -6,12 +6,11 @@ BUCKET_NAME = os.getenv("BUCKET_NAME")
 CLOUDFRONT_DISTRIBUTION_ID = os.getenv("CLOUDFRONT_DISTRIBUTION_ID")
 LOCAL_SOURCE_DIRECTORY = "src/public/"
 BUILD_DEPLOY_SCRIPT_PATH = "bin/build_deploy"
-API_URL = os.getenv("API_URL")
 
 
 def build_module():
     print("Building module ...")
-    os.system(f"{BUILD_DEPLOY_SCRIPT_PATH} {API_URL}")
+    os.system(BUILD_DEPLOY_SCRIPT_PATH)
     print("Module built")
 
 

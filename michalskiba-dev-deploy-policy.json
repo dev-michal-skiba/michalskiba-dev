@@ -17,8 +17,8 @@
             "Resource": [
                 "arn:aws:s3:::aws-sam-cli-managed-*",
                 "arn:aws:s3:::aws-sam-cli-managed-*/*",
-                "arn:aws:s3:::michalskiba-dev-static",
-                "arn:aws:s3:::michalskiba-dev-static/*"
+                "arn:aws:s3:::michalskiba-dev-static-*",
+                "arn:aws:s3:::michalskiba-dev-static-*/*"
             ]
         },
         {

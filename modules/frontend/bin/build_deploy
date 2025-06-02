@@ -4,5 +4,4 @@ compose \
 run \
 --entrypoint=hugo \
 --rm \
--e HUGO_API_URL=$1 \
 frontend
