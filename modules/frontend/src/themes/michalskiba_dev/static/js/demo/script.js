@@ -52,7 +52,7 @@ async function callApi({
   };
 
   return await fetch(
-    window.HUGO_API_URL + path + getQueryParamsString(queryParams),
+    "/api" + path + getQueryParamsString(queryParams),
     options,
   );
 }

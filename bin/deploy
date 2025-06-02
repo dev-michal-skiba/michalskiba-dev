@@ -26,11 +26,10 @@ fi
 
 BUCKET_NAME=$(AWS_PROFILE=${PROFILE} aws cloudformation describe-stacks --stack-name ${STACK_NAME} --region ${REGION} --query "Stacks[0].Outputs[?OutputKey=='StaticFilesBucketName'].OutputValue" --output text)
 CLOUDFRONT_DISTRIBUTION_ID=$(AWS_PROFILE=${PROFILE} aws cloudformation describe-stacks --stack-name ${STACK_NAME} --region ${REGION} --query "Stacks[0].Outputs[?OutputKey=='CloudFrontDistributionId'].OutputValue" --output text)
-API_URL=$(AWS_PROFILE=${PROFILE} aws cloudformation describe-stacks --stack-name ${STACK_NAME} --region ${REGION} --query "Stacks[0].Outputs[?OutputKey=='ApiUrl'].OutputValue" --output text)
 
 # Deploy frontend
 if [[ " ${modules[@]} " =~ " frontend " ]]; then
-    cd modules/frontend/ && AWS_PROFILE=${PROFILE} BUCKET_NAME=${BUCKET_NAME} CLOUDFRONT_DISTRIBUTION_ID=${CLOUDFRONT_DISTRIBUTION_ID} API_URL=${API_URL} python3 bin/deploy.py
+    cd modules/frontend/ && AWS_PROFILE=${PROFILE} BUCKET_NAME=${BUCKET_NAME} CLOUDFRONT_DISTRIBUTION_ID=${CLOUDFRONT_DISTRIBUTION_ID} python3 bin/deploy.py
 
     if [ $? -ne 0 ]; then
         echo "Frontend deployment failed. Aborting."
