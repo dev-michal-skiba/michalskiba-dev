@@ -31,6 +31,22 @@ Mappings:
       CookieTemplate: "access_token={}; Secure; HttpOnly; SameSite=Lax; Path=/api/demo"
 
 Resources:
+  SharedLambdaLogGroup:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Sub '/aws/lambda/${AWS::StackName}/shared'
+      RetentionInDays: 30
+  SharedLambdaLogGroupPolicy:
+    Type: AWS::IAM::ManagedPolicy
+    Properties:
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - logs:CreateLogStream
+              - logs:PutLogEvents
+            Resource: !GetAtt SharedLambdaLogGroup.Arn
   Core:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -58,6 +74,10 @@ Resources:
       Environment:
         Variables:
           DB_PATH: sql_injection/data.db
+          ENVIRONMENT: !Ref Environment
+          LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
+      Policies:
+        - !Ref SharedLambdaLogGroupPolicy
   Auth:
     Type: AWS::Serverless::Function
     Properties:
@@ -82,6 +102,10 @@ Resources:
             - !Ref Environment
             - CookieTemplate
           SECRET_KEY: !Ref AuthSecretKey
+          ENVIRONMENT: !Ref Environment
+          LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
+      Policies:
+        - !Ref SharedLambdaLogGroupPolicy
   WebParameterTampering:
     Type: AWS::Serverless::Function
     Properties:
@@ -102,6 +126,10 @@ Resources:
       Environment:
         Variables:
           DB_PATH: web_parameter_tampering/data.db
+          ENVIRONMENT: !Ref Environment
+          LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
+      Policies:
+        - !Ref SharedLambdaLogGroupPolicy
   HostHeaderInjection:
     Type: AWS::Serverless::Function
     Properties:
@@ -122,6 +150,9 @@ Resources:
           SECRET_KEY: !Ref HostHeaderInjectionSecretKey
           ENVIRONMENT: !Ref Environment
           DOMAIN: !Ref Domain
+          LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
+      Policies:
+        - !Ref SharedLambdaLogGroupPolicy
   ApiGatewayLogGroup:
     Type: AWS::Logs::LogGroup
     Properties:

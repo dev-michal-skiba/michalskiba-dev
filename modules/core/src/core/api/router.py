@@ -1,6 +1,7 @@
 import json
 from typing import Callable
 
+from ..logging import Logger, get_logger
 from .domain import (
     AuthorizerResponse,
     HttpMethod,
@@ -74,8 +75,12 @@ class Router:
         )
 
     def __handle_route_request(
-        self, handler: Callable[[RouteRequest], RouteResponse], request: RouteRequest
+        self,
+        handler: Callable[[RouteRequest], RouteResponse],
+        request: RouteRequest,
+        logger: Logger,
     ) -> LambdaResponse:
+        logger.log(f"Route Request: {request.model_dump_json()}")
         route_response = handler(request)
         response = LambdaResponse(statusCode=route_response.status_code)
         if route_response.body:
@@ -86,31 +91,43 @@ class Router:
                 raise HttpException(status_code=500, detail="Internal server error")
         if route_response.headers:
             response["headers"] = route_response.headers
+        logger.log(f"Route Response: {route_response.model_dump_json()}")
+        logger.log(f"Lambda Route Response: {json.dumps(response)}")
         return response
 
     def __handle_authorizer_request(
-        self, handler: Callable[[RouteRequest], AuthorizerResponse], request: RouteRequest
+        self,
+        handler: Callable[[RouteRequest], AuthorizerResponse],
+        request: RouteRequest,
+        logger: Logger,
     ) -> LambdaAuthorizerResponse:
+        logger.log(f"Authorizer Request: {request.model_dump_json()}")
         authorizer_response = handler(request)
+        logger.log(f"Authorizer Response: {authorizer_response.model_dump_json()}")
         response = LambdaAuthorizerResponse(isAuthorized=authorizer_response.is_authorized)
         if authorizer_response.username:
             response["context"] = LambdaAuthorizerResponseContext(
                 username=authorizer_response.username
             )
+        logger.log(f"Lambda Authorizer Response: {json.dumps(response)}")
         return response
 
     def __call__(self, event: LambdaEvent) -> LambdaResponse | LambdaAuthorizerResponse:
         path = event["requestContext"]["http"]["path"]
         method = event["requestContext"]["http"]["method"]
+        logger = get_logger(keys=[path, method])
+        logger.log(f"LambdaEvent: {json.dumps(event)}")
         try:
             request = self._get_request(event)
             if event.get("type") == "REQUEST":
                 if self.__authorizer_route is None:
                     return NotFoundException().response()
-                return self.__handle_authorizer_request(self.__authorizer_route.handler, request)
+                return self.__handle_authorizer_request(
+                    self.__authorizer_route.handler, request, logger
+                )
             for route in self.__routes:
                 if route.path == path and route.method == method:
-                    return self.__handle_route_request(route.handler, request)
+                    return self.__handle_route_request(route.handler, request, logger)
         except HttpException as e:
             return e.response()
         return NotFoundException().response()
