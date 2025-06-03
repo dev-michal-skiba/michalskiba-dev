@@ -1,7 +1,7 @@
 import json
 from typing import Callable
 
-from ..logging import Logger, get_logger
+from ..logger import Logger, get_logger
 from .domain import (
     AuthorizerResponse,
     HttpMethod,

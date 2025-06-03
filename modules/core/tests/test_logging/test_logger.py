@@ -2,11 +2,11 @@ from typing import Type
 from unittest.mock import Mock, patch
 
 import pytest
-from core.logging import Logger, LogGroupLogger, PrintLogger, get_logger
+from core.logger import Logger, LogGroupLogger, PrintLogger, get_logger
 from freezegun import freeze_time
 
 
-@patch("core.logging.logger.uuid4", return_value="uuid")
+@patch("core.logger.logger.uuid4", return_value="uuid")
 class TestPrintLogger:
     def test_log(self, mock_uuid4: Mock) -> None:
         logger = PrintLogger(keys=["a", "b", "c"])
@@ -17,8 +17,8 @@ class TestPrintLogger:
         mock_print.assert_called_once_with("[uuid][a][b][c] test")
 
 
-@patch("core.logging.logger.uuid4", return_value="uuid")
-@patch("core.logging.logger.boto3.client")
+@patch("core.logger.logger.uuid4", return_value="uuid")
+@patch("core.logger.logger.boto3.client")
 @freeze_time("2025-06-03 21:00:00")
 class TestLogGroupLogger:
     def test_log(
@@ -46,7 +46,7 @@ class TestLogGroupLogger:
         )
 
 
-@patch("core.logging.logger.boto3.client")
+@patch("core.logger.logger.boto3.client")
 class TestGetLogger:
     @pytest.mark.parametrize(
         "environment, expected_logger_class",
