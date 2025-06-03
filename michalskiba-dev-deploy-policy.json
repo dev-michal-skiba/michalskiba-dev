@@ -43,6 +43,11 @@
         },
         {
             "Effect": "Allow",
+            "Action": "logs:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
             "Action": "cloudfront:*",
             "Resource": "arn:aws:cloudfront::*:distribution/*",
             "Condition": {
