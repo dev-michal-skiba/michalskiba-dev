@@ -8,6 +8,7 @@ parameter_overrides=[
   "AuthSecretKey=local-secret-key",
   "HostHeaderInjectionSecretKey=local-secret-key",
   "Domain=localhost:8080",
+  "AdminApiKey=local-admin-api-key",
 ]
 
 [default.validate.parameters]
@@ -32,4 +33,5 @@ parameter_overrides=[
   "Domain=${DOMAIN}",
   "CertificateArn=${CERTIFICATE_ARN}",
   "SentryDsn=${SENTRY_DSN}",
+  "AdminApiKey=${ADMIN_API_KEY}",
 ]

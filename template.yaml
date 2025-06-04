@@ -26,6 +26,9 @@ Parameters:
     Type: String
     NoEcho: true
     Default: ""
+  AdminApiKey:
+    Type: String
+    NoEcho: true
 
 Mappings:
   EnvVariables:
@@ -51,6 +54,28 @@ Resources:
               - logs:CreateLogStream
               - logs:PutLogEvents
             Resource: !GetAtt SharedLambdaLogGroup.Arn
+  UserTestMetric:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SharedLambdaLogGroup
+      FilterName: !Sub '${AWS::StackName}-user-test-metric'
+      FilterPattern: "\"[metrics][user] test\""
+      MetricTransformations:
+        - MetricName: UserTestMetric
+          MetricNamespace: !Sub '${AWS::StackName}-metrics'
+          MetricValue: 1
+          Unit: Count
+  AdminTestMetric:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SharedLambdaLogGroup
+      FilterName: !Sub '${AWS::StackName}-admin-test-metric'
+      FilterPattern: "\"[metrics][admin] test\""
+      MetricTransformations:
+        - MetricName: AdminTestMetric
+          MetricNamespace: !Sub '${AWS::StackName}-metrics'
+          MetricValue: 1
+          Unit: Count
   Core:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -77,10 +102,11 @@ Resources:
             Path: /api/demo/sql-injection/{proxy+}
       Environment:
         Variables:
-          DB_PATH: sql_injection/data.db
           ENVIRONMENT: !Ref Environment
           SENTRY_DSN: !Ref SentryDsn
+          ADMIN_API_KEY: !Ref AdminApiKey
           LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
+          DB_PATH: sql_injection/data.db
       Policies:
         - !Ref SharedLambdaLogGroupPolicy
   Auth:
@@ -101,15 +127,16 @@ Resources:
             Path: /api/demo/auth/{proxy+}
       Environment:
         Variables:
+          ENVIRONMENT: !Ref Environment
+          SENTRY_DSN: !Ref SentryDsn
+          ADMIN_API_KEY: !Ref AdminApiKey
+          LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
           DB_PATH: auth/data.db
           COOKIE_TEMPLATE: !FindInMap
             - EnvVariables
             - !Ref Environment
             - CookieTemplate
           SECRET_KEY: !Ref AuthSecretKey
-          ENVIRONMENT: !Ref Environment
-          SENTRY_DSN: !Ref SentryDsn
-          LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
       Policies:
         - !Ref SharedLambdaLogGroupPolicy
   WebParameterTampering:
@@ -131,10 +158,11 @@ Resources:
               Authorizer: CustomAuthorizer
       Environment:
         Variables:
-          DB_PATH: web_parameter_tampering/data.db
           ENVIRONMENT: !Ref Environment
           SENTRY_DSN: !Ref SentryDsn
+          ADMIN_API_KEY: !Ref AdminApiKey
           LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
+          DB_PATH: web_parameter_tampering/data.db
       Policies:
         - !Ref SharedLambdaLogGroupPolicy
   HostHeaderInjection:
@@ -154,11 +182,12 @@ Resources:
             Path: /api/demo/host-header-injection/{proxy+}
       Environment:
         Variables:
-          SECRET_KEY: !Ref HostHeaderInjectionSecretKey
           ENVIRONMENT: !Ref Environment
           SENTRY_DSN: !Ref SentryDsn
-          DOMAIN: !Ref Domain
+          ADMIN_API_KEY: !Ref AdminApiKey
           LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
+          SECRET_KEY: !Ref HostHeaderInjectionSecretKey
+          DOMAIN: !Ref Domain
       Policies:
         - !Ref SharedLambdaLogGroupPolicy
   ApiGatewayLogGroup:
