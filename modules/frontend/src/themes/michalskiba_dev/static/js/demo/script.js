@@ -46,11 +46,11 @@ async function callApi({
     method: method,
     headers: {
       "Content-Type": "application/json",
+      "x-api-key": localStorage.getItem("apiKey") || "",
     },
     body,
     credentials,
   };
-
   return await fetch(
     "/api" + path + getQueryParamsString(queryParams),
     options,
