@@ -64,6 +64,7 @@ Repository for [michalskiba.dev](https://michalskiba.dev/) webpage which is a po
         - ARN for certificate from AWS Certificate Manager which must be created manually in us-east-1
     - `AUTH_SECRET_KEY`
     - `HOST_HEADER_INJECTION_SECRET_KEY`
+    - `SENTRY_DSN`
 - Run `bin/deploy`
     - By default script creates/updates AWS CloudFormation  stack and uploads built frontend static files
     - You can pass one or more arguments to create/update stack or upload static files only

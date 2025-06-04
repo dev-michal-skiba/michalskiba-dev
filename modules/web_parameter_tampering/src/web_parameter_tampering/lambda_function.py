@@ -1,3 +1,4 @@
+
 from core.api import (
     HttpException,
     LambdaContext,
@@ -8,9 +9,13 @@ from core.api import (
     RouteRequest,
     RouteResponse,
 )
+from core.sentry import IS_SENTRY_ENABLED, SENTRY_INIT_OPTIONS, sentry_init
 
 from .db import get_press_application
 from .utils import get_username
+
+if IS_SENTRY_ENABLED:
+    sentry_init(**SENTRY_INIT_OPTIONS)
 
 
 def get_press_application_route_handler(request: RouteRequest) -> RouteResponse:

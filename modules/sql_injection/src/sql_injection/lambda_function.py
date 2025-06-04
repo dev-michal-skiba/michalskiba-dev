@@ -1,3 +1,4 @@
+
 from core.api import (
     LambdaContext,
     LambdaEvent,
@@ -7,8 +8,12 @@ from core.api import (
     RouteRequest,
     RouteResponse,
 )
+from core.sentry import IS_SENTRY_ENABLED, SENTRY_INIT_OPTIONS, sentry_init
 
 from . import db, utils
+
+if IS_SENTRY_ENABLED:
+    sentry_init(**SENTRY_INIT_OPTIONS)
 
 
 def get_parcel_stores(request: RouteRequest) -> RouteResponse:
