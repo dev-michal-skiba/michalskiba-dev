@@ -31,4 +31,5 @@ parameter_overrides=[
   "Subdomain=${SUBDOMAIN}",
   "Domain=${DOMAIN}",
   "CertificateArn=${CERTIFICATE_ARN}",
+  "SentryDsn=${SENTRY_DSN}",
 ]

@@ -22,6 +22,10 @@ Parameters:
   CertificateArn:  # Certificate must be created and validated manually in us-east-1
     Type: String
     Default: ""
+  SentryDsn:
+    Type: String
+    NoEcho: true
+    Default: ""
 
 Mappings:
   EnvVariables:
@@ -75,6 +79,7 @@ Resources:
         Variables:
           DB_PATH: sql_injection/data.db
           ENVIRONMENT: !Ref Environment
+          SENTRY_DSN: !Ref SentryDsn
           LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
       Policies:
         - !Ref SharedLambdaLogGroupPolicy
@@ -103,6 +108,7 @@ Resources:
             - CookieTemplate
           SECRET_KEY: !Ref AuthSecretKey
           ENVIRONMENT: !Ref Environment
+          SENTRY_DSN: !Ref SentryDsn
           LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
       Policies:
         - !Ref SharedLambdaLogGroupPolicy
@@ -127,6 +133,7 @@ Resources:
         Variables:
           DB_PATH: web_parameter_tampering/data.db
           ENVIRONMENT: !Ref Environment
+          SENTRY_DSN: !Ref SentryDsn
           LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
       Policies:
         - !Ref SharedLambdaLogGroupPolicy
@@ -149,6 +156,7 @@ Resources:
         Variables:
           SECRET_KEY: !Ref HostHeaderInjectionSecretKey
           ENVIRONMENT: !Ref Environment
+          SENTRY_DSN: !Ref SentryDsn
           DOMAIN: !Ref Domain
           LOG_GROUP_NAME: !Ref SharedLambdaLogGroup
       Policies:

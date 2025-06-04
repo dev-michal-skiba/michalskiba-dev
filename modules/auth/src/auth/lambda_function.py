@@ -9,9 +9,13 @@ from core.api import (
     RouteRequest,
     RouteResponse,
 )
+from core.sentry import IS_SENTRY_ENABLED, SENTRY_INIT_OPTIONS, sentry_init
 
 from .domain import User
 from .utils import get_headers
+
+if IS_SENTRY_ENABLED:
+    sentry_init(**SENTRY_INIT_OPTIONS)
 
 
 def authorize(request: RouteRequest) -> AuthorizerResponse:

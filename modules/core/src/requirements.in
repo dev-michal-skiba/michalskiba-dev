@@ -1,3 +1,4 @@
 pydantic
 peewee
 boto3
+sentry-sdk
