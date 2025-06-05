@@ -54,26 +54,70 @@ Resources:
               - logs:CreateLogStream
               - logs:PutLogEvents
             Resource: !GetAtt SharedLambdaLogGroup.Arn
-  UserTestMetric:
+  UserWptExploitMetric:
     Type: AWS::Logs::MetricFilter
     Properties:
       LogGroupName: !Ref SharedLambdaLogGroup
-      FilterName: !Sub '${AWS::StackName}-user-test-metric'
-      FilterPattern: "\"[metrics][user] test\""
+      FilterName: !Sub '${AWS::StackName}-user-wpt-exploit'
+      FilterPattern: "\"[metrics][user] wpt-exploit\""
       MetricTransformations:
-        - MetricName: UserTestMetric
-          MetricNamespace: !Sub '${AWS::StackName}-metrics'
+        - MetricName: UserWptExploit
+          MetricNamespace: !Sub '${AWS::StackName}'
           MetricValue: 1
           Unit: Count
-  AdminTestMetric:
+  AdminWPTExploitMetric:
     Type: AWS::Logs::MetricFilter
     Properties:
       LogGroupName: !Ref SharedLambdaLogGroup
-      FilterName: !Sub '${AWS::StackName}-admin-test-metric'
-      FilterPattern: "\"[metrics][admin] test\""
+      FilterName: !Sub '${AWS::StackName}-admin-wpt-exploit'
+      FilterPattern: "\"[metrics][admin] wpt-exploit\""
       MetricTransformations:
-        - MetricName: AdminTestMetric
-          MetricNamespace: !Sub '${AWS::StackName}-metrics'
+        - MetricName: AdminWPTExploit
+          MetricNamespace: !Sub '${AWS::StackName}'
+          MetricValue: 1
+          Unit: Count
+  UserSQLIExploitMetric:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SharedLambdaLogGroup
+      FilterName: !Sub '${AWS::StackName}-user-sqli-exploit'
+      FilterPattern: "\"[metrics][user] sqli-exploit\""
+      MetricTransformations:
+        - MetricName: UserSQLIExploit
+          MetricNamespace: !Sub '${AWS::StackName}'
+          MetricValue: 1
+          Unit: Count
+  AdminSQLIExploitMetric:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SharedLambdaLogGroup
+      FilterName: !Sub '${AWS::StackName}-admin-sqli-exploit'
+      FilterPattern: "\"[metrics][admin] sqli-exploit\""
+      MetricTransformations:
+        - MetricName: AdminSQLIExploit
+          MetricNamespace: !Sub '${AWS::StackName}'
+          MetricValue: 1
+          Unit: Count
+  UserHHIExploitMetric:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SharedLambdaLogGroup
+      FilterName: !Sub '${AWS::StackName}-user-hhi-exploit'
+      FilterPattern: "\"[metrics][user] hhi-exploit\""
+      MetricTransformations:
+        - MetricName: UserHHIExploit
+          MetricNamespace: !Sub '${AWS::StackName}'
+          MetricValue: 1
+          Unit: Count
+  AdminHHIExploitMetric:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SharedLambdaLogGroup
+      FilterName: !Sub '${AWS::StackName}-admin-hhi-exploit'
+      FilterPattern: "\"[metrics][admin] hhi-exploit\""
+      MetricTransformations:
+        - MetricName: AdminHHIExploit
+          MetricNamespace: !Sub '${AWS::StackName}'
           MetricValue: 1
           Unit: Count
   Core:

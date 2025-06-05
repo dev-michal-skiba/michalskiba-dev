@@ -17,13 +17,14 @@ if IS_SENTRY_ENABLED:
 
 
 def get_parcel_stores(request: RouteRequest) -> RouteResponse:
-    metrics_client = MetricsClient(request)
-    metrics_client.log_metric(MetricName.TEST)
     address_search_phrase, is_secure_version_on = utils.extract_query_parameters(request)
     parcel_stores = db.get_parcel_stores(
         address_search_phrase=address_search_phrase,
         is_secure_version_on=is_secure_version_on,
     )
+    if "--" in address_search_phrase and len(parcel_stores):
+        metrics_client = MetricsClient(request)
+        metrics_client.log_metric(MetricName.SQLI_EXPLOIT)
     return RouteResponse(status_code=200, body={"parcel_stores": parcel_stores})
 
 

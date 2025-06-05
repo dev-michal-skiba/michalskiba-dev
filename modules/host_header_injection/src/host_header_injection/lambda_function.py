@@ -1,4 +1,3 @@
-
 from core.api import (
     LambdaContext,
     LambdaEvent,

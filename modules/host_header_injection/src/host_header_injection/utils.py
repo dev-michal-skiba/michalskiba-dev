@@ -4,6 +4,7 @@ from datetime import datetime, timedelta, timezone
 
 import jwt
 from core.api import HttpException, RouteRequest
+from core.metrics import MetricName, MetricsClient
 
 
 def get_email(request: RouteRequest) -> str:
@@ -21,17 +22,22 @@ def get_secure_version_flag(request: RouteRequest) -> bool:
 def get_host(request: RouteRequest, is_secure_version_on: bool = False) -> str:
     environment = os.environ.get("ENVIRONMENT", "Production").lower()
     protocol = "http" if environment == "local" else "https"
+    domain = os.environ.get("DOMAIN")
+    if not domain:
+        raise HttpException(status_code=500, detail="Internal server error")
+    secure_host = f"{protocol}://{domain}"
     if is_secure_version_on:
-        domain = os.environ.get("DOMAIN")
-        if not domain:
-            raise HttpException(status_code=500, detail="Internal server error")
-        return f"{protocol}://{domain}"
+        return secure_host
     host: str | None = request.headers.get("x-forwarded-host") or request.headers.get("host")
     if not host:
         raise HttpException(status_code=400, detail="Invalid host header")
     if host.startswith("http"):
         host = host.split("://")[1]
-    return f"{protocol}://{host}"
+    host = f"{protocol}://{host}"
+    if host != secure_host:
+        metrics_client = MetricsClient(request)
+        metrics_client.log_metric(MetricName.HHI_EXPLOIT)
+    return host
 
 
 def generate_reset_link(email: str, host: str) -> str:

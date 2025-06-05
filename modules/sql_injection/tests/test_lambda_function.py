@@ -1,46 +1,52 @@
-from unittest.mock import Mock, patch
+from unittest import mock
 
-from core.api import RouteRequest
+from core.api import LambdaEvent
+from core.metrics import MetricName
 from sql_injection.lambda_function import lambda_handler
 
 
-@patch("sql_injection.lambda_function.utils.extract_query_parameters")
-@patch("sql_injection.lambda_function.db.get_parcel_stores")
+@mock.patch("sql_injection.lambda_function.MetricsClient")
 class TestLambdaHandler:
-    def test_lambda_handler(
-        self, mock_get_parcel_stores: Mock, mock_extract_query_parameters: Mock
-    ) -> None:
-        address_search_phrase = "test address search phrase"
-        is_secure_version_on = True
-        mock_extract_query_parameters.return_value = address_search_phrase, is_secure_version_on
-        parcel_stores = [
-            {
-                "name": "parcel_store_1",
-                "address": "Red Street 1, 00-001 Warsaw, Poland",
-                "opening_hours": "8:00-18:00",
-                "access_code": "743763",
-            }
-        ]
-        mock_get_parcel_stores.return_value = parcel_stores
-        event = {
-            "queryStringParameters": {"address_search_phrase": "Warsaw"},
-            "requestContext": {
+    def test_secure_version(self, mock_metrics_client: mock.Mock) -> None:
+        event = LambdaEvent(
+            queryStringParameters={"address_search_phrase": "Wroclaw"},
+            requestContext={
                 "http": {
                     "method": "GET",
                     "path": "/api/demo/sql-injection/parcel-stores",
                 }
             },
-        }
-        request = RouteRequest(query_paramaters={"address_search_phrase": "Warsaw"})
+        )
 
         response = lambda_handler(event, context={})
 
         assert response == {
             "statusCode": 200,
-            "body": '{"parcel_stores": [{"name": "parcel_store_1", "address": "Red Street 1, 00-001 Warsaw, Poland", "opening_hours": "8:00-18:00", "access_code": "743763"}]}',
+            "body": '{"parcel_stores": [{"name": "parcel_store_2", "address": "Blue Street 2, 47-404 Wroclaw, Poland", "opening_hours": "7:00-15:00"}]}',
         }
-        mock_extract_query_parameters.assert_called_once_with(request)
-        mock_get_parcel_stores.assert_called_once_with(
-            address_search_phrase=address_search_phrase,
-            is_secure_version_on=is_secure_version_on,
+        assert mock_metrics_client.return_value.log_metric.call_count == 0
+
+    def test_insecure_version(self, mock_metrics_client: mock.Mock) -> None:
+        event = LambdaEvent(
+            queryStringParameters={
+                "address_search_phrase": "abc' UNION SELECT NULL, NULL, NULL, NULL, NULL;--",
+                "is_secure_version_on": "false",
+            },
+            requestContext={
+                "http": {
+                    "method": "GET",
+                    "path": "/api/demo/sql-injection/parcel-stores",
+                }
+            },
+        )
+
+        response = lambda_handler(event, context={})
+
+        assert response == {
+            "statusCode": 200,
+            "body": '{"parcel_stores": [{"name": null, "address": null, "opening_hours": null}]}',
+        }
+        assert mock_metrics_client.return_value.log_metric.call_count == 1
+        assert mock_metrics_client.return_value.log_metric.call_args[0] == (
+            MetricName.SQLI_EXPLOIT,
         )

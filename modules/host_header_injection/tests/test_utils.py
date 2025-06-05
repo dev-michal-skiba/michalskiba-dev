@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta, timezone
 from typing import Any
+from unittest import mock
 
 import jwt
 import pytest
 from core.api import HttpException, RouteRequest
+from core.metrics import MetricName
 from freezegun import freeze_time
 from host_header_injection.utils import (
     extract_token_and_new_password,
@@ -63,18 +65,28 @@ class TestGetSecureVersionFlag:
         assert get_secure_version_flag(request) is True
 
 
+@mock.patch("host_header_injection.utils.MetricsClient")
 class TestGetHost:
-    def test_secure_version_on(self) -> None:
+    def test_secure_version_on(self, mock_metrics_client: mock.Mock) -> None:
         request = RouteRequest()
-        assert get_host(request, is_secure_version_on=True) == "https://localhost:8080"
 
-    def test_missing_domain(self, monkeypatch: pytest.MonkeyPatch) -> None:
+        host = get_host(request, is_secure_version_on=True)
+
+        assert host == "https://localhost:8080"
+        assert mock_metrics_client.return_value.log_metric.call_count == 0
+
+    def test_missing_domain(
+        self, mock_metrics_client: mock.Mock, monkeypatch: pytest.MonkeyPatch
+    ) -> None:
         request = RouteRequest(headers={"host": "https://test-host.com"})
         monkeypatch.delenv("DOMAIN", raising=False)
+
         with pytest.raises(HttpException) as exc_info:
             get_host(request, is_secure_version_on=True)
+
         assert exc_info.value.status_code == 500
         assert str(exc_info.value.detail) == "Internal server error"
+        assert mock_metrics_client.return_value.log_metric.call_count == 0
 
     @pytest.mark.parametrize(
         "headers,expected_host",
@@ -99,18 +111,32 @@ class TestGetHost:
         ],
     )
     def test_host_headers(
-        self, headers: dict[str, str], expected_host: str, monkeypatch: pytest.MonkeyPatch
+        self,
+        mock_metrics_client: mock.Mock,
+        headers: dict[str, str],
+        expected_host: str,
+        monkeypatch: pytest.MonkeyPatch,
     ) -> None:
         request = RouteRequest(headers=headers)
         monkeypatch.setenv("DOMAIN", expected_host)
-        assert get_host(request, is_secure_version_on=False) == expected_host
 
-    def test_missing_headers(self) -> None:
+        host = get_host(request, is_secure_version_on=False)
+
+        assert host == expected_host
+        assert mock_metrics_client.return_value.log_metric.call_count == 1
+        assert mock_metrics_client.return_value.log_metric.call_args[0] == (
+            MetricName.HHI_EXPLOIT,
+        )
+
+    def test_missing_headers(self, mock_metrics_client: mock.Mock) -> None:
         request = RouteRequest()
+
         with pytest.raises(HttpException) as exc_info:
             get_host(request, is_secure_version_on=False)
+
         assert exc_info.value.status_code == 400
         assert str(exc_info.value.detail) == "Invalid host header"
+        assert mock_metrics_client.return_value.log_metric.call_count == 0
 
 
 class TestGenerateResetLink:
