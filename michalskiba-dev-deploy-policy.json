@@ -111,6 +111,16 @@
             "Effect": "Allow",
             "Action": "route53:*",
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cloudwatch:PutDashboard",
+                "cloudwatch:GetDashboard",
+                "cloudwatch:ListDashboards",
+                "cloudwatch:DeleteDashboards"
+            ],
+            "Resource": "*"
         }
     ]
 }
