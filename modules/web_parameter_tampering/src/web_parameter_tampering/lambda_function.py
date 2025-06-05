@@ -1,4 +1,3 @@
-
 from core.api import (
     HttpException,
     LambdaContext,
@@ -9,6 +8,7 @@ from core.api import (
     RouteRequest,
     RouteResponse,
 )
+from core.metrics import MetricName, MetricsClient
 from core.sentry import IS_SENTRY_ENABLED, SENTRY_INIT_OPTIONS, sentry_init
 
 from .db import get_press_application
@@ -25,6 +25,9 @@ def get_press_application_route_handler(request: RouteRequest) -> RouteResponse:
     press_application = get_press_application(username)
     if press_application is None:
         raise HttpException(status_code=404, detail="Press application not found")
+    if request.authorizer_username != username:
+        metrics_client = MetricsClient(request)
+        metrics_client.log_metric(MetricName.WPT_EXPLOIT)
     return RouteResponse(
         status_code=200,
         body={

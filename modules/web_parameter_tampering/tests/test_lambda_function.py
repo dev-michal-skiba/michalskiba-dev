@@ -1,9 +1,13 @@
+from unittest import mock
+
 from core.api import LambdaEvent
+from core.metrics import MetricName
 from web_parameter_tampering.lambda_function import lambda_handler
 
 
+@mock.patch("web_parameter_tampering.lambda_function.MetricsClient")
 class TestLambdaHandler:
-    def test_for_secure_version(self) -> None:
+    def test_for_secure_version(self, mock_metrics_client: mock.Mock) -> None:
         event = LambdaEvent(
             requestContext={
                 "authorizer": {"lambda": {"username": "hacker"}},
@@ -24,8 +28,9 @@ class TestLambdaHandler:
                 '"organization": "Shady non-existing organization"}'
             ),
         }
+        assert mock_metrics_client.return_value.log_metric.call_count == 0
 
-    def test_for_insecure_version(self) -> None:
+    def test_for_insecure_version(self, mock_metrics_client: mock.Mock) -> None:
         event = LambdaEvent(
             requestContext={
                 "authorizer": {"lambda": {"username": "hacker"}},
@@ -46,8 +51,12 @@ class TestLambdaHandler:
                 '"organization": "Legitimate organization"}'
             ),
         }
+        assert mock_metrics_client.return_value.log_metric.call_count == 1
+        assert mock_metrics_client.return_value.log_metric.call_args[0] == (
+            MetricName.WPT_EXPLOIT,
+        )
 
-    def test_for_missing_username(self) -> None:
+    def test_for_missing_username(self, mock_metrics_client: mock.Mock) -> None:
         event = LambdaEvent(
             requestContext={
                 "http": {
@@ -63,8 +72,9 @@ class TestLambdaHandler:
             "statusCode": 404,
             "body": '{"detail": "User not found"}',
         }
+        assert mock_metrics_client.return_value.log_metric.call_count == 0
 
-    def test_for_non_existing_press_application(self) -> None:
+    def test_for_non_existing_press_application(self, mock_metrics_client: mock.Mock) -> None:
         event = LambdaEvent(
             requestContext={
                 "authorizer": {"lambda": {"username": "non-existing-user"}},

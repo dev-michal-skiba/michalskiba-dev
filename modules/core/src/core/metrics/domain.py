@@ -2,7 +2,7 @@ from enum import Enum
 
 
 class MetricName(Enum):
-    TEST = "test"
+    WPT_EXPLOIT = "wpt-exploit"
 
 
 class MetricType(Enum):
