@@ -12,8 +12,10 @@ class TestMetricsClient:
         [
             ("local-admin-api-key", MetricName.WPT_EXPLOIT, MetricType.ADMIN.value),
             ("local-admin-api-key", MetricName.SQLI_EXPLOIT, MetricType.ADMIN.value),
+            ("local-admin-api-key", MetricName.HHI_EXPLOIT, MetricType.ADMIN.value),
             (None, MetricName.WPT_EXPLOIT, MetricType.USER.value),
             (None, MetricName.SQLI_EXPLOIT, MetricType.USER.value),
+            (None, MetricName.HHI_EXPLOIT, MetricType.USER.value),
         ],
     )
     def test_log_metric(

@@ -98,6 +98,28 @@ Resources:
           MetricNamespace: !Sub '${AWS::StackName}'
           MetricValue: 1
           Unit: Count
+  UserHHIExploitMetric:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SharedLambdaLogGroup
+      FilterName: !Sub '${AWS::StackName}-user-hhi-exploit'
+      FilterPattern: "\"[metrics][user] hhi-exploit\""
+      MetricTransformations:
+        - MetricName: UserHHIExploit
+          MetricNamespace: !Sub '${AWS::StackName}'
+          MetricValue: 1
+          Unit: Count
+  AdminHHIExploitMetric:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SharedLambdaLogGroup
+      FilterName: !Sub '${AWS::StackName}-admin-hhi-exploit'
+      FilterPattern: "\"[metrics][admin] hhi-exploit\""
+      MetricTransformations:
+        - MetricName: AdminHHIExploit
+          MetricNamespace: !Sub '${AWS::StackName}'
+          MetricValue: 1
+          Unit: Count
   Core:
     Type: AWS::Serverless::LayerVersion
     Properties:
