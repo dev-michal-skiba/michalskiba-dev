@@ -76,6 +76,28 @@ Resources:
           MetricNamespace: !Sub '${AWS::StackName}'
           MetricValue: 1
           Unit: Count
+  UserSQLIExploitMetric:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SharedLambdaLogGroup
+      FilterName: !Sub '${AWS::StackName}-user-sqli-exploit'
+      FilterPattern: "\"[metrics][user] sqli-exploit\""
+      MetricTransformations:
+        - MetricName: UserSQLIExploit
+          MetricNamespace: !Sub '${AWS::StackName}'
+          MetricValue: 1
+          Unit: Count
+  AdminSQLIExploitMetric:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref SharedLambdaLogGroup
+      FilterName: !Sub '${AWS::StackName}-admin-sqli-exploit'
+      FilterPattern: "\"[metrics][admin] sqli-exploit\""
+      MetricTransformations:
+        - MetricName: AdminSQLIExploit
+          MetricNamespace: !Sub '${AWS::StackName}'
+          MetricValue: 1
+          Unit: Count
   Core:
     Type: AWS::Serverless::LayerVersion
     Properties:

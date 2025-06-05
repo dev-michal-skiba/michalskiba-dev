@@ -11,7 +11,9 @@ class TestMetricsClient:
         "api_key, metric_name, expected_user_type",
         [
             ("local-admin-api-key", MetricName.WPT_EXPLOIT, MetricType.ADMIN.value),
+            ("local-admin-api-key", MetricName.SQLI_EXPLOIT, MetricType.ADMIN.value),
             (None, MetricName.WPT_EXPLOIT, MetricType.USER.value),
+            (None, MetricName.SQLI_EXPLOIT, MetricType.USER.value),
         ],
     )
     def test_log_metric(

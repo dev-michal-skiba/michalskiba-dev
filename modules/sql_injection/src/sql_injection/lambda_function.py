@@ -7,6 +7,7 @@ from core.api import (
     RouteRequest,
     RouteResponse,
 )
+from core.metrics import MetricName, MetricsClient
 from core.sentry import IS_SENTRY_ENABLED, SENTRY_INIT_OPTIONS, sentry_init
 
 from . import db, utils
@@ -21,6 +22,9 @@ def get_parcel_stores(request: RouteRequest) -> RouteResponse:
         address_search_phrase=address_search_phrase,
         is_secure_version_on=is_secure_version_on,
     )
+    if "--" in address_search_phrase and len(parcel_stores):
+        metrics_client = MetricsClient(request)
+        metrics_client.log_metric(MetricName.SQLI_EXPLOIT)
     return RouteResponse(status_code=200, body={"parcel_stores": parcel_stores})
 
 
