@@ -418,6 +418,87 @@ Resources:
       TTL: 300
       ResourceRecords:
         - !GetAtt CloudFrontDistribution.DomainName
+  Dashboard:
+    Type: AWS::CloudWatch::Dashboard
+    Properties:
+      DashboardName: !Sub "${AWS::StackName}"
+      DashboardBody: !Sub |
+        {
+          "start": "-P30D",
+          "widgets": [
+            {
+              "type": "metric",
+              "x": 0,
+              "y": 0,
+              "width": 12,
+              "height": 8,
+              "properties": {
+                "metrics": [
+                  [ "${AWS::StackName}", "UserWptExploit" ],
+                  [ ".", "UserSQLIExploit" ],
+                  [ ".", "UserHHIExploit" ]
+                ],
+                "period": 86400,
+                "stat": "Sum",
+                "region": "${AWS::Region}",
+                "title": "User Activity"
+              }
+            },
+            {
+              "type": "metric",
+              "x": 12,
+              "y": 0,
+              "width": 12,
+              "height": 8,
+              "properties": {
+                "metrics": [
+                  [ "${AWS::StackName}", "AdminWPTExploit" ],
+                  [ ".", "AdminSQLIExploit" ],
+                  [ ".", "AdminHHIExploit" ]
+                ],
+                "period": 86400,
+                "stat": "Sum",
+                "region": "${AWS::Region}",
+                "title": "Admin Activity"
+              }
+            },
+            {
+              "type": "metric",
+              "x": 0,
+              "y": 8,
+              "width": 12,
+              "height": 8,
+              "properties": {
+                "metrics": [
+                  [ "AWS/ApiGateway", "4XXError", "ApiId", "${Api}" ],
+                  [ ".", "5XXError", ".", "." ],
+                  [ ".", "Count", ".", "." ]
+                ],
+                "period": 86400,
+                "stat": "Sum",
+                "region": "${AWS::Region}",
+                "title": "API Gateway Requests"
+              }
+            },
+            {
+              "type": "metric",
+              "x": 12,
+              "y": 8,
+              "width": 12,
+              "height": 8,
+              "properties": {
+                "metrics": [
+                  [ "AWS/ApiGateway", "Latency", "ApiId", "${Api}" ],
+                  [ ".", "IntegrationLatency", ".", "." ]
+                ],
+                "period": 86400,
+                "stat": "Average",
+                "region": "${AWS::Region}",
+                "title": "API Gateway Latency"
+              }
+            }
+          ]
+        }
 
 Outputs:
   StaticFilesBucketName:
