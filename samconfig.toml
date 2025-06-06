@@ -34,4 +34,5 @@ parameter_overrides=[
   "CertificateArn=${CERTIFICATE_ARN}",
   "SentryDsn=${SENTRY_DSN}",
   "AdminApiKey=${ADMIN_API_KEY}",
+  "NotificationEmail=${NOTIFICATION_EMAIL}",
 ]

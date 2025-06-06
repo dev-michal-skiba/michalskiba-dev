@@ -66,6 +66,7 @@ Repository for [michalskiba.dev](https://michalskiba.dev/) webpage which is a po
     - `HOST_HEADER_INJECTION_SECRET_KEY`
     - `SENTRY_DSN`
     - `ADMIN_API_KEY`
+    - `NOTIFICATION_EMAIL`
 - Run `bin/deploy`
     - By default script creates/updates AWS CloudFormation  stack and uploads built frontend static files
     - You can pass one or more arguments to create/update stack or upload static files only

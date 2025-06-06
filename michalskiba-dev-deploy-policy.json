@@ -121,6 +121,40 @@
                 "cloudwatch:DeleteDashboards"
             ],
             "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "sns:CreateTopic",
+                "sns:DeleteTopic",
+                "sns:Subscribe",
+                "sns:Unsubscribe",
+                "sns:SetTopicAttributes",
+                "sns:GetTopicAttributes",
+                "sns:ListTopics",
+                "sns:ListSubscriptionsByTopic",
+                "sns:Publish",
+                "sns:AddPermission",
+                "sns:RemovePermission",
+                "sns:TagResource",
+                "sns:UntagResource",
+                "sns:ListTagsForResource"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cloudwatch:PutMetricAlarm",
+                "cloudwatch:DeleteAlarms",
+                "cloudwatch:DescribeAlarms",
+                "cloudwatch:DescribeAlarmHistory",
+                "cloudwatch:GetMetricData",
+                "cloudwatch:GetMetricStatistics",
+                "cloudwatch:ListMetrics",
+                "cloudwatch:SetAlarmState"
+            ],
+            "Resource": "*"
         }
     ]
 }
