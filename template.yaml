@@ -29,6 +29,9 @@ Parameters:
   AdminApiKey:
     Type: String
     NoEcho: true
+  NotificationEmail:
+    Type: String
+    Default: ""
 
 Mappings:
   EnvVariables:
@@ -499,6 +502,58 @@ Resources:
             }
           ]
         }
+  UserExploitSnsTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: !Sub '${AWS::StackName}: User Exploit Alerts'
+  UserExploitSnsSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref UserExploitSnsTopic
+      Protocol: email
+      Endpoint: !Ref NotificationEmail
+  UserWptExploitAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-UserWptExploit'
+      MetricName: UserWptExploit
+      Namespace: !Sub '${AWS::StackName}'
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref UserExploitSnsTopic
+      TreatMissingData: notBreaching
+  UserSQLIExploitAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-UserSQLIExploit'
+      MetricName: UserSQLIExploit
+      Namespace: !Sub '${AWS::StackName}'
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref UserExploitSnsTopic
+      TreatMissingData: notBreaching
+  UserHHIExploitAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: !Sub '${AWS::StackName}-UserHHIExploit'
+      MetricName: UserHHIExploit
+      Namespace: !Sub '${AWS::StackName}'
+      Statistic: Sum
+      Period: 60
+      EvaluationPeriods: 1
+      Threshold: 1
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      AlarmActions:
+        - !Ref UserExploitSnsTopic
+      TreatMissingData: notBreaching
 
 Outputs:
   StaticFilesBucketName:
