@@ -160,12 +160,26 @@ li a:hover {
   color: var(--primary-bg) !important;
 }
 
+.primary-button:disabled {
+  background-color: var(--secondary-color);
+  color: var(--primary-bg) !important;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
 .secondary-button,
 .secondary-button:hover,
 .secondary-button:active,
 .secondary-button:focus {
   background-color: var(--extra-color);
   color: var(--primary-bg) !important;
+}
+
+.secondary-button:disabled {
+  background-color: var(--extra-color);
+  color: var(--primary-bg) !important;
+  opacity: 0.8;
+  cursor: not-allowed;
 }
 
 .link-button,

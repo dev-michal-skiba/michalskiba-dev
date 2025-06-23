@@ -57,6 +57,32 @@ async function callApi({
   );
 }
 
+function setLoading(buttonId, spanId) {
+  const button = document.getElementById(buttonId);
+  if (!button.dataset.originalWidth) {
+    button.dataset.originalWidth = button.offsetWidth + "px";
+  }
+  button.disabled = true;
+  button.style.width = button.dataset.originalWidth;
+  const span = document.getElementById(spanId);
+  const spinner = document.createElement("span");
+  spinner.className = "spinner-border spinner-border-sm";
+  spinner.setAttribute("role", "status");
+  spinner.setAttribute("aria-hidden", "true");
+  span.textContent = "";
+  span.appendChild(spinner);
+}
+
+function unsetLoading(buttonId, spanId, originalText) {
+  const button = document.getElementById(buttonId);
+  button.disabled = false;
+  button.style.width = "";
+  const span = document.getElementById(spanId);
+  span.innerText = originalText;
+}
+
 window.versionSwitchClick = versionSwitchClick;
 window.getIsSecureVersionOn = getIsSecureVersionOn;
 window.callApi = callApi;
+window.setLoading = setLoading;
+window.unsetLoading = unsetLoading;
