@@ -35,7 +35,7 @@ function submitForm() {
     showError("Please enter a valid email address");
     return;
   }
-  window.setLoading(
+  window.setButtonLoading(
     "submit-password-reset-initiate-button",
     "submit-password-reset-initiate-button-text",
   );
@@ -48,7 +48,7 @@ function submitForm() {
     .then((response) => response.json())
     .then((data) => {
       updateModalAndShow(email, data.reset_link);
-      window.unsetLoading(
+      window.unsetButtonLoading(
         "submit-password-reset-initiate-button",
         "submit-password-reset-initiate-button-text",
         "Reset Password",
@@ -64,7 +64,7 @@ function submitNewPassword() {
     showError("Please enter a new password");
     return;
   }
-  window.setLoading(
+  window.setButtonLoading(
     "submit-password-reset-button",
     "submit-password-reset-button-text",
   );
@@ -83,7 +83,7 @@ function submitNewPassword() {
     })
     .catch((error) => {
       showError(error.message);
-      window.unsetLoading(
+      window.unsetButtonLoading(
         "submit-password-reset-button",
         "submit-password-reset-button-text",
         "Reset Password",

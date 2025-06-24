@@ -15,6 +15,7 @@ function login() {
   clearLoggingError();
   const username = document.getElementById("wpt-username").value;
   const password = document.getElementById("wpt-password").value;
+  window.setButtonLoading("wpt-login-button", "wpt-login-button-text");
   window
     .callApi({
       method: "POST",
@@ -32,12 +33,25 @@ function login() {
         loadPage();
       } else {
         setLoggingError();
+        window.unsetButtonLoading(
+          "wpt-login-button",
+          "wpt-login-button-text",
+          "Log In",
+        );
       }
     })
-    .catch(() => setLoggingError());
+    .catch(() => {
+      setLoggingError();
+      window.unsetButtonLoading(
+        "wpt-login-button",
+        "wpt-login-button-text",
+        "Log In",
+      );
+    });
 }
 
 function logout() {
+  window.setButtonLoading("wpt-logout-button", "wpt-logout-button-text");
   window
     .callApi({
       method: "POST",
@@ -51,7 +65,13 @@ function logout() {
         loadPage();
       }
     })
-    .catch(() => {});
+    .catch(() => {
+      window.unsetButtonLoading(
+        "wpt-logout-button",
+        "wpt-logout-button-text",
+        "logout",
+      );
+    });
 }
 
 function clearLogoutButton() {
@@ -65,7 +85,10 @@ function displayLogoutButton() {
   let button = document.createElement("button");
   button.id = "wpt-logout-button";
   button.className = "nav-link link-button secondary-color";
-  button.innerText = "logout";
+  let span = document.createElement("span");
+  span.id = "wpt-logout-button-text";
+  span.innerText = "logout";
+  button.appendChild(span);
   button.addEventListener("click", logout);
   document.getElementById("wpt-logout-container").appendChild(button);
 }
@@ -108,11 +131,13 @@ function displayPressApplication(pressApplication) {
 }
 
 function displayPressApplicationPage(pressApplication) {
+  clearPage();
   displayLogoutButton();
   displayPressApplication(pressApplication);
 }
 
 function displayLoginPage() {
+  clearPage();
   let container = document.getElementById("wpt-press-container");
   if (!container) {
     return;
@@ -191,7 +216,11 @@ function displayLoginPage() {
   let button_3_2 = document.createElement("button");
   button_3_2.type = "submit";
   button_3_2.className = "btn primary-button";
-  button_3_2.innerText = "Log In";
+  button_3_2.id = "wpt-login-button";
+  let span_3_2 = document.createElement("span");
+  span_3_2.id = "wpt-login-button-text";
+  span_3_2.innerText = "Log In";
+  button_3_2.appendChild(span_3_2);
   div_3_2.appendChild(button_3_2);
   col_3_2.appendChild(div_3_2);
   row_3.appendChild(col_3_1);
@@ -206,6 +235,7 @@ function displayLoginPage() {
 }
 
 function clearPage() {
+  window.unsetContainerLoading("wpt-press-container");
   clearLogoutButton();
   const container = document.getElementById("wpt-press-container");
   if (container) {
@@ -215,6 +245,7 @@ function clearPage() {
 
 function loadPage() {
   clearPage();
+  window.setContainerLoading("wpt-press-container");
   let queryParams = {};
   if (localStorage.getItem("wptIsLoggedIn") === "true") {
     if (!window.getIsSecureVersionOn()) {

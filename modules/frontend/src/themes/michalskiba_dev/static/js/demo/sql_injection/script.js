@@ -62,18 +62,18 @@ function setNoResults() {
 }
 
 function setClearLoading() {
-  window.setLoading("clear-button", "clear-button-text");
+  window.setButtonLoading("clear-button", "clear-button-text");
   clearParentContainer();
 }
 
 function setSearchLoading() {
-  window.setLoading("submit-button", "submit-button-text");
+  window.setButtonLoading("submit-button", "submit-button-text");
   clearParentContainer();
 }
 
 function sqliUnsetLoading() {
-  window.unsetLoading("submit-button", "submit-button-text", "Search");
-  window.unsetLoading("clear-button", "clear-button-text", "Clear");
+  window.unsetButtonLoading("submit-button", "submit-button-text", "Search");
+  window.unsetButtonLoading("clear-button", "clear-button-text", "Clear");
 }
 
 function submitForm(isClear = false) {

@@ -57,7 +57,7 @@ async function callApi({
   );
 }
 
-function setLoading(buttonId, spanId) {
+function setButtonLoading(buttonId, spanId) {
   const button = document.getElementById(buttonId);
   if (!button.dataset.originalWidth) {
     button.dataset.originalWidth = button.offsetWidth + "px";
@@ -73,7 +73,7 @@ function setLoading(buttonId, spanId) {
   span.appendChild(spinner);
 }
 
-function unsetLoading(buttonId, spanId, originalText) {
+function unsetButtonLoading(buttonId, spanId, originalText) {
   const button = document.getElementById(buttonId);
   button.disabled = false;
   button.style.width = "";
@@ -81,8 +81,40 @@ function unsetLoading(buttonId, spanId, originalText) {
   span.innerText = originalText;
 }
 
+function setContainerLoading(containerId) {
+  const container = document.getElementById(containerId);
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+  const terminalContainer = document.createElement("div");
+  terminalContainer.className = "loading-container";
+
+  const cursor = document.createElement("span");
+  const p = document.createElement("p");
+
+  cursor.textContent = ":~$";
+  cursor.className = "loading-cursor";
+  p.appendChild(cursor);
+
+  const text = document.createElement("span");
+  text.textContent = " Loading";
+  text.className = "loading-text";
+  p.appendChild(text);
+  terminalContainer.appendChild(p);
+  container.appendChild(terminalContainer);
+}
+
+function unsetContainerLoading(containerId) {
+  const container = document.getElementById(containerId);
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+}
+
 window.versionSwitchClick = versionSwitchClick;
 window.getIsSecureVersionOn = getIsSecureVersionOn;
 window.callApi = callApi;
-window.setLoading = setLoading;
-window.unsetLoading = unsetLoading;
+window.setButtonLoading = setButtonLoading;
+window.unsetButtonLoading = unsetButtonLoading;
+window.setContainerLoading = setContainerLoading;
+window.unsetContainerLoading = unsetContainerLoading;
