@@ -14,6 +14,11 @@ function getAddressSearchPhrase() {
 }
 
 function renderParcelStores(parcelStores) {
+  if (parcelStores.length === 0) {
+    setNoResults();
+    return;
+  }
+  const parentContainer = document.getElementById("parent-container");
   const container = document.createElement("div");
   parcelStores.forEach((store) => {
     const tile = document.createElement("div");
@@ -42,23 +47,41 @@ function renderParcelStores(parcelStores) {
     tile.appendChild(openingHoursParagraph);
     container.appendChild(tile);
   });
-  const parentContainer = document.getElementById("parent-container");
   parentContainer.innerText = "";
   parentContainer.appendChild(container);
 }
 
-async function setLoading() {
-  const parentContainer = document.getElementById("parent-container");
-  parentContainer.innerText = "Loading ...";
-}
-
-async function unsetLoading() {
+function clearParentContainer() {
   const parentContainer = document.getElementById("parent-container");
   parentContainer.innerText = "";
 }
 
-function submitForm() {
-  setLoading();
+function setNoResults() {
+  const parentContainer = document.getElementById("parent-container");
+  parentContainer.innerText = "No parcel stores found";
+}
+
+function setClearLoading() {
+  window.setButtonLoading("clear-button", "clear-button-text");
+  clearParentContainer();
+}
+
+function setSearchLoading() {
+  window.setButtonLoading("submit-button", "submit-button-text");
+  clearParentContainer();
+}
+
+function sqliUnsetLoading() {
+  window.unsetButtonLoading("submit-button", "submit-button-text", "Search");
+  window.unsetButtonLoading("clear-button", "clear-button-text", "Clear");
+}
+
+function submitForm(isClear = false) {
+  if (isClear) {
+    setClearLoading();
+  } else {
+    setSearchLoading();
+  }
   window
     .callApi({
       method: "GET",
@@ -72,10 +95,12 @@ function submitForm() {
     })
     .then((data) => {
       renderParcelStores(data.parcel_stores);
+      sqliUnsetLoading();
     })
     .catch((error) => {
       console.debug(error);
-      unsetLoading();
+      sqliUnsetLoading();
+      setNoResults();
     });
 }
 
@@ -90,7 +115,7 @@ document
 document.getElementById("clear-button").addEventListener("click", () => {
   setAddressSearchPhrase("");
   document.getElementById("address-search-phrase").value = "";
-  submitForm();
+  submitForm(true);
 });
 
 // Add listener to correctly submit form

@@ -160,12 +160,26 @@ li a:hover {
   color: var(--primary-bg) !important;
 }
 
+.primary-button:disabled {
+  background-color: var(--secondary-color);
+  color: var(--primary-bg) !important;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
 .secondary-button,
 .secondary-button:hover,
 .secondary-button:active,
 .secondary-button:focus {
   background-color: var(--extra-color);
   color: var(--primary-bg) !important;
+}
+
+.secondary-button:disabled {
+  background-color: var(--extra-color);
+  color: var(--primary-bg) !important;
+  opacity: 0.8;
+  cursor: not-allowed;
 }
 
 .link-button,
@@ -237,6 +251,30 @@ li a:hover {
   padding: 20px;
   border-radius: 5px;
   background-color: var(--secondary-bg);
+}
+
+.loading-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 100px;
+}
+
+.loading-cursor {
+  animation: blink 1s step-end infinite;
+  font-size: 24px;
+  color: var(--extra-color);
+}
+
+.loading-text {
+  font-size: 24px;
+  color: var(--secondary-color);
+}
+
+@keyframes blink {
+  50% {
+    opacity: 0;
+  }
 }
 
 @media (min-width: 576px) {
