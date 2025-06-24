@@ -35,6 +35,10 @@ function submitForm() {
     showError("Please enter a valid email address");
     return;
   }
+  window.setLoading(
+    "submit-password-reset-initiate-button",
+    "submit-password-reset-initiate-button-text",
+  );
   window
     .callApi({
       method: "POST",
@@ -44,6 +48,11 @@ function submitForm() {
     .then((response) => response.json())
     .then((data) => {
       updateModalAndShow(email, data.reset_link);
+      window.unsetLoading(
+        "submit-password-reset-initiate-button",
+        "submit-password-reset-initiate-button-text",
+        "Reset Password",
+      );
     });
 }
 
@@ -55,6 +64,10 @@ function submitNewPassword() {
     showError("Please enter a new password");
     return;
   }
+  window.setLoading(
+    "submit-password-reset-button",
+    "submit-password-reset-button-text",
+  );
   window
     .callApi({
       method: "POST",
@@ -70,6 +83,11 @@ function submitNewPassword() {
     })
     .catch((error) => {
       showError(error.message);
+      window.unsetLoading(
+        "submit-password-reset-button",
+        "submit-password-reset-button-text",
+        "Reset Password",
+      );
     });
 }
 
