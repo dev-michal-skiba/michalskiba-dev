@@ -51,7 +51,7 @@ function submitForm() {
       window.unsetButtonLoading(
         "submit-password-reset-initiate-button",
         "submit-password-reset-initiate-button-text",
-        "Reset",
+        "Reset Password",
       );
     });
 }
@@ -76,7 +76,7 @@ function submitNewPassword() {
     })
     .then((response) => {
       if (response.status !== 204) {
-        throw new Error("Failed to Reset, please try again.");
+        throw new Error("Failed to reset password, please try again.");
       }
       window.location.href =
         "/demo/host-header-injection/password-reset/success";
@@ -86,7 +86,7 @@ function submitNewPassword() {
       window.unsetButtonLoading(
         "submit-password-reset-button",
         "submit-password-reset-button-text",
-        "Reset",
+        "Reset Password",
       );
     });
 }

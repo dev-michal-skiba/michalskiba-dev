@@ -202,7 +202,9 @@ li a:hover {
 
 .warning-footer {
   position: fixed;
+  left: 0;
   bottom: 0;
+  width: 100%;
   background-color: var(--error-color);
   color: white !important;
   text-align: center;
@@ -267,10 +269,6 @@ li a:hover {
 .loading-text {
   font-size: 24px;
   color: var(--secondary-color);
-}
-
-.nav-divider {
-  border-bottom: 2px dashed var(--extra-color);
 }
 
 @keyframes blink {

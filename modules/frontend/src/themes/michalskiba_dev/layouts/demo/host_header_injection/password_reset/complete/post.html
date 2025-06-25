@@ -6,40 +6,36 @@
   <body>
     {{- partial "demo/host_header_injection/header.html" .}}
     <div class="container-lg">
-      <h2 class="mb-4">Password Reset</h2>
-      <p class="mb-4">
-        Enter your new password below and we'll reset it.
-      </p>
-      <form id="password-reset-form">
-        <div class="row">
-          <div class="col-8">
-            <input
-            type="password"
-            class="form-control"
-            id="new-password"
-            placeholder="New password"
-            required
-          />
-          </div>
-          <div class="col-4">
-            <button
-              id="submit-password-reset-button"
-              type="button"
-              class="btn primary-button"
-            >
-              <span id="submit-password-reset-button-text">
-                Reset
-              </span>
-            </button>
-          </div>
+      <div class="row justify-content-center mt-5">
+        <div class="col-md-6">
+          <h2 class="text-center mb-4">Reset Your Password</h2>
+          <form id="password-reset-form">
+            <div class="mb-3">
+              <input
+                type="password"
+                class="form-control"
+                id="new-password"
+                required
+              />
+            </div>
+            <div class="text-center">
+              <p class="error mt-4" id="error-message"></p>
+            </div>
+            <div class="text-center">
+              <button
+                id="submit-password-reset-button"
+                type="button"
+                class="btn primary-button"
+              >
+                <span id="submit-password-reset-button-text">
+                  Reset Password
+                </span>
+              </button>
+            </div>
+          </form>
         </div>
-        <div class="row">
-          <div class="col-7">
-            <p class="error mt-4" id="error-message"></p>
-          </div>
-        </div>
-      </form>
-      {{- partial "demo/host_header_injection/footer.html" .}}
+      </div>
     </div>
+    {{- partial "demo/host_header_injection/footer.html" .}}
   </body>
 </html>

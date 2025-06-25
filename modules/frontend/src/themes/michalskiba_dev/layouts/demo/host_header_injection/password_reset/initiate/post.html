@@ -13,7 +13,7 @@
       </p>
       <form id="password-reset-initiate-form">
         <div class="row">
-          <div class="col-8">
+          <div class="col-7">
             <input
               type="email"
               class="form-control"
@@ -29,7 +29,7 @@
               class="btn primary-button"
             >
               <span id="submit-password-reset-initiate-button-text">
-                Reset
+                Reset Password
               </span>
             </button>
           </div>
@@ -40,7 +40,6 @@
           </div>
         </div>
       </form>
-      {{- partial "demo/host_header_injection/footer.html" .}}
     </div>
 
     <div class="modal" id="email-modal" tabindex="-1">
@@ -69,5 +68,7 @@
         </div>
       </div>
     </div>
+
+    {{- partial "demo/host_header_injection/footer.html" .}}
   </body>
 </html>
