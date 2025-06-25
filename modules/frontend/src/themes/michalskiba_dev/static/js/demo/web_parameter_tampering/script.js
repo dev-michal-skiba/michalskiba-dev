@@ -95,7 +95,7 @@ function displayLogoutButton() {
 
 function displayPressApplication(pressApplication) {
   let container = document.getElementById("wpt-press-container");
-  let header = document.createElement("h1");
+  let header = document.createElement("h2");
   header.innerText = "Accreditation info";
   container.append(header);
   if (pressApplication.accreditation_code) {
@@ -143,95 +143,86 @@ function displayLoginPage() {
     return;
   }
 
+  let formWrapper = document.createElement("div");
+  formWrapper.className = "row";
+  
+  let formCol = document.createElement("div");
+  formCol.className = "col-12";
+
+  let h2 = document.createElement("h2");
+  h2.innerText = "Log in to WPT press portal";
+  formCol.appendChild(h2);
+  
   let form = document.createElement("form");
   form.id = "wpt-login-form";
-  form.className = "container-lg";
 
   let row_1 = document.createElement("div");
   row_1.className = "row mt-5";
-  let col_1_1 = document.createElement("div");
-  col_1_1.className = "col d-flex text-justify align-items-center";
-  let p_1_1 = document.createElement("p");
-  p_1_1.className = "h2 text-justify";
-  p_1_1.innerText =
-    "To see status of your press application please log in to our BEST Festival press portal";
-  col_1_1.appendChild(p_1_1);
-  let col_1_2 = document.createElement("div");
-  col_1_2.className = "col";
-  let div_1_2_1 = document.createElement("div");
-  div_1_2_1.className = "mb-3";
-  let label_1_2_1 = document.createElement("label");
-  label_1_2_1.for = "wpt-username";
-  label_1_2_1.className = "form-label primary-color";
-  label_1_2_1.innerText = "Username";
-  let input_1_2_1 = document.createElement("input");
-  input_1_2_1.type = "text";
-  input_1_2_1.className = "form-control";
-  input_1_2_1.id = "wpt-username";
-  input_1_2_1.name = "username";
-  input_1_2_1.placeholder = "Username";
-  div_1_2_1.appendChild(label_1_2_1);
-  div_1_2_1.appendChild(input_1_2_1);
-  let div_1_2_2 = document.createElement("div");
-  div_1_2_2.className = "mb-3";
-  let label_1_2_2 = document.createElement("label");
-  label_1_2_2.for = "wpt-password";
-  label_1_2_2.className = "form-label primary-color";
-  label_1_2_2.innerText = "Password";
-  let input_1_2_2 = document.createElement("input");
-  input_1_2_2.type = "password";
-  input_1_2_2.className = "form-control";
-  input_1_2_2.id = "wpt-password";
-  input_1_2_2.name = "password";
-  input_1_2_2.placeholder = "Password";
-  div_1_2_2.appendChild(label_1_2_2);
-  div_1_2_2.appendChild(input_1_2_2);
-  col_1_2.appendChild(div_1_2_1);
-  col_1_2.appendChild(div_1_2_2);
-  row_1.append(col_1_1);
-  row_1.append(col_1_2);
-
+  let col_1 = document.createElement("div");
+  col_1.className = "col-4";
+  let div_1 = document.createElement("div");
+  div_1.className = "mb-3";
+  let input_1 = document.createElement("input");
+  input_1.type = "text";
+  input_1.className = "form-control";
+  input_1.id = "wpt-username";
+  input_1.name = "username";
+  input_1.placeholder = "Username";
+  div_1.appendChild(input_1);
+  col_1.appendChild(div_1);
+  row_1.appendChild(col_1);
+  
   let row_2 = document.createElement("div");
   row_2.className = "row";
-  let col_2_1 = document.createElement("div");
-  col_2_1.className = "col";
-  let col_2_2 = document.createElement("div");
-  col_2_2.className = "col";
-  let p_2_2 = document.createElement("p");
-  p_2_2.id = "wpt-login-error";
-  p_2_2.className = "error";
-  col_2_2.appendChild(p_2_2);
-  row_2.appendChild(col_2_1);
-  row_2.appendChild(col_2_2);
-
+  let col_2 = document.createElement("div");
+  col_2.className = "col-4";
+  let div_2 = document.createElement("div");
+  div_2.className = "mb-3";
+  let input_2 = document.createElement("input");
+  input_2.type = "password";
+  input_2.className = "form-control";
+  input_2.id = "wpt-password";
+  input_2.name = "password";
+  input_2.placeholder = "Password";
+  div_2.appendChild(input_2);
+  col_2.appendChild(div_2);
+  row_2.appendChild(col_2);
+  
+  let row_error = document.createElement("div");
+  row_error.className = "row";
+  let col_error = document.createElement("div");
+  col_error.className = "col-12";
+  let p_error = document.createElement("p");
+  p_error.id = "wpt-login-error";
+  p_error.className = "error";
+  col_error.appendChild(p_error);
+  row_error.appendChild(col_error);
+  
   let row_3 = document.createElement("div");
   row_3.className = "row";
-  let col_3_1 = document.createElement("div");
-  col_3_1.className = "col";
-  let col_3_2 = document.createElement("div");
-  col_3_2.className = "col";
-  let div_3_2 = document.createElement("div");
-  div_3_2.className = "text-center";
-
-  let button_3_2 = document.createElement("button");
-  button_3_2.type = "submit";
-  button_3_2.className = "btn primary-button";
-  button_3_2.id = "wpt-login-button";
-  let span_3_2 = document.createElement("span");
-  span_3_2.id = "wpt-login-button-text";
-  span_3_2.innerText = "Log In";
-  button_3_2.appendChild(span_3_2);
-  div_3_2.appendChild(button_3_2);
-  col_3_2.appendChild(div_3_2);
-  row_3.appendChild(col_3_1);
-  row_3.appendChild(col_3_2);
-
+  let col_3 = document.createElement("div");
+  col_3.className = "col-4";
+  let button_3 = document.createElement("button");
+  button_3.type = "submit";
+  button_3.className = "btn primary-button";
+  button_3.id = "wpt-login-button";
+  let span_3 = document.createElement("span");
+  span_3.id = "wpt-login-button-text";
+  span_3.innerText = "Log In";
+  button_3.appendChild(span_3);
+  col_3.appendChild(button_3);
+  row_3.appendChild(col_3);
+  
   form.appendChild(row_1);
   form.appendChild(row_2);
+  form.appendChild(row_error);
   form.appendChild(row_3);
   form.addEventListener("submit", submit);
 
-  container.appendChild(form);
+  // Assemble the centered structure
+  formCol.appendChild(form);
+  formWrapper.appendChild(formCol);
+  container.appendChild(formWrapper);
 }
 
 function clearPage() {
