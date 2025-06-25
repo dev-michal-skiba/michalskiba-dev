@@ -1,20 +1,37 @@
+{{- partial "header.html" .}}
+<div class="warning-footer container-lg">
+  <p primary-text>
+    This is demo site that present security threat. Do not put any personal
+    information here as it may be compromised. See
+    <a
+      class="link"
+      href="/blog/post/host-header-injection-dont-trust-request-headers/"
+    >
+      blog post
+    </a>
+    for more information.
+  </p>
+</div>
+
 <nav class="navbar navbar-expand-lg navbar-font-size">
   <div class="container-lg primary-bg">
-    <a class="navbar-brand secondary-color navbar-font-size" href="/"
-      >michalskiba.dev</a
+    <a
+      class="navbar-brand secondary-color navbar-font-size"
+      href="/demo/host-header-injection/password-reset/initiate/"
+      >host header injection</a
     >
     <button
       class="navbar-toggler"
       type="button"
       data-bs-toggle="collapse"
-      data-bs-target="#navbarSupportedContent"
-      aria-controls="navbarSupportedContent"
+      data-bs-target="#navbarSupportedContentDemo"
+      aria-controls="navbarSupportedContentDemo"
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
       <span class="navbar-toggler-icon"></span>
     </button>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="collapse navbar-collapse" id="navbarSupportedContentDemo">
       <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
         <li class="nav-item">
           <label class="secondary-color" title="" for="version-switch"

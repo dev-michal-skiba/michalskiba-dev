@@ -201,11 +201,7 @@ li a:hover {
 }
 
 .warning-footer {
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  width: 100%;
-  background-color: var(--error-color);
+  background-color: #6e080177;
   color: white !important;
   text-align: center;
   height: auto;
