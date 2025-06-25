@@ -83,7 +83,7 @@ Repository for [michalskiba.dev](https://michalskiba.dev/) webpage which is a po
         - portfolio
     - `/blog/`
         - blog
-    - `/demo/demo/web-parameter-tampering/`
+    - `/demo/demo/web-parameter-tampering/press`
         - Web Parameter Tampering demo
     - `/demo/sql-injection/`
         - SQL Injection demo
