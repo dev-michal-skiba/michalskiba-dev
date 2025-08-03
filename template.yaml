@@ -135,6 +135,7 @@ Resources:
   SqlInjection:
     Type: AWS::Serverless::Function
     Properties:
+      Timeout: 30
       Runtime: python3.12
       CodeUri: ./modules/sql_injection/src
       Handler: sql_injection.lambda_function.lambda_handler
@@ -159,6 +160,7 @@ Resources:
   Auth:
     Type: AWS::Serverless::Function
     Properties:
+      Timeout: 30
       Runtime: python3.12
       CodeUri: ./modules/auth/src
       Handler: auth.lambda_function.lambda_handler
@@ -189,6 +191,7 @@ Resources:
   WebParameterTampering:
     Type: AWS::Serverless::Function
     Properties:
+      Timeout: 30
       Runtime: python3.12
       CodeUri: ./modules/web_parameter_tampering/src
       Handler: web_parameter_tampering.lambda_function.lambda_handler
@@ -215,6 +218,7 @@ Resources:
   HostHeaderInjection:
     Type: AWS::Serverless::Function
     Properties:
+      Timeout: 30
       Runtime: python3.12
       CodeUri: ./modules/host_header_injection/src
       Handler: host_header_injection.lambda_function.lambda_handler
@@ -305,6 +309,7 @@ Resources:
             S3OriginConfig: {}
           - DomainName: !Sub '${Api}.execute-api.${AWS::Region}.amazonaws.com'
             Id: ApiOrigin
+            OriginResponseTimeout: 30
             CustomOriginConfig:
               OriginProtocolPolicy: https-only
               OriginSSLProtocols:
